@@ -4,6 +4,10 @@
   "engines": {
     "node": ">=20"
   },
+  "scripts": {
+    "verify": "npm run verify --prefix backend",
+    "ci": "npm run verify --prefix backend && node --check api/index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

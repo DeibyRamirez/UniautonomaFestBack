@@ -2,6 +2,8 @@
 
 Backend Express con Firebase Admin, Wompi y Resend para compra de kits y panel administrativo.
 
+Documentación completa del repositorio (arquitectura, diagramas, instalación, Wompi, ficheros): [`../README.md`](../README.md).
+
 ## Requisitos
 
 - Node.js 20+

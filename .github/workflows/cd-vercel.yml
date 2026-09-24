@@ -1,0 +1,92 @@
+# Despliegue continuo — Vercel (Gitflow)
+# main → producción | develop → preview staging | PR → preview
+name: CD Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      entorno:
+        description: 'Entorno de despliegue'
+        required: true
+        default: 'preview'
+        type: choice
+        options:
+          - preview
+          - production
+
+concurrency:
+  group: cd-vercel-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  desplegar:
+    name: Desplegar en Vercel
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || (github.ref == 'refs/heads/develop' && 'staging' || 'preview') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: |
+          npm ci
+          npm ci --prefix backend
+
+      - name: Instalar Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Determinar entorno Vercel
+        id: entorno
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.entorno }}" = "production" ]; then
+            echo "target=production" >> "$GITHUB_OUTPUT"
+            echo "prod_flag=--prod" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.ref }}" = "refs/heads/main" ] && [ "${{ github.event_name }}" = "push" ]; then
+            echo "target=production" >> "$GITHUB_OUTPUT"
+            echo "prod_flag=--prod" >> "$GITHUB_OUTPUT"
+          else
+            echo "target=preview" >> "$GITHUB_OUTPUT"
+            echo "prod_flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Vincular proyecto Vercel
+        run: vercel pull --yes --environment=${{ steps.entorno.outputs.target }} --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build
+        run: vercel build ${{ steps.entorno.outputs.prod_flag }} --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt ${{ steps.entorno.outputs.prod_flag }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Desplegado en: $url"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Resumen
+        if: always() && steps.deploy.outputs.url != ''
+        run: echo "### URL de despliegue" >> "$GITHUB_STEP_SUMMARY" && echo "${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

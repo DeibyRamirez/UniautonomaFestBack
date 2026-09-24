@@ -4,3 +4,5 @@ backend/node_modules/
 backend/.env
 *.log
 service-account.json
+backend/service-account.json
+.vercel

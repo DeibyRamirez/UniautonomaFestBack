@@ -28,7 +28,9 @@ const variablesEntorno = {
   },
   resend: {
     apiKey: process.env.RESEND_API_KEY,
-    correoRemitente: process.env.CORREO_REMITENTE || 'fest@uniautonoma.edu.co',
+    correoRemitente:
+      process.env.CORREO_REMITENTE ||
+      'Uniautónoma Fest <onboarding@resend.dev>',
     /** En sandbox (onboarding@resend.dev), reenvía todos los correos a esta bandeja. */
     correoSandbox: process.env.RESEND_CORREO_SANDBOX?.trim() || null,
   },

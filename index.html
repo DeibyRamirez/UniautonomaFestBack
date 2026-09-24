@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" crossorigin="">
 <style>
 :root{
   --bg:#050b14;
@@ -185,6 +186,25 @@ p{margin:0;}
 .ev .meta span::before{content:"";display:inline-block;width:6px;height:6px;border:1px solid var(--cyan);transform:rotate(45deg);margin-right:8px;vertical-align:2px;}
 .ev .flag{display:inline-block;margin-left:10px;padding:2px 8px;border:1px dashed rgba(255,193,7,.6);color:#ffd166;font-size:11px;letter-spacing:.08em;text-transform:uppercase;vertical-align:middle;}
 .ev .cta{margin-top:14px;}
+.mapa-5k{margin-top:18px;border:1px solid rgba(159,183,195,.22);background:rgba(5,11,20,.55);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);}
+.mapa-5k__contenedor{height:min(52vw,320px);min-height:220px;width:100%;z-index:0;background:#e8eef2;}
+.mapa-5k__contenedor .maplibregl-ctrl-group button{background:rgba(10,21,34,.92);color:var(--cyan);border-color:rgba(44,240,255,.35);}
+.mapa-5k__contenedor .maplibregl-ctrl-group button:hover{background:rgba(44,240,255,.15);}
+.mapa-5k__contenedor .maplibregl-ctrl-attrib{background:rgba(255,255,255,.88)!important;color:#4a5f6d!important;font-size:10px;}
+.mapa-5k__contenedor .maplibregl-ctrl-attrib a{color:#1a6dd8!important;}
+.mapa-5k__popup .maplibregl-popup-content{background:#0a1522;color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-size:13px;line-height:1.45;}
+.mapa-5k__popup .maplibregl-popup-content a{color:var(--cyan);}
+.mapa-5k__popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip{border-top-color:#0a1522;}
+.mapa-5k__leyenda{display:flex;flex-wrap:wrap;gap:10px 20px;padding:12px 14px;border-top:1px solid rgba(159,183,195,.18);font-size:13px;color:var(--ink-2);}
+.mapa-5k__leyenda a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(44,240,255,.35);}
+.mapa-5k__leyenda a:hover{color:var(--cyan);}
+.mapa-5k__punto{display:inline-flex;align-items:center;gap:8px;}
+.mapa-5k__punto::before{content:"";width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);}
+.mapa-5k__punto--salida::before{background:var(--blue);}
+.mapa-5k__punto--meta::before{background:#22c55e;}
+.marcador-5k{width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.45);}
+.marcador-5k--salida{background:var(--blue);}
+.marcador-5k--meta{background:#22c55e;}
 @media (max-width:640px){ .ev{grid-template-columns:1fr;gap:8px;padding:20px 0;} }
 
 /* camiseta */
@@ -435,6 +455,17 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
         <div class="time">6:00 PM<small>Miércoles 21 de octubre</small></div>
         <div><h3>Carrera 5K</h3><p class="sub">Corre con la U por Popayán.</p>
           <div class="meta"><span>Salida: sede principal</span><span>Meta: Parque de la Salud</span></div>
+          <div class="mapa-5k" id="mapaCarrera5k" role="region" aria-label="Mapa de salida y meta de la Carrera 5K">
+            <div class="mapa-5k__contenedor" id="mapaCarrera5kContenedor" tabindex="0" aria-describedby="mapaCarrera5kLeyenda"></div>
+            <div class="mapa-5k__leyenda" id="mapaCarrera5kLeyenda">
+              <span class="mapa-5k__punto mapa-5k__punto--salida">
+                <a href="https://www.google.com/maps/place/Corporaci%C3%B3n+Universitaria+Aut%C3%B3noma+del+Cauca/@2.4406539,-76.6042339,17z" target="_blank" rel="noopener noreferrer">Salida · Corporación Universitaria Autónoma del Cauca</a>
+              </span>
+              <span class="mapa-5k__punto mapa-5k__punto--meta">
+                <a href="https://www.google.com/maps/place/Parque+de+la+Salud/@2.4551328,-76.5920287,17z" target="_blank" rel="noopener noreferrer">Meta · Parque de la Salud</a>
+              </span>
+            </div>
+          </div>
           <div class="cta"><a class="btn sm" href="#"><i class="tick"></i>Inscribirme a la 5K</a></div></div>
       </article>
     </div>
@@ -633,8 +664,9 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
     <div>
       <p class="tc"><strong>Aplican términos y condiciones.</strong> La programación está sujeta a cambios. Está prohibido el consumo de bebidas alcohólicas, sustancias psicoactivas, vaper o cigarrillo electrónico dentro de las instalaciones y durante los eventos de Uniautónoma del Cauca.</p>
       <div class="social">
-        <a class="btn sm" href="#"><i class="tick"></i>Instagram</a>
+        <a class="btn sm" href="https://www.instagram.com/uniautonomadelcauca/?hl=es-la"><i class="tick"></i>Instagram</a>
         <a class="btn sm" href="#"><i class="tick"></i>TikTok</a>
+        <a class="btn sm" href="https://www.facebook.com/uniautonomadc/?locale=es_LA"><i class="tick"></i>Facebook</a>
         <a class="btn sm" href="#"><i class="tick"></i>WhatsApp</a>
       </div>
     </div>
@@ -751,7 +783,9 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
       tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
       days.forEach(function(d){d.classList.remove('active');});
       t.setAttribute('aria-selected','true');
-      document.getElementById(t.getAttribute('aria-controls')).classList.add('active');
+      var panelId=t.getAttribute('aria-controls');
+      document.getElementById(panelId).classList.add('active');
+      if(panelId==='d21' && window.refrescarMapaCarrera5k){ window.refrescarMapaCarrera5k(); }
     });
   });
 
@@ -764,6 +798,8 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
   }
 })();
 </script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin="" defer></script>
+<script src="js/mapa-carrera-5k.js" defer></script>
 <script src="js/modal-compra.js" defer></script>
 </body>
 </html>

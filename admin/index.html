@@ -3,81 +3,143 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin — Uniautónoma Fest 2026</title>
+  <title>Panel — Uniautónoma Fest 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
 </head>
-<body>
-  <div id="vista-login" class="contenedor-login">
-    <form id="formulario-login" class="tarjeta">
-      <p class="etiqueta">Panel administrativo</p>
-      <h1>Iniciar sesión</h1>
-      <div class="campo">
-        <label for="correo">Correo</label>
-        <input id="correo" type="email" autocomplete="username" required>
-      </div>
-      <div class="campo">
-        <label for="contrasena">Contraseña</label>
-        <input id="contrasena" type="password" autocomplete="current-password" required>
-      </div>
-      <p id="error-login" class="error" role="alert" hidden></p>
-      <button type="submit" class="boton-principal">Entrar</button>
-    </form>
-  </div>
-
-  <div id="vista-panel" class="panel" hidden>
+<body class="modo-panel">
+  <div id="vista-panel" class="panel">
     <header class="barra">
       <div>
         <p class="etiqueta">Uniautónoma Fest 2026</p>
-        <h1>Entrega de kits</h1>
+        <h1>Panel administrativo</h1>
       </div>
       <div class="barra-acciones">
+        <a class="enlace-landing" href="/">← Volver al Fest</a>
         <span id="correo-admin" class="correo-admin"></span>
         <button type="button" id="boton-cerrar-sesion" class="boton-secundario">Cerrar sesión</button>
       </div>
     </header>
 
-    <section class="filtros">
-      <div class="campo-inline">
-        <label for="filtro-busqueda">Buscar</label>
-        <input id="filtro-busqueda" type="search" placeholder="Nombre, código estudiante o reclamo">
+    <nav class="admin-pestanas" aria-label="Secciones del panel">
+      <button type="button" id="pestana-financiera" class="admin-pestana activa" data-pestana="financiera">
+        Financiera UniautonomaFest
+      </button>
+      <button type="button" id="pestana-administradores" class="admin-pestana" data-pestana="administradores" hidden>
+        Administradores
+      </button>
+    </nav>
+
+    <section id="seccion-financiera" class="admin-seccion" aria-labelledby="pestana-financiera">
+      <p class="admin-seccion__subtitulo">Kits, pagos y entregas</p>
+
+      <div class="filtros">
+        <div class="campo-inline">
+          <label for="filtro-busqueda">Buscar</label>
+          <input id="filtro-busqueda" type="search" placeholder="Nombre, código estudiante o reclamo">
+        </div>
+        <div class="campo-inline">
+          <label for="filtro-estado">Estado pago</label>
+          <select id="filtro-estado">
+            <option value="">Todos</option>
+            <option value="APPROVED">Aprobado</option>
+            <option value="PENDING">Pendiente</option>
+            <option value="REJECTED">Rechazado</option>
+          </select>
+        </div>
+        <button type="button" id="boton-refrescar" class="boton-secundario">Actualizar</button>
+        <button type="button" id="boton-exportar" class="boton-principal">Exportar Excel</button>
       </div>
-      <div class="campo-inline">
-        <label for="filtro-estado">Estado pago</label>
-        <select id="filtro-estado">
-          <option value="">Todos</option>
-          <option value="APPROVED">Aprobado</option>
-          <option value="PENDING">Pendiente</option>
-          <option value="REJECTED">Rechazado</option>
-        </select>
+
+      <p id="error-panel" class="error" role="alert" hidden></p>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Cód. estudiante</th>
+              <th>Talla</th>
+              <th>Kit</th>
+              <th>Código reclamo</th>
+              <th>Pago</th>
+              <th>Estado Correo</th>
+              <th>Entrega</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
       </div>
-      <button type="button" id="boton-refrescar" class="boton-secundario">Actualizar</button>
-      <button type="button" id="boton-exportar" class="boton-principal">Exportar Excel</button>
+
+      <nav class="paginacion-tabla" aria-label="Paginación de registros">
+        <button type="button" id="boton-pagina-anterior" class="boton-pagina" aria-label="Página anterior">&lt;</button>
+        <span id="texto-pagina-actual" class="texto-pagina">Página 1</span>
+        <button type="button" id="boton-pagina-siguiente" class="boton-pagina" aria-label="Página siguiente">&gt;</button>
+      </nav>
     </section>
 
-    <p id="error-panel" class="error" role="alert" hidden></p>
+    <section id="seccion-administradores" class="admin-seccion" hidden aria-labelledby="pestana-administradores">
+      <p class="admin-seccion__subtitulo">Cuentas con acceso al panel</p>
 
-    <div class="tabla-contenedor">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Cód. estudiante</th>
-            <th>Talla</th>
-            <th>Kit</th>
-            <th>Código reclamo</th>
-            <th>Pago</th>
-            <th>Correo</th>
-            <th>Entrega</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody id="cuerpo-tabla"></tbody>
-      </table>
-    </div>
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Registrado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-admins"></tbody>
+        </table>
+      </div>
+
+      <div class="seccion-crear-admin">
+        <div class="seccion-crear-admin__cabecera">
+          <p class="etiqueta">Alta de usuario</p>
+          <h2 id="titulo-crear-admin">Crear administrador</h2>
+          <p class="seccion-crear-admin__ayuda">El nuevo usuario ingresará en la página de inicio de sesión del admin.</p>
+        </div>
+        <form id="formulario-crear-admin" class="formulario-crear-admin">
+          <div class="campo-inline">
+            <label for="nuevo-admin-correo">Correo</label>
+            <input id="nuevo-admin-correo" name="correo" type="email" autocomplete="off" required>
+          </div>
+          <div class="campo-inline campo-inline--contrasena">
+            <label for="nuevo-admin-contrasena">Contraseña</label>
+            <div class="campo-contrasena campo-contrasena--integrado">
+              <input id="nuevo-admin-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="8" required>
+              <button type="button" id="boton-ver-contrasena-nuevo-admin" class="boton-ver-contrasena" aria-pressed="false" aria-label="Mostrar contraseña">Ver</button>
+            </div>
+          </div>
+          <div class="campo-inline">
+            <label for="nuevo-admin-rol">Rol</label>
+            <select id="nuevo-admin-rol" name="rol">
+              <option value="ADMIN">Administrador</option>
+              <option value="SUPER_ADMIN">Super administrador</option>
+            </select>
+          </div>
+          <button type="submit" class="boton-principal">Crear administrador</button>
+        </form>
+        <p id="mensaje-crear-admin" class="mensaje-crear-admin" role="status" hidden></p>
+      </div>
+    </section>
   </div>
+
+  <dialog id="dialogo-confirmar-entrega" class="dialogo-confirmacion">
+    <form method="dialog" class="dialogo-confirmacion__contenido">
+      <p class="etiqueta">Confirmar entrega</p>
+      <h2 id="dialogo-entrega-titulo">¿Marcar kit como entregado?</h2>
+      <p id="dialogo-entrega-detalle" class="dialogo-confirmacion__detalle"></p>
+      <div class="dialogo-confirmacion__acciones">
+        <button type="submit" value="no" class="boton-secundario">No</button>
+        <button type="submit" value="si" class="boton-principal">Sí, entregar</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="js/admin.js" type="module"></script>

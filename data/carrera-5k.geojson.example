@@ -1,0 +1,13 @@
+{
+  "type": "Feature",
+  "properties": {
+    "nombre": "Carrera 5K Uniautónoma Fest 2026"
+  },
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [-76.6042339, 2.4406539],
+      [-76.5920287, 2.4551328]
+    ]
+  }
+}

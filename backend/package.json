@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "node --watch src/servidor.js",
     "start": "node src/servidor.js",
+    "verify": "node scripts/verificar-sintaxis.js",
     "crear-super-admin": "node scripts/crear-super-admin.js",
     "semilla-admin": "node scripts/crear-admin-semilla.js",
     "verificar-admin": "node scripts/verificar-admin-semilla.js",

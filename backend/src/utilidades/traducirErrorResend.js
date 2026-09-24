@@ -14,8 +14,10 @@ function traducirErrorResend(mensajeIngles) {
 
   if (texto.includes('domain is not verified')) {
     return (
-      'El dominio del remitente no está verificado en Resend. ' +
-      'Usa CORREO_REMITENTE=Uniautónoma Fest <onboarding@resend.dev> en pruebas o verifica tu dominio institucional.'
+      'El dominio del remitente (CORREO_REMITENTE) no coincide con ningún dominio verificado en Resend. ' +
+      'El correo "from" debe usar exactamente el dominio que aparece en verde en resend.com/domains ' +
+      '(ej. si verificaste send.cheiviz.com, usa Uniautónoma Fest <fest@send.cheiviz.com>, no @cheiviz.com ni @uniautonoma.edu.co). ' +
+      'En pruebas: Uniautónoma Fest <onboarding@resend.dev>. Reinicia el servidor tras cambiar backend/.env.'
     );
   }
 

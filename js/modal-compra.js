@@ -188,49 +188,110 @@
     }
   }
 
+  function mostrarCodigoReclamoEnPantalla(d) {
+    if (!d || d.status !== 'APPROVED' || !d.uniqueClaimCode) return false;
+    codigoMostrar.textContent = d.uniqueClaimCode;
+    codigoMostrar.hidden = false;
+    textoConfirmacion.textContent = '¡Pago confirmado! Tu código de reclamo:';
+    textoConfirmacionExtra.textContent =
+      'Presenta este código en la sede principal con tu documento. ' +
+      (d.emailEnviado
+        ? 'También lo enviamos a tu correo.'
+        : 'Si no llega el correo, usa este código en pantalla.');
+    return true;
+  }
+
+  function consultarEstadoPago() {
+    if (!referenciaActual) {
+      return Promise.resolve(null);
+    }
+    return fetch('/api/checkout/estado?reference=' + encodeURIComponent(referenciaActual))
+      .then(function (r) {
+        return r.json().then(function (d) {
+          return { ok: r.ok, d: d };
+        });
+      })
+      .then(function (_ref) {
+        var ok = _ref.ok;
+        var d = _ref.d;
+        if (!ok) return null;
+        return d;
+      })
+      .catch(function () {
+        return null;
+      });
+  }
+
+  function extraerTransaccionWidget(resultado) {
+    if (!resultado) return null;
+    return resultado.transaction || (resultado.data && resultado.data.transaction) || null;
+  }
+
+  function confirmarPagoEnServidor(transactionId) {
+    if (!referenciaActual || !transactionId) {
+      return Promise.resolve(null);
+    }
+    var idTransaccion = String(transactionId);
+    return fetch('/api/checkout/confirmar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        reference: referenciaActual,
+        transactionId: idTransaccion,
+      }),
+    })
+      .then(function (r) {
+        return r.json().then(function (d) {
+          return { ok: r.ok, d: d };
+        });
+      })
+      .then(function (_ref2) {
+        var ok = _ref2.ok;
+        var d = _ref2.d;
+        if (!ok) {
+          console.warn('[compra] confirmar pago:', d && d.mensaje);
+          return null;
+        }
+        return d;
+      })
+      .catch(function (err) {
+        console.warn('[compra] confirmar pago:', err);
+        return null;
+      });
+  }
+
   function iniciarPollingEstado() {
     detenerPolling();
     var intentos = 0;
     var maxIntentos = 40;
 
+    function revisarEstado(d) {
+      if (!d) return;
+      if (mostrarCodigoReclamoEnPantalla(d)) {
+        detenerPolling();
+        return;
+      }
+      if (d.status === 'REJECTED') {
+        detenerPolling();
+        textoConfirmacion.textContent = 'El pago no fue aprobado.';
+        textoConfirmacionExtra.textContent = 'Puedes intentar de nuevo desde la sección Kit.';
+      }
+    }
+
+    consultarEstadoPago().then(revisarEstado);
+
     intervaloPolling = setInterval(function () {
       intentos++;
       if (!referenciaActual || intentos > maxIntentos) {
         detenerPolling();
-        if (intentos > maxIntentos) {
+        if (intentos > maxIntentos && codigoMostrar.hidden) {
           textoConfirmacionExtra.textContent =
             'Si ya pagaste, revisa tu correo en unos minutos o acércate a sede con tu comprobante.';
         }
         return;
       }
 
-      fetch('/api/checkout/estado?reference=' + encodeURIComponent(referenciaActual))
-        .then(function (r) {
-          return r.json().then(function (d) {
-            return { ok: r.ok, d: d };
-          });
-        })
-        .then(function (_ref) {
-          var ok = _ref.ok;
-          var d = _ref.d;
-          if (!ok) return;
-          if (d.status === 'APPROVED' && d.uniqueClaimCode) {
-            detenerPolling();
-            codigoMostrar.textContent = d.uniqueClaimCode;
-            codigoMostrar.hidden = false;
-            textoConfirmacion.textContent = '¡Pago confirmado! Tu código de reclamo:';
-            textoConfirmacionExtra.textContent =
-              'Presenta este código en la sede principal con tu documento. ' +
-              (d.emailEnviado
-                ? 'También lo enviamos a tu correo.'
-                : 'Si no llega el correo, usa este código en pantalla.');
-          } else if (d.status === 'REJECTED') {
-            detenerPolling();
-            textoConfirmacion.textContent = 'El pago no fue aprobado.';
-            textoConfirmacionExtra.textContent = 'Puedes intentar de nuevo desde la sección Kit.';
-          }
-        })
-        .catch(function () {});
+      consultarEstadoPago().then(revisarEstado);
     }, 3000);
   }
 
@@ -265,10 +326,29 @@
           restaurarDespuesPasarela();
           mostrarPaso('confirmacion');
           enviandoPago = false;
-          if (resultado && resultado.transaction && resultado.transaction.status === 'APPROVED') {
+          botonAbrirWompi.disabled = false;
+          botonAbrirWompi.innerHTML = '<i class="tick"></i>Pagar con Wompi';
+
+          var transaccion = extraerTransaccionWidget(resultado);
+          if (transaccion && transaccion.status === 'APPROVED') {
             textoConfirmacion.textContent = '¡Pago recibido! Generando tu código…';
+          } else if (transaccion && transaccion.id) {
+            textoConfirmacion.textContent = 'Verificando tu pago con Wompi…';
+          } else {
+            textoConfirmacion.textContent = 'Confirmando tu pago…';
           }
-          iniciarPollingEstado();
+
+          var promesaConfirmar = transaccion && transaccion.id
+            ? confirmarPagoEnServidor(transaccion.id)
+            : Promise.resolve(null);
+
+          promesaConfirmar.then(function (d) {
+            if (mostrarCodigoReclamoEnPantalla(d)) {
+              detenerPolling();
+            } else {
+              iniciarPollingEstado();
+            }
+          });
         });
       })
       .catch(function (err) {
