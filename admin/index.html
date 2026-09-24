@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Uniautónoma Fest 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div id="vista-login" class="contenedor-login">
+    <form id="formulario-login" class="tarjeta">
+      <p class="etiqueta">Panel administrativo</p>
+      <h1>Iniciar sesión</h1>
+      <div class="campo">
+        <label for="correo">Correo</label>
+        <input id="correo" type="email" autocomplete="username" required>
+      </div>
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <input id="contrasena" type="password" autocomplete="current-password" required>
+      </div>
+      <p id="error-login" class="error" role="alert" hidden></p>
+      <button type="submit" class="boton-principal">Entrar</button>
+    </form>
+  </div>
+
+  <div id="vista-panel" class="panel" hidden>
+    <header class="barra">
+      <div>
+        <p class="etiqueta">Uniautónoma Fest 2026</p>
+        <h1>Entrega de kits</h1>
+      </div>
+      <div class="barra-acciones">
+        <span id="correo-admin" class="correo-admin"></span>
+        <button type="button" id="boton-cerrar-sesion" class="boton-secundario">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <section class="filtros">
+      <div class="campo-inline">
+        <label for="filtro-busqueda">Buscar</label>
+        <input id="filtro-busqueda" type="search" placeholder="Nombre, código estudiante o reclamo">
+      </div>
+      <div class="campo-inline">
+        <label for="filtro-estado">Estado pago</label>
+        <select id="filtro-estado">
+          <option value="">Todos</option>
+          <option value="APPROVED">Aprobado</option>
+          <option value="PENDING">Pendiente</option>
+          <option value="REJECTED">Rechazado</option>
+        </select>
+      </div>
+      <button type="button" id="boton-refrescar" class="boton-secundario">Actualizar</button>
+      <button type="button" id="boton-exportar" class="boton-principal">Exportar Excel</button>
+    </section>
+
+    <p id="error-panel" class="error" role="alert" hidden></p>
+
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Cód. estudiante</th>
+            <th>Talla</th>
+            <th>Kit</th>
+            <th>Código reclamo</th>
+            <th>Pago</th>
+            <th>Correo</th>
+            <th>Entrega</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-tabla"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="js/admin.js" type="module"></script>
+</body>
+</html>

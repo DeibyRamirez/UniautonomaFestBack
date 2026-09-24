@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0;url=/?comprar=uniautonomo#kit">
+  <script>
+    var p = new URLSearchParams(location.search);
+    var kit = p.get('kit') === 'general' ? 'general' : 'uniautonomo';
+    location.replace('/?comprar=' + kit + '#kit');
+  </script>
+  <title>Redirigiendo…</title>
+</head>
+<body>
+  <p><a href="/#kit">Volver al fest</a></p>
+</body>
+</html>
