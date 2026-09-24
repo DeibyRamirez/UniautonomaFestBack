@@ -263,6 +263,7 @@ html.pasarela-wompi,html.pasarela-wompi body{overflow:auto!important;height:auto
 .form-compra-grid input,.form-compra-grid select{width:100%;padding:12px 14px;border:1px solid var(--line);background:rgba(5,11,20,.6);color:var(--ink);font:inherit;border-radius:2px;}
 .form-compra-grid input:focus-visible,.form-compra-grid select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
 .modal-compra__error{color:#ff6b6b;font-size:14px;margin:12px 0 0;}
+.modal-compra__exito{color:#4ade80;font-size:14px;margin:12px 0 0;line-height:1.5;}
 .modal-compra__wompi{text-align:center;padding:20px 0;}
 .modal-compra__wompi-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;}
 .modal-compra__resumen{text-align:left;background:rgba(5,11,20,.5);border:1px solid var(--line);padding:16px;margin-bottom:20px;font-size:15px;line-height:1.6;color:var(--ink-2);}
@@ -442,7 +443,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
         <div class="time">9:00 AM<small>hasta 4:00 PM</small></div>
         <div><h3>Desafío Uniautónomo</h3><p class="sub">Actividades lúdicas y deportivas, y el Hackatón.</p>
           <div class="meta"><span>Sede Campestre El Aljibe</span></div>
-          <div class="cta"><a class="btn sm" href="#"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
+          <div class="cta"><a class="btn sm" id="inscribir-hackton" href="/eventos/?evento=Hackton&amp;desde=inscribir-hackton"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
       </article>
     </div>
 
@@ -475,7 +476,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
         <div class="time">8:00 AM<small>Jueves 22 de octubre</small></div>
         <div><h3>Feria de Emprendimiento</h3><p class="sub">Gastronomía, accesorios, salud, moda y belleza.</p>
           <div class="meta"><span>Sede principal</span></div>
-          <div class="cta"><a class="btn sm" href="#"><i class="tick"></i>Quiero un stand</a></div></div>
+          <div class="cta"><a class="btn sm" id="inscribir-feria" href="/eventos/?evento=FeriaEmprendimiento&amp;desde=inscribir-feria"><i class="tick"></i>Quiero un stand</a></div></div>
       </article>
       <article class="ev">
         <div class="time">3:00 PM<small>hasta 7:00 PM</small></div>

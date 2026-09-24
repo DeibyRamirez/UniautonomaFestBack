@@ -10,5 +10,9 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
     }
+
+    match /eventos/{documento}/{subcoleccion}/{inscripcion} {
+      allow read, write: if false;
+    }
   }
 }

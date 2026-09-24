@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro — Uniautónoma Fest 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="registro.css">
+</head>
+<body>
+  <main class="pagina-registro" id="pagina-registro">
+    <span class="corner tl"></span>
+    <span class="corner tr"></span>
+    <span class="corner bl"></span>
+    <span class="corner br"></span>
+
+    <p class="hud" id="registro-etiqueta">Registro · Evento</p>
+    <h1 class="t-m" id="registro-titulo">Inscripción</h1>
+    <p class="muted" id="registro-descripcion"></p>
+
+    <div id="paso-datos">
+      <form id="formulario-evento" class="form-compra-grid" novalidate></form>
+      <p id="mensaje-error" class="mensaje-error" role="alert" hidden></p>
+    </div>
+
+    <div id="paso-confirmacion" class="paso-confirmacion" hidden>
+      <p class="lead" id="texto-confirmacion">¡Te esperamos!</p>
+      <p class="muted" id="texto-confirmacion-extra"></p>
+      <a class="enlace-volver" href="/#programacion">Volver al cronograma</a>
+    </div>
+
+    <a class="enlace-volver" id="enlace-volver-datos" href="/#programacion">← Volver al Fest</a>
+  </main>
+  <script src="registro.js" defer></script>
+</body>
+</html>

@@ -3,6 +3,7 @@ const {
   getPerfilAdmin,
   getAdministradores,
   getEstudiantes,
+  getInscripcionesEventos,
   patchEntregarKit,
   postCrearAdmin,
 } = require('../controllers/admin.controller');
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.get('/perfil', requireAuth, requireAdmin, getPerfilAdmin);
 router.get('/students', requireAuth, requireAdmin, getEstudiantes);
+router.get('/eventos', requireAuth, requireAdmin, getInscripcionesEventos);
 router.patch('/students/:id/deliver', requireAuth, requireAdmin, patchEntregarKit);
 router.get('/admins', requireAuth, requireSuperAdmin, getAdministradores);
 router.post('/create-admin', requireAuth, requireSuperAdmin, postCrearAdmin);

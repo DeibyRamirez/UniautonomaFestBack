@@ -1,6 +1,8 @@
 const pagosRepository = require('../repositories/pagos.repository');
+const eventosRepository = require('../repositories/eventos.repository');
 const administradoresRepository = require('../repositories/administradores.repository');
 const { obtenerAuth } = require('../config/firebase');
+const { validarTipoEvento } = require('../services/validacionEvento.service');
 
 async function getPerfilAdmin(req, res) {
   try {
@@ -114,10 +116,36 @@ async function postCrearAdmin(req, res) {
   }
 }
 
+async function getInscripcionesEventos(req, res) {
+  try {
+    const tipoEvento = req.query.tipoEvento;
+    const errorTipo = validarTipoEvento(tipoEvento);
+    if (errorTipo) {
+      return res.status(400).json({ mensaje: errorTipo });
+    }
+
+    const resultado = await eventosRepository.listarInscripciones({
+      tipoEvento,
+      busqueda: req.query.search,
+      cursor: req.query.cursor,
+      limite: req.query.limit,
+    });
+
+    return res.json({
+      tipoEvento,
+      ...resultado,
+    });
+  } catch (error) {
+    console.error('[admin eventos]', error);
+    return res.status(500).json({ mensaje: 'No se pudo obtener inscripciones de eventos' });
+  }
+}
+
 module.exports = {
   getPerfilAdmin,
   getAdministradores,
   getEstudiantes,
+  getInscripcionesEventos,
   patchEntregarKit,
   postCrearAdmin,
 };

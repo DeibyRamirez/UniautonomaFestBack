@@ -15,9 +15,19 @@ const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
 const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
 const textoPaginaActual = document.getElementById('texto-pagina-actual');
 const pestanaFinanciera = document.getElementById('pestana-financiera');
+const pestanaEventos = document.getElementById('pestana-eventos');
 const pestanaAdministradores = document.getElementById('pestana-administradores');
 const seccionFinanciera = document.getElementById('seccion-financiera');
+const seccionEventos = document.getElementById('seccion-eventos');
 const seccionAdministradores = document.getElementById('seccion-administradores');
+const filtroTipoEvento = document.getElementById('filtro-tipo-evento');
+const filtroBusquedaEventos = document.getElementById('filtro-busqueda-eventos');
+const errorPanelEventos = document.getElementById('error-panel-eventos');
+const cuerpoTablaEventos = document.getElementById('cuerpo-tabla-eventos');
+const cabeceraTablaEventos = document.getElementById('cabecera-tabla-eventos');
+const botonPaginaAnteriorEventos = document.getElementById('boton-pagina-anterior-eventos');
+const botonPaginaSiguienteEventos = document.getElementById('boton-pagina-siguiente-eventos');
+const textoPaginaActualEventos = document.getElementById('texto-pagina-actual-eventos');
 const formularioCrearAdmin = document.getElementById('formulario-crear-admin');
 const inputContrasenaNuevoAdmin = document.getElementById('nuevo-admin-contrasena');
 const botonVerContrasenaNuevoAdmin = document.getElementById('boton-ver-contrasena-nuevo-admin');
@@ -35,6 +45,10 @@ let paginaIndice = 0;
 let cursoresInicioPagina = [null];
 let hayMasPaginas = false;
 
+let paginaIndiceEventos = 0;
+let cursoresInicioPaginaEventos = [null];
+let hayMasPaginasEventos = false;
+
 function mostrarError(elemento, texto) {
   elemento.textContent = texto || '';
   elemento.hidden = !texto;
@@ -45,13 +59,26 @@ function irALogin() {
 }
 
 function activarPestana(nombre) {
-  const esFinanciera = nombre !== 'administradores';
-  pestanaFinanciera.classList.toggle('activa', esFinanciera);
-  pestanaAdministradores.classList.toggle('activa', !esFinanciera);
-  seccionFinanciera.hidden = !esFinanciera;
-  seccionAdministradores.hidden = esFinanciera;
+  const esFinanciera = nombre === 'financiera';
+  const esEventos = nombre === 'eventos';
+  const esAdministradores = nombre === 'administradores';
 
-  if (!esFinanciera && esSuperAdmin) {
+  pestanaFinanciera.classList.toggle('activa', esFinanciera);
+  pestanaEventos.classList.toggle('activa', esEventos);
+  pestanaAdministradores.classList.toggle('activa', esAdministradores);
+
+  seccionFinanciera.hidden = !esFinanciera;
+  seccionEventos.hidden = !esEventos;
+  seccionAdministradores.hidden = !esAdministradores;
+
+  if (esEventos) {
+    actualizarCabeceraTablaEventos();
+    obtenerInscripcionesEventos({ reiniciar: true }).catch((e) =>
+      mostrarError(errorPanelEventos, e.message)
+    );
+  }
+
+  if (esAdministradores && esSuperAdmin) {
     cargarListadoAdmins().catch((e) => mostrarError(errorPanel, e.message));
   }
 }
@@ -288,6 +315,199 @@ async function obtenerTodosParaExportar() {
   return datos.datos || [];
 }
 
+function actualizarCabeceraTablaEventos() {
+  const esHackton = filtroTipoEvento.value === 'Hackton';
+  if (esHackton) {
+    cabeceraTablaEventos.innerHTML = `
+      <tr>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Programa</th>
+        <th>Cód. estudiante</th>
+        <th>Estado correo</th>
+        <th>Registro</th>
+      </tr>`;
+  } else {
+    cabeceraTablaEventos.innerHTML = `
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Documento</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Emprendimiento</th>
+        <th>Estado correo</th>
+        <th>Registro</th>
+      </tr>`;
+  }
+}
+
+function estadoCorreoEvento(registro) {
+  if (registro.emailEnviadoEn) return 'Enviado';
+  if (registro.emailError) return `Error: ${registro.emailError}`;
+  return '—';
+}
+
+function renderizarTablaEventos(registros) {
+  cuerpoTablaEventos.innerHTML = '';
+  const esHackton = filtroTipoEvento.value === 'Hackton';
+  const columnas = esHackton ? 7 : 8;
+
+  if (!registros.length) {
+    cuerpoTablaEventos.innerHTML =
+      `<tr><td colspan="${columnas}">No hay inscripciones con los filtros actuales.</td></tr>`;
+    return;
+  }
+
+  for (const registro of registros) {
+    const fila = document.createElement('tr');
+    if (esHackton) {
+      fila.innerHTML = `
+        <td>${registro.nombres || '—'}</td>
+        <td>${registro.apellidos || '—'}</td>
+        <td>${registro.correoElectronico || '—'}</td>
+        <td>${registro.programa || '—'}</td>
+        <td>${registro.codigoEstudiantil || '—'}</td>
+        <td>${estadoCorreoEvento(registro)}</td>
+        <td>${formatearFecha(registro.createdAt)}</td>
+      `;
+    } else {
+      fila.innerHTML = `
+        <td>${registro.nombre || '—'}</td>
+        <td>${registro.apellido || '—'}</td>
+        <td>${registro.tipoDocumento || '—'} ${registro.numeroDocumento || ''}</td>
+        <td>${registro.telefono || '—'}</td>
+        <td>${registro.correoElectronico || '—'}</td>
+        <td>${registro.emprendimientoMarca || '—'}</td>
+        <td>${estadoCorreoEvento(registro)}</td>
+        <td>${formatearFecha(registro.createdAt)}</td>
+      `;
+    }
+    cuerpoTablaEventos.appendChild(fila);
+  }
+}
+
+function reiniciarPaginacionEventos() {
+  paginaIndiceEventos = 0;
+  cursoresInicioPaginaEventos = [null];
+  hayMasPaginasEventos = false;
+}
+
+function actualizarControlesPaginacionEventos() {
+  textoPaginaActualEventos.textContent = `Página ${paginaIndiceEventos + 1}`;
+  botonPaginaAnteriorEventos.disabled = paginaIndiceEventos <= 0;
+  botonPaginaSiguienteEventos.disabled = !hayMasPaginasEventos;
+}
+
+async function obtenerInscripcionesEventos(opciones = {}) {
+  const { reiniciar = false } = opciones;
+  if (reiniciar) reiniciarPaginacionEventos();
+
+  const params = new URLSearchParams();
+  params.set('tipoEvento', filtroTipoEvento.value);
+  params.set('limit', String(FILAS_POR_PAGINA));
+  if (filtroBusquedaEventos.value.trim()) {
+    params.set('search', filtroBusquedaEventos.value.trim());
+  }
+
+  const cursor = cursoresInicioPaginaEventos[paginaIndiceEventos];
+  if (cursor) params.set('cursor', cursor);
+
+  const respuesta = await fetch(`/api/admin/eventos?${params}`, {
+    headers: { Authorization: `Bearer ${tokenActual}` },
+  });
+  const datos = await respuesta.json();
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'Error al cargar inscripciones');
+  }
+
+  hayMasPaginasEventos = Boolean(datos.paginacion?.hayMas);
+  if (datos.paginacion?.cursorSiguiente) {
+    cursoresInicioPaginaEventos[paginaIndiceEventos + 1] = datos.paginacion.cursorSiguiente;
+  } else {
+    cursoresInicioPaginaEventos = cursoresInicioPaginaEventos.slice(0, paginaIndiceEventos + 1);
+  }
+
+  renderizarTablaEventos(datos.datos || []);
+  actualizarControlesPaginacionEventos();
+}
+
+async function obtenerEventosParaExportar(tipoEvento) {
+  const params = new URLSearchParams();
+  params.set('tipoEvento', tipoEvento);
+  params.set('limit', '500');
+
+  const respuesta = await fetch(`/api/admin/eventos?${params}`, {
+    headers: { Authorization: `Bearer ${tokenActual}` },
+  });
+  const datos = await respuesta.json();
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'Error al cargar datos de eventos');
+  }
+  return datos.datos || [];
+}
+
+function filasExcelHackton(registros) {
+  return registros.map((r) => ({
+    Nombres: r.nombres || '',
+    Apellidos: r.apellidos || '',
+    Correo: r.correoElectronico || '',
+    Programa: r.programa || '',
+    CodigoEstudiantil: r.codigoEstudiantil || '',
+    CorreoEnviado: r.emailEnviadoEn || '',
+    ErrorCorreo: r.emailError || '',
+    FechaRegistro: r.createdAt || '',
+  }));
+}
+
+function filasExcelFeria(registros) {
+  return registros.map((r) => ({
+    Nombre: r.nombre || '',
+    Apellido: r.apellido || '',
+    TipoDocumento: r.tipoDocumento || '',
+    NumeroDocumento: r.numeroDocumento || '',
+    Telefono: r.telefono || '',
+    Correo: r.correoElectronico || '',
+    EmprendimientoMarca: r.emprendimientoMarca || '',
+    CorreoEnviado: r.emailEnviadoEn || '',
+    ErrorCorreo: r.emailError || '',
+    FechaRegistro: r.createdAt || '',
+  }));
+}
+
+async function exportarExcelEventos() {
+  try {
+    const [hackton, feria] = await Promise.all([
+      obtenerEventosParaExportar('Hackton'),
+      obtenerEventosParaExportar('FeriaEmprendimiento'),
+    ]);
+
+    if (!hackton.length && !feria.length) {
+      mostrarError(errorPanelEventos, 'No hay inscripciones para exportar');
+      return;
+    }
+
+    const libro = XLSX.utils.book_new();
+    if (hackton.length) {
+      const hojaHackton = XLSX.utils.json_to_sheet(filasExcelHackton(hackton));
+      XLSX.utils.book_append_sheet(libro, hojaHackton, 'Hackton');
+    }
+    if (feria.length) {
+      const hojaFeria = XLSX.utils.json_to_sheet(filasExcelFeria(feria));
+      XLSX.utils.book_append_sheet(libro, hojaFeria, 'FeriaEmprendimiento');
+    }
+
+    XLSX.writeFile(
+      libro,
+      `eventos-uaf26-${new Date().toISOString().slice(0, 10)}.xlsx`
+    );
+    mostrarError(errorPanelEventos, '');
+  } catch (error) {
+    mostrarError(errorPanelEventos, error.message);
+  }
+}
+
 async function exportarExcel() {
   try {
     const filasExport = await obtenerTodosParaExportar();
@@ -354,8 +574,44 @@ botonPaginaSiguiente.addEventListener('click', () => {
 });
 
 pestanaFinanciera.addEventListener('click', () => activarPestana('financiera'));
+pestanaEventos.addEventListener('click', () => activarPestana('eventos'));
 pestanaAdministradores.addEventListener('click', () => {
   if (esSuperAdmin) activarPestana('administradores');
+});
+
+document.getElementById('boton-refrescar-eventos').addEventListener('click', () => {
+  obtenerInscripcionesEventos({ reiniciar: true }).catch((e) =>
+    mostrarError(errorPanelEventos, e.message)
+  );
+});
+document.getElementById('boton-exportar-eventos').addEventListener('click', exportarExcelEventos);
+botonPaginaAnteriorEventos.addEventListener('click', () => {
+  if (paginaIndiceEventos <= 0) return;
+  paginaIndiceEventos -= 1;
+  obtenerInscripcionesEventos().catch((e) => mostrarError(errorPanelEventos, e.message));
+});
+botonPaginaSiguienteEventos.addEventListener('click', () => {
+  if (!hayMasPaginasEventos) return;
+  paginaIndiceEventos += 1;
+  obtenerInscripcionesEventos().catch((e) => mostrarError(errorPanelEventos, e.message));
+});
+
+let temporizadorBusquedaEventos;
+filtroBusquedaEventos.addEventListener('input', () => {
+  clearTimeout(temporizadorBusquedaEventos);
+  temporizadorBusquedaEventos = setTimeout(() => {
+    if (!seccionEventos.hidden) {
+      obtenerInscripcionesEventos({ reiniciar: true }).catch((e) =>
+        mostrarError(errorPanelEventos, e.message)
+      );
+    }
+  }, 350);
+});
+filtroTipoEvento.addEventListener('change', () => {
+  actualizarCabeceraTablaEventos();
+  obtenerInscripcionesEventos({ reiniciar: true }).catch((e) =>
+    mostrarError(errorPanelEventos, e.message)
+  );
 });
 
 let temporizadorBusqueda;

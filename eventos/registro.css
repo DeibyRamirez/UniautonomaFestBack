@@ -1,0 +1,211 @@
+:root {
+  --bg: #050b14;
+  --line: rgba(44, 240, 255, 0.28);
+  --cyan: #2cf0ff;
+  --ink: #eef7fb;
+  --ink-2: #9fb7c3;
+  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: var(--font);
+  background: rgba(5, 11, 20, 0.96);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.pagina-registro {
+  width: min(640px, 100%);
+  max-height: min(92vh, 900px);
+  overflow: auto;
+  position: relative;
+  border: 1px solid var(--line);
+  background: linear-gradient(165deg, rgba(10, 21, 34, 0.97), rgba(15, 28, 35, 0.98));
+  padding: clamp(22px, 4vw, 36px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--cyan);
+  pointer-events: none;
+}
+
+.corner.tl {
+  top: 8px;
+  left: 8px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner.tr {
+  top: 8px;
+  right: 8px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner.bl {
+  bottom: 8px;
+  left: 8px;
+  border-right: none;
+  border-top: none;
+}
+
+.corner.br {
+  bottom: 8px;
+  right: 8px;
+  border-left: none;
+  border-top: none;
+}
+
+.hud {
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 8px;
+}
+
+.t-m {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.05;
+}
+
+.muted {
+  color: var(--ink-2);
+  margin: 8px 0 0;
+}
+
+.enlace-volver {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--cyan);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.enlace-volver:hover {
+  text-decoration: underline;
+}
+
+.form-compra-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+  margin-top: 22px;
+}
+
+.form-compra-grid .ancho-completo {
+  grid-column: 1 / -1;
+}
+
+.form-compra-grid label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+.form-compra-grid input,
+.form-compra-grid select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  background: rgba(5, 11, 20, 0.6);
+  color: var(--ink);
+  font: inherit;
+  border-radius: 2px;
+}
+
+.form-compra-grid input:focus-visible,
+.form-compra-grid select:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  font: 900 15px/1 var(--font);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #04121a;
+  border: 1px solid var(--cyan);
+  background: var(--cyan);
+  cursor: pointer;
+  clip-path: polygon(
+    12px 0,
+    100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%,
+    0 12px
+  );
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn .tick {
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.mensaje-error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 12px 0 0;
+}
+
+.paso-confirmacion {
+  margin-top: 22px;
+}
+
+.paso-confirmacion .lead {
+  font-size: clamp(17px, 1.5vw, 20px);
+  margin: 0;
+}
+
+#paso-datos[hidden],
+.paso-confirmacion[hidden],
+.mensaje-error[hidden],
+.enlace-volver[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .form-compra-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -26,6 +26,9 @@
       <button type="button" id="pestana-financiera" class="admin-pestana activa" data-pestana="financiera">
         Financiera UniautonomaFest
       </button>
+      <button type="button" id="pestana-eventos" class="admin-pestana" data-pestana="eventos">
+        Eventos
+      </button>
       <button type="button" id="pestana-administradores" class="admin-pestana" data-pestana="administradores" hidden>
         Administradores
       </button>
@@ -78,6 +81,51 @@
         <button type="button" id="boton-pagina-anterior" class="boton-pagina" aria-label="Página anterior">&lt;</button>
         <span id="texto-pagina-actual" class="texto-pagina">Página 1</span>
         <button type="button" id="boton-pagina-siguiente" class="boton-pagina" aria-label="Página siguiente">&gt;</button>
+      </nav>
+    </section>
+
+    <section id="seccion-eventos" class="admin-seccion" hidden aria-labelledby="pestana-eventos">
+      <p class="admin-seccion__subtitulo">Inscripciones Hackatón y Feria de Emprendimiento</p>
+
+      <div class="filtros">
+        <div class="campo-inline">
+          <label for="filtro-tipo-evento">Evento</label>
+          <select id="filtro-tipo-evento">
+            <option value="Hackton">Hackatón</option>
+            <option value="FeriaEmprendimiento">Feria de Emprendimiento</option>
+          </select>
+        </div>
+        <div class="campo-inline">
+          <label for="filtro-busqueda-eventos">Buscar</label>
+          <input id="filtro-busqueda-eventos" type="search" placeholder="Correo electrónico">
+        </div>
+        <button type="button" id="boton-refrescar-eventos" class="boton-secundario">Actualizar</button>
+        <button type="button" id="boton-exportar-eventos" class="boton-principal">Exportar Excel</button>
+      </div>
+
+      <p id="error-panel-eventos" class="error" role="alert" hidden></p>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead id="cabecera-tabla-eventos">
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Correo</th>
+              <th>Programa</th>
+              <th>Cód. estudiante</th>
+              <th>Correo enviado</th>
+              <th>Registro</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-eventos"></tbody>
+        </table>
+      </div>
+
+      <nav class="paginacion-tabla" aria-label="Paginación de eventos">
+        <button type="button" id="boton-pagina-anterior-eventos" class="boton-pagina" aria-label="Página anterior">&lt;</button>
+        <span id="texto-pagina-actual-eventos" class="texto-pagina">Página 1</span>
+        <button type="button" id="boton-pagina-siguiente-eventos" class="boton-pagina" aria-label="Página siguiente">&gt;</button>
       </nav>
     </section>
 
