@@ -78,7 +78,7 @@ En **Project Settings → General**, verifica:
 | **Root Directory** | Vacío o `.` (raíz del repo, **no** `backend`) |
 | **Install Command** | Vacío (usa [`vercel.json`](../vercel.json)) |
 | **Build Command** | Vacío (usa [`vercel.json`](../vercel.json)) |
-| **Node.js Version** | `20.x` |
+| **Node.js Version** | `24.x` |
 
 Si Root Directory apunta a `backend`, el install falla porque busca `backend/backend/package-lock.json`.
 
