@@ -69,9 +69,25 @@ Puedes conectar el repositorio en el dashboard de Vercel **además** del workflo
 
 Recomendación del repo: **CI en GitHub Actions + CD con `cd-vercel.yml`** para control explícito por rama Gitflow.
 
+## Configuración del proyecto en Vercel
+
+En **Project Settings → General**, verifica:
+
+| Ajuste | Valor correcto |
+|--------|----------------|
+| **Framework Preset** | Other (`framework: null` en [`vercel.json`](../vercel.json)) |
+| **Root Directory** | Vacío o `.` (raíz del repo, **no** `backend`) |
+| **Install Command** | Vacío (usa [`vercel.json`](../vercel.json)) |
+| **Build Command** | Vacío (usa [`vercel.json`](../vercel.json)) |
+| **Output Directory** | Vacío (usa `outputDirectory: "."` en [`vercel.json`](../vercel.json)) |
+| **Node.js Version** | `24.x` |
+
+Si Root Directory apunta a `backend`, el install falla porque busca `backend/backend/package-lock.json`.
+
 ## Checklist primer despliegue
 
 - [ ] Proyecto Vercel creado y `vercel link`
+- [ ] Root Directory en Vercel = raíz del repo (no `backend`)
 - [ ] Secretos `VERCEL_*` en GitHub
 - [ ] Rama `develop` creada y pusheada
 - [ ] Variables de entorno Preview y Production en Vercel

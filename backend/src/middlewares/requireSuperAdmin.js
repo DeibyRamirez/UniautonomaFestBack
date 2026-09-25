@@ -1,4 +1,8 @@
 const administradoresRepository = require('../repositories/administradores.repository');
+const {
+  obtenerDeCache,
+  guardarEnCache,
+} = require('../utilidades/cacheAdmin');
 
 async function requireSuperAdmin(req, res, next) {
   if (!req.usuario) {
@@ -6,7 +10,14 @@ async function requireSuperAdmin(req, res, next) {
   }
 
   const esSuperClaim = req.usuario.superAdmin === true;
-  const registro = await administradoresRepository.obtenerPorUid(req.usuario.uid);
+
+  let registro = obtenerDeCache(req.usuario.uid);
+  if (!registro) {
+    registro = await administradoresRepository.obtenerPorUid(req.usuario.uid);
+    if (registro) {
+      guardarEnCache(req.usuario.uid, registro);
+    }
+  }
 
   if (!esSuperClaim || !registro || registro.role !== 'SUPER_ADMIN') {
     return res.status(403).json({ mensaje: 'Acceso reservado a super administradores' });

@@ -70,7 +70,7 @@ El proyecto ya incluye más que la landing sola. Referencia rápida para no olvi
 
 - [ ] Wompi: llaves de **producción**, webhook apuntando a `https://<dominio>/api/payments/webhook`.
 - [ ] Resend: dominio verificado; `CORREO_REMITENTE` con el mismo dominio (ej. `@send.tudominio.com`).
-- [ ] Firebase: credenciales admin en Vercel; reglas Firestore desplegadas.
+- [ ] Firebase: credenciales admin en Vercel; reglas Firestore desplegadas; índices del admin con `firebase deploy --only firestore:indexes`.
 - [ ] Admin: semilla o super admin (`npm run semilla-admin` / `crear-super-admin`).
 - [ ] Probar flujo completo: compra → APPROVED → correo con código `UAF26-…` → búsqueda en panel admin.
 - [ ] `URL_BASE` en producción = URL canónica del sitio (enlaces y callbacks correctos).

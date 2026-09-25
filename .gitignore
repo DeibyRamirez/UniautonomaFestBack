@@ -6,3 +6,5 @@ backend/.env
 service-account.json
 backend/service-account.json
 .vercel
+
+.vercel

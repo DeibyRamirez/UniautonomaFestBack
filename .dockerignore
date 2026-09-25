@@ -1,0 +1,31 @@
+# Git y control de versiones
+.git
+.gitignore
+
+# Secretos y credenciales (nunca en la imagen)
+.env
+backend/.env
+backend/service-account.json
+**/*.pem
+**/*.key
+
+# Dependencias (se instalan en el build)
+node_modules
+backend/node_modules
+
+# Desarrollo y documentación (no afectan runtime)
+.agents
+.cursor
+.vscode
+.idea
+*.md
+!backend/README.md
+
+# Logs y temporales
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# CI / Vercel (no necesarios en contenedor)
+.vercel

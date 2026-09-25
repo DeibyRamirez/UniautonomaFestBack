@@ -84,15 +84,23 @@ async function buscarInscripcionRecientePorCorreo(tipoEvento, correo, ventanaMin
   return null;
 }
 
-function construirConsultaListado(tipoEvento, busqueda) {
-  let consulta = referenciaSubcoleccion(tipoEvento).orderBy('createdAt', 'desc');
+function construirConsultaListado(tipoEvento, busqueda, cursorDoc) {
   const termino = String(busqueda || '').trim().toLowerCase();
+  let consulta;
+
   if (termino) {
     consulta = referenciaSubcoleccion(tipoEvento)
       .orderBy('correoElectronico')
       .startAt(termino)
       .endAt(`${termino}\uf8ff`);
+  } else {
+    consulta = referenciaSubcoleccion(tipoEvento).orderBy('createdAt', 'desc');
   }
+
+  if (cursorDoc) {
+    consulta = consulta.startAfter(cursorDoc);
+  }
+
   return consulta;
 }
 
@@ -105,17 +113,15 @@ async function listarInscripciones({
   const limiteSolicitado = Math.min(Math.max(Number(limite) || 20, 1), 500);
   const modoExportacion = !cursor && limiteSolicitado >= 100;
 
-  let consulta = construirConsultaListado(tipoEvento, busqueda);
-
-  if (cursor && !busqueda) {
+  let cursorDoc = null;
+  if (cursor) {
     const docSnap = await referenciaSubcoleccion(tipoEvento).doc(cursor).get();
     if (docSnap.exists) {
-      consulta = referenciaSubcoleccion(tipoEvento)
-        .orderBy('createdAt', 'desc')
-        .startAfter(docSnap);
+      cursorDoc = docSnap;
     }
   }
 
+  const consulta = construirConsultaListado(tipoEvento, busqueda, cursorDoc);
   const snapshot = await consulta.limit(limiteSolicitado + 1).get();
   const docs = snapshot.docs;
   const hayMas = docs.length > limiteSolicitado;

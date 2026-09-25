@@ -2,6 +2,7 @@ const pagosRepository = require('../repositories/pagos.repository');
 const eventosRepository = require('../repositories/eventos.repository');
 const administradoresRepository = require('../repositories/administradores.repository');
 const { obtenerAuth } = require('../config/firebase');
+const { invalidarCacheAdmin } = require('../utilidades/cacheAdmin');
 const { validarTipoEvento } = require('../services/validacionEvento.service');
 
 async function getPerfilAdmin(req, res) {
@@ -43,6 +44,17 @@ async function getEstudiantes(req, res) {
     return res.json(resultado);
   } catch (error) {
     console.error('[admin estudiantes]', error);
+    const detalle = String(error.details || error.message || '');
+    if (
+      error.code === 9 ||
+      detalle.includes('requires an index') ||
+      detalle.includes('currently building')
+    ) {
+      return res.status(503).json({
+        mensaje:
+          'Los índices de búsqueda de Firebase se están creando. Espera unos minutos y recarga, o busca por nombre.',
+      });
+    }
     return res.status(500).json({ mensaje: 'No se pudo obtener el listado' });
   }
 }
@@ -101,6 +113,7 @@ async function postCrearAdmin(req, res) {
       email: usuario.email,
       role: rol,
     });
+    invalidarCacheAdmin(usuario.uid);
 
     return res.status(201).json({
       mensaje: 'Administrador creado',

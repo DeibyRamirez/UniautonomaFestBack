@@ -1,19 +1,6 @@
 (function () {
   const URL_WIDGET_WOMPI = 'https://checkout.wompi.co/widget.js';
 
-  const METADATOS_KIT = {
-    uniautonomo: {
-      titulo: 'Kit Sangre Azul',
-      descripcion: 'Estudiantes, docentes, administrativos y egresados (@uniautonoma.edu.co).',
-      precioCentavos: 7500000,
-    },
-    general: {
-      titulo: 'Kit Corredor',
-      descripcion: 'Para participantes externos a la institución.',
-      precioCentavos: 8000000,
-    },
-  };
-
   const modal = document.getElementById('modal-compra');
   if (!modal) return;
 
@@ -44,8 +31,30 @@
   let datosPersonales = null;
   let referenciaActual = null;
   let intervaloPolling = null;
+  function bloquearScrollLanding() {
+    document.documentElement.classList.add('compra-scroll-lock');
+  }
+
+  function desbloquearScrollLanding() {
+    document.documentElement.classList.remove('compra-scroll-lock');
+  }
+
+  function obtenerMetadatosKit() {
+    return window.PreciosKit ? window.PreciosKit.METADATOS : null;
+  }
+
+  function metaKit(tipo) {
+    var metadatos = obtenerMetadatosKit();
+    if (metadatos && metadatos[tipo]) return metadatos[tipo];
+    return {
+      titulo: tipo === 'general' ? 'Kit Corredor' : 'Kit Sangre Azul',
+      descripcion: '',
+      precioCentavos: tipo === 'general' ? 8000000 : 7500000,
+    };
+  }
 
   function formatearPrecio(centavos) {
+    if (window.PreciosKit) return window.PreciosKit.formatearPrecio(centavos);
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
@@ -75,7 +84,7 @@
 
   function abrirModal(kit) {
     tipoKit = kit === 'general' ? 'general' : 'uniautonomo';
-    const meta = METADATOS_KIT[tipoKit];
+    var meta = metaKit(tipoKit);
     titulo.textContent = 'Comprar ' + meta.titulo;
     descripcion.textContent = meta.descripcion;
     precioEl.innerHTML =
@@ -106,37 +115,26 @@
 
     modal.hidden = false;
     modal.classList.add('activo');
-    document.body.style.overflow = 'hidden';
+    bloquearScrollLanding();
     document.getElementById('compra-firstName').focus();
   }
 
-  function liberarScrollPasarela() {
-    document.documentElement.classList.add('pasarela-wompi');
-    document.body.classList.add('pasarela-wompi');
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.documentElement.style.overflow = '';
+  function activarPasarelaWompi() {
     modal.classList.add('pasarela-wompi');
+    bloquearScrollLanding();
   }
 
   function restaurarDespuesPasarela() {
-    document.documentElement.classList.remove('pasarela-wompi');
-    document.body.classList.remove('pasarela-wompi');
-    document.documentElement.style.overflow = '';
     modal.classList.remove('pasarela-wompi');
     modal.classList.add('activo');
     modal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    bloquearScrollLanding();
   }
 
   function cerrarModal() {
     modal.classList.remove('activo', 'pasarela-wompi');
     modal.hidden = true;
-    document.documentElement.classList.remove('pasarela-wompi');
-    document.body.classList.remove('pasarela-wompi');
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.documentElement.style.overflow = '';
+    desbloquearScrollLanding();
     detenerPolling();
     enviandoPago = false;
   }
@@ -319,7 +317,7 @@
           opciones.redirectUrl = datosCheckout.redirectUrl;
         }
 
-        liberarScrollPasarela();
+        activarPasarelaWompi();
 
         var checkout = new window.WidgetCheckout(opciones);
         checkout.open(function (resultado) {
@@ -352,6 +350,8 @@
         });
       })
       .catch(function (err) {
+        modal.classList.remove('pasarela-wompi');
+        bloquearScrollLanding();
         mostrarError(err.message);
         botonAbrirWompi.disabled = false;
         botonAbrirWompi.innerHTML = '<i class="tick"></i>Pagar con Wompi';
@@ -393,7 +393,7 @@
 
         resumenPago.innerHTML =
           '<strong>Kit:</strong> ' +
-          METADATOS_KIT[tipoKit].titulo +
+          metaKit(tipoKit).titulo +
           '<br><strong>Total:</strong> ' +
           formatearPrecio(datos.amountInCents) +
           '<br><strong>Talla:</strong> ' +
@@ -427,14 +427,21 @@
 
   document.querySelectorAll('[data-abrir-compra]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      abrirModal(btn.getAttribute('data-abrir-compra'));
+      var kit = btn.getAttribute('data-abrir-compra');
+      var listo = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
+      listo.then(function () {
+        abrirModal(kit);
+      });
     });
   });
 
   var params = new URLSearchParams(window.location.search);
   var comprar = params.get('comprar') || params.get('kit');
   if (comprar) {
-    abrirModal(comprar);
+    var listoCompra = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
+    listoCompra.then(function () {
+      abrirModal(comprar);
+    });
     if (window.history.replaceState) {
       var url = new URL(window.location.href);
       url.searchParams.delete('comprar');

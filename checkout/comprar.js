@@ -10,20 +10,39 @@ const formulario = document.getElementById('formulario-compra');
 const mensajeError = document.getElementById('mensaje-error');
 const botonPagar = document.getElementById('boton-pagar');
 
-const METADATOS_KIT = {
-  uniautonomo: {
-    titulo: 'Kit Sangre Azul',
-    descripcion: 'Estudiantes, docentes, administrativos y egresados (@uniautonoma.edu.co).',
-    precioCentavos: 7500000,
-  },
-  general: {
-    titulo: 'Kit Corredor',
-    descripcion: 'Para participantes externos a la institución.',
-    precioCentavos: 8000000,
-  },
-};
-
 const URL_WIDGET_WOMPI = 'https://checkout.wompi.co/widget.js';
+
+async function obtenerMontosKit() {
+  try {
+    const respuesta = await fetch('/api/config/publica');
+    if (!respuesta.ok) throw new Error('config');
+    const datos = await respuesta.json();
+    return datos.montos || null;
+  } catch {
+    return null;
+  }
+}
+
+function metaKit(tipo, montos) {
+  const base = {
+    uniautonomo: {
+      titulo: 'Kit Sangre Azul',
+      descripcion: 'Estudiantes, docentes, administrativos y egresados (@uniautonoma.edu.co).',
+      precioCentavos: 7500000,
+    },
+    general: {
+      titulo: 'Kit Corredor',
+      descripcion: 'Para participantes externos a la institución.',
+      precioCentavos: 8000000,
+    },
+  };
+
+  const meta = { ...base[tipo] };
+  if (montos?.[tipo]) {
+    meta.precioCentavos = montos[tipo];
+  }
+  return meta;
+}
 
 function formatearPrecio(centavos) {
   return new Intl.NumberFormat('es-CO', {
@@ -33,8 +52,8 @@ function formatearPrecio(centavos) {
   }).format(centavos / 100);
 }
 
-function configurarVista() {
-  const meta = METADATOS_KIT[tipoKit];
+function configurarVista(montos) {
+  const meta = metaKit(tipoKit, montos);
   tituloKit.textContent = `Comprar ${meta.titulo}`;
   descripcionKit.textContent = meta.descripcion;
   precioKit.textContent = formatearPrecio(meta.precioCentavos);
@@ -162,4 +181,4 @@ formulario.addEventListener('submit', async (evento) => {
   }
 });
 
-configurarVista();
+obtenerMontosKit().then(configurarVista);

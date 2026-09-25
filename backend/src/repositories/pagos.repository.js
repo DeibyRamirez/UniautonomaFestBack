@@ -137,6 +137,8 @@ async function marcarEntregado(id, correoAdmin) {
 
 const LIMITE_FILAS_POR_PAGINA = 6;
 const LOTE_BUSQUEDA_FIRESTORE = 12;
+const MAX_LECTURAS_BUSQUEDA_NOMBRE = 20;
+const LIMITE_TERMINO_BUSQUEDA = 120;
 
 function coincideBusqueda(pago, termino) {
   if (!termino) return true;
@@ -167,6 +169,18 @@ function coincideBusqueda(pago, termino) {
   );
 }
 
+function sanitizarTermino(busqueda) {
+  return String(busqueda || '').trim().slice(0, LIMITE_TERMINO_BUSQUEDA);
+}
+
+function detectarEstrategiaBusqueda(termino) {
+  if (termino.includes('@')) return 'email';
+  if (/^uaf26-pay-/i.test(termino)) return 'reference';
+  if (/^uaf26-/i.test(termino)) return 'claimCode';
+  if (/^\d+$/.test(termino)) return 'studentCode';
+  return 'nombre';
+}
+
 function construirConsultaPagos(db, status) {
   if (status) {
     return db
@@ -175,6 +189,176 @@ function construirConsultaPagos(db, status) {
       .orderBy('createdAt', 'desc');
   }
   return db.collection(COLECCION).orderBy('createdAt', 'desc');
+}
+
+function construirConsultaPagosIndexada(db, estrategia, termino) {
+  const coleccion = db.collection(COLECCION);
+
+  if (estrategia === 'email') {
+    return coleccion
+      .where('personalInfo.email', '==', termino.toLowerCase())
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'reference') {
+    return coleccion.where('reference', '==', termino).orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'claimCode') {
+    return coleccion
+      .where('uniqueClaimCode', '==', termino.toUpperCase())
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'studentCode') {
+    return coleccion
+      .where('personalInfo.studentCode', '==', termino)
+      .orderBy('createdAt', 'desc');
+  }
+
+  return null;
+}
+
+function filtrarPorStatus(pagos, status) {
+  if (!status) return pagos;
+  return pagos.filter((pago) => pago.status === status);
+}
+
+function esIndiceFirestorePendiente(error) {
+  if (!error) return false;
+  const detalle = String(error.details || error.message || '');
+  return (
+    error.code === 9 ||
+    detalle.includes('FAILED_PRECONDITION') ||
+    detalle.includes('requires an index')
+  );
+}
+
+async function buscarPagosPorNombre({
+  db,
+  status,
+  termino,
+  filasPorPagina,
+  cursor,
+}) {
+  let consulta = construirConsultaPagos(db, status);
+  if (cursor) {
+    const docCursor = await db.collection(COLECCION).doc(String(cursor)).get();
+    if (docCursor.exists) {
+      consulta = consulta.startAfter(docCursor);
+    }
+  }
+
+  const resultados = [];
+  let ultimoDocLeido = null;
+  let hayMas = false;
+  let lecturasFirestore = 0;
+
+  while (resultados.length < filasPorPagina && lecturasFirestore < MAX_LECTURAS_BUSQUEDA_NOMBRE) {
+    const snapshot = await consulta.limit(LOTE_BUSQUEDA_FIRESTORE).get();
+    if (snapshot.empty) break;
+
+    lecturasFirestore += snapshot.size;
+    for (const doc of snapshot.docs) {
+      ultimoDocLeido = doc;
+      const pago = serializarDocumento(doc.id, doc.data());
+      if (coincideBusqueda(pago, termino)) {
+        resultados.push(pago);
+        if (resultados.length >= filasPorPagina) break;
+      }
+    }
+
+    if (snapshot.size < LOTE_BUSQUEDA_FIRESTORE) break;
+    consulta = construirConsultaPagos(db, status).startAfter(ultimoDocLeido);
+  }
+
+  if (ultimoDocLeido && lecturasFirestore < MAX_LECTURAS_BUSQUEDA_NOMBRE) {
+    const prueba = await construirConsultaPagos(db, status)
+      .startAfter(ultimoDocLeido)
+      .limit(1)
+      .get();
+    hayMas = !prueba.empty;
+    lecturasFirestore += prueba.size;
+  }
+
+  return {
+    datos: resultados,
+    paginacion: {
+      limite: filasPorPagina,
+      hayMas,
+      cursorSiguiente: hayMas && ultimoDocLeido ? ultimoDocLeido.id : null,
+      lecturasFirestore,
+    },
+  };
+}
+
+async function buscarPagosIndexado({
+  db,
+  status,
+  estrategia,
+  termino,
+  filasPorPagina,
+  cursor,
+}) {
+  if (estrategia === 'nombre') {
+    return buscarPagosPorNombre({
+      db,
+      status,
+      termino,
+      filasPorPagina,
+      cursor,
+    });
+  }
+
+  let consulta = construirConsultaPagosIndexada(db, estrategia, termino);
+  if (!consulta) {
+    return buscarPagosPorNombre({
+      db,
+      status,
+      termino,
+      filasPorPagina,
+      cursor,
+    });
+  }
+
+  if (cursor) {
+    const docCursor = await db.collection(COLECCION).doc(String(cursor)).get();
+    if (docCursor.exists) {
+      consulta = consulta.startAfter(docCursor);
+    }
+  }
+
+  try {
+    const snapshot = await consulta.limit(filasPorPagina + 1).get();
+    let datos = snapshot.docs.map((doc) => serializarDocumento(doc.id, doc.data()));
+    datos = filtrarPorStatus(datos, status);
+
+    const hayMas = snapshot.size > filasPorPagina;
+    const pagina = datos.slice(0, filasPorPagina);
+    const ultimoDoc = snapshot.docs[Math.min(filasPorPagina, snapshot.docs.length - 1)];
+
+    return {
+      datos: pagina,
+      paginacion: {
+        limite: filasPorPagina,
+        hayMas,
+        cursorSiguiente: hayMas && ultimoDoc ? ultimoDoc.id : null,
+        lecturasFirestore: snapshot.size,
+      },
+    };
+  } catch (error) {
+    if (!esIndiceFirestorePendiente(error)) {
+      throw error;
+    }
+    console.warn(
+      '[pagos] índice Firestore en construcción, usando búsqueda alternativa:',
+      estrategia
+    );
+    return buscarPagosPorNombre({
+      db,
+      status,
+      termino,
+      filasPorPagina,
+      cursor,
+    });
+  }
 }
 
 async function listarPagos({
@@ -192,7 +376,7 @@ async function listarPagos({
         LIMITE_FILAS_POR_PAGINA,
         Math.max(1, limiteSolicitado || LIMITE_FILAS_POR_PAGINA)
       );
-  const termino = busqueda?.trim().toLowerCase() || '';
+  const termino = sanitizarTermino(busqueda).toLowerCase();
 
   if (modoExportacion) {
     let consultaExport = construirConsultaPagos(db, status);
@@ -211,6 +395,18 @@ async function listarPagos({
       },
     };
   }
+  if (termino) {
+    const estrategia = detectarEstrategiaBusqueda(termino);
+    return buscarPagosIndexado({
+      db,
+      status,
+      estrategia,
+      termino,
+      filasPorPagina,
+      cursor,
+    });
+  }
+
   let consulta = construirConsultaPagos(db, status);
 
   if (cursor) {
@@ -220,49 +416,12 @@ async function listarPagos({
     }
   }
 
-  const resultados = [];
-  let ultimoDocLeido = null;
-  let hayMas = false;
-  let lecturasFirestore = 0;
-  const maxLecturasBusqueda = 60;
-
-  if (!termino) {
-    const snapshot = await consulta.limit(filasPorPagina + 1).get();
-    lecturasFirestore = snapshot.size;
-    const docs = snapshot.docs.slice(0, filasPorPagina);
-    hayMas = snapshot.size > filasPorPagina;
-    for (const doc of docs) {
-      resultados.push(serializarDocumento(doc.id, doc.data()));
-      ultimoDocLeido = doc;
-    }
-  } else {
-    while (resultados.length < filasPorPagina && lecturasFirestore < maxLecturasBusqueda) {
-      const snapshot = await consulta.limit(LOTE_BUSQUEDA_FIRESTORE).get();
-      if (snapshot.empty) break;
-
-      lecturasFirestore += snapshot.size;
-      for (const doc of snapshot.docs) {
-        ultimoDocLeido = doc;
-        const pago = serializarDocumento(doc.id, doc.data());
-        if (coincideBusqueda(pago, termino)) {
-          resultados.push(pago);
-          if (resultados.length >= filasPorPagina) break;
-        }
-      }
-
-      if (snapshot.size < LOTE_BUSQUEDA_FIRESTORE) break;
-      consulta = construirConsultaPagos(db, status).startAfter(ultimoDocLeido);
-    }
-
-    if (ultimoDocLeido && lecturasFirestore < maxLecturasBusqueda) {
-      const prueba = await construirConsultaPagos(db, status)
-        .startAfter(ultimoDocLeido)
-        .limit(1)
-        .get();
-      hayMas = !prueba.empty;
-      lecturasFirestore += prueba.size;
-    }
-  }
+  const snapshot = await consulta.limit(filasPorPagina + 1).get();
+  const lecturasFirestore = snapshot.size;
+  const docs = snapshot.docs.slice(0, filasPorPagina);
+  const hayMas = snapshot.size > filasPorPagina;
+  const resultados = docs.map((doc) => serializarDocumento(doc.id, doc.data()));
+  const ultimoDocLeido = docs[docs.length - 1] || null;
 
   return {
     datos: resultados,
