@@ -1,5 +1,19 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
 
+function normalizarPrivateKey(valor) {
+  if (!valor) return valor;
+
+  let clave = valor.trim();
+  if (
+    (clave.startsWith('"') && clave.endsWith('"')) ||
+    (clave.startsWith("'") && clave.endsWith("'"))
+  ) {
+    clave = clave.slice(1, -1);
+  }
+
+  return clave.replace(/\\n/g, '\n');
+}
+
 function obtenerEntero(nombre, valorPorDefecto) {
   const valor = process.env[nombre];
   if (valor === undefined || valor === '') return valorPorDefecto;
@@ -17,7 +31,7 @@ const variablesEntorno = {
   firebase: {
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    privateKey: normalizarPrivateKey(process.env.FIREBASE_PRIVATE_KEY),
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
   },
