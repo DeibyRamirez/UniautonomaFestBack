@@ -26,7 +26,6 @@
   const indicadoresPaso = modal.querySelectorAll('[data-indicador-paso]');
 
   let tipoKit = 'uniautonomo';
-  let scrollBloqueadoEn = 0;
   let enviandoPago = false;
   let datosCheckout = null;
   let datosPersonales = null;
@@ -54,26 +53,6 @@
       currency: 'COP',
       maximumFractionDigits: 0,
     }).format(centavos / 100);
-  }
-
-  function bloquearScrollFondo() {
-    scrollBloqueadoEn = window.scrollY;
-    document.documentElement.classList.add('scroll-bloqueado');
-    document.body.style.position = 'fixed';
-    document.body.style.top = '-' + scrollBloqueadoEn + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-  }
-
-  function desbloquearScrollFondo() {
-    document.documentElement.classList.remove('scroll-bloqueado');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollBloqueadoEn);
   }
 
   function mostrarError(texto) {
@@ -129,25 +108,37 @@
 
     modal.hidden = false;
     modal.classList.add('activo');
-    bloquearScrollFondo();
+    document.body.style.overflow = 'hidden';
     document.getElementById('compra-firstName').focus();
   }
 
   function liberarScrollPasarela() {
+    document.documentElement.classList.add('pasarela-wompi');
+    document.body.classList.add('pasarela-wompi');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.documentElement.style.overflow = '';
     modal.classList.add('pasarela-wompi');
   }
 
   function restaurarDespuesPasarela() {
+    document.documentElement.classList.remove('pasarela-wompi');
+    document.body.classList.remove('pasarela-wompi');
+    document.documentElement.style.overflow = '';
     modal.classList.remove('pasarela-wompi');
     modal.classList.add('activo');
     modal.hidden = false;
-    bloquearScrollFondo();
+    document.body.style.overflow = 'hidden';
   }
 
   function cerrarModal() {
     modal.classList.remove('activo', 'pasarela-wompi');
     modal.hidden = true;
-    desbloquearScrollFondo();
+    document.documentElement.classList.remove('pasarela-wompi');
+    document.body.classList.remove('pasarela-wompi');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.documentElement.style.overflow = '';
     detenerPolling();
     enviandoPago = false;
   }
