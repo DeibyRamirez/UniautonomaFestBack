@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "installCommand": "npm ci && npm ci --prefix backend",
-  "buildCommand": "npm run verify --prefix backend",
+  "installCommand": "npm ci && cd backend && npm ci",
+  "buildCommand": "cd backend && npm run verify",
   "builds": [
     { "src": "api/index.js", "use": "@vercel/node" }
   ],

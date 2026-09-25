@@ -46,7 +46,7 @@ jobs:
       - name: Instalar dependencias
         run: |
           npm ci
-          npm ci --prefix backend
+          cd backend && npm ci
 
       - name: Instalar Vercel CLI
         run: npm install -g vercel@latest
