@@ -66,6 +66,7 @@ a:hover {
 
 body.modo-panel {
   min-height: 100vh;
+  font-size: 17px;
 }
 
 .tarjeta-login {
@@ -236,10 +237,10 @@ button:focus-visible {
 
 .boton-principal,
 .boton-secundario {
-  font: 900 14px/1 var(--font);
+  font: 900 15px/1 var(--font);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 12px 18px;
+  padding: 14px 22px;
   cursor: pointer;
   border: 1px solid var(--cyan);
   clip-path: polygon(
@@ -277,26 +278,36 @@ button:focus-visible {
 }
 
 .panel {
-  width: min(1680px, calc(100% - 48px));
+  width: 100%;
   max-width: none;
-  margin: 0 auto;
-  padding: 28px 24px 56px;
+  margin: 0;
+  padding: clamp(20px, 2.5vw, 36px) clamp(20px, 3vw, 56px) clamp(40px, 4vw, 72px);
+}
+
+.panel h1 {
+  font-size: clamp(1.75rem, 2.8vw, 2.35rem);
+  margin-bottom: 0;
+}
+
+.panel .etiqueta {
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .admin-pestanas {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--borde);
 }
 
 .admin-pestana {
-  font: 800 13px/1 var(--font);
+  font: 800 14px/1 var(--font);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 12px 18px;
+  padding: 14px 22px;
   cursor: pointer;
   border: 1px solid var(--borde);
   background: transparent;
@@ -317,9 +328,9 @@ button:focus-visible {
 }
 
 .admin-seccion__subtitulo {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
 .admin-seccion + .admin-seccion {
@@ -422,8 +433,8 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 20px;
+  margin-top: 24px;
 }
 
 .boton-pagina {
@@ -449,18 +460,24 @@ button:focus-visible {
 
 .texto-pagina {
   color: var(--muted);
-  font-size: 0.9rem;
-  min-width: 6rem;
+  font-size: 1rem;
+  min-width: 7rem;
   text-align: center;
+}
+
+.panel .error {
+  font-size: 1rem;
+  margin-bottom: 16px;
 }
 
 .barra {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--borde);
 }
 
@@ -472,27 +489,43 @@ button:focus-visible {
 }
 
 .enlace-landing {
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .correo-admin {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .filtros {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
   align-items: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .filtros .campo-inline {
-  flex: 1 1 180px;
+  flex: 1 1 220px;
   margin: 0;
+}
+
+.filtros .campo-inline:first-child {
+  flex: 2 1 min(100%, 420px);
+}
+
+.panel input,
+.panel select {
+  padding: 12px 14px;
+  font-size: 1rem;
+}
+
+.panel .campo-inline label,
+.panel label {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
 }
 
 .tabla-contenedor {
@@ -511,24 +544,29 @@ button:focus-visible {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.97rem;
 }
 
 th,
 td {
-  padding: 12px 10px;
+  padding: 15px 16px;
   border-bottom: 1px solid rgba(44, 240, 255, 0.12);
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 th {
   background: var(--bg-2);
   color: var(--muted);
-  font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+td {
+  line-height: 1.45;
 }
 
 .estado-aprobado {
@@ -545,11 +583,12 @@ th {
 
 .boton-entregar {
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 8px 12px;
+  padding: 10px 14px;
+  white-space: nowrap;
   border: 1px solid var(--cyan);
   background: rgba(44, 240, 255, 0.1);
   color: var(--cyan);

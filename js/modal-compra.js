@@ -31,6 +31,13 @@
   let datosPersonales = null;
   let referenciaActual = null;
   let intervaloPolling = null;
+  function bloquearScrollLanding() {
+    document.documentElement.classList.add('compra-scroll-lock');
+  }
+
+  function desbloquearScrollLanding() {
+    document.documentElement.classList.remove('compra-scroll-lock');
+  }
 
   function obtenerMetadatosKit() {
     return window.PreciosKit ? window.PreciosKit.METADATOS : null;
@@ -108,37 +115,26 @@
 
     modal.hidden = false;
     modal.classList.add('activo');
-    document.body.style.overflow = 'hidden';
+    bloquearScrollLanding();
     document.getElementById('compra-firstName').focus();
   }
 
-  function liberarScrollPasarela() {
-    document.documentElement.classList.add('pasarela-wompi');
-    document.body.classList.add('pasarela-wompi');
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.documentElement.style.overflow = '';
+  function activarPasarelaWompi() {
     modal.classList.add('pasarela-wompi');
+    bloquearScrollLanding();
   }
 
   function restaurarDespuesPasarela() {
-    document.documentElement.classList.remove('pasarela-wompi');
-    document.body.classList.remove('pasarela-wompi');
-    document.documentElement.style.overflow = '';
     modal.classList.remove('pasarela-wompi');
     modal.classList.add('activo');
     modal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    bloquearScrollLanding();
   }
 
   function cerrarModal() {
     modal.classList.remove('activo', 'pasarela-wompi');
     modal.hidden = true;
-    document.documentElement.classList.remove('pasarela-wompi');
-    document.body.classList.remove('pasarela-wompi');
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.documentElement.style.overflow = '';
+    desbloquearScrollLanding();
     detenerPolling();
     enviandoPago = false;
   }
@@ -321,7 +317,7 @@
           opciones.redirectUrl = datosCheckout.redirectUrl;
         }
 
-        liberarScrollPasarela();
+        activarPasarelaWompi();
 
         var checkout = new window.WidgetCheckout(opciones);
         checkout.open(function (resultado) {
@@ -354,6 +350,8 @@
         });
       })
       .catch(function (err) {
+        modal.classList.remove('pasarela-wompi');
+        bloquearScrollLanding();
         mostrarError(err.message);
         botonAbrirWompi.disabled = false;
         botonAbrirWompi.innerHTML = '<i class="tick"></i>Pagar con Wompi';

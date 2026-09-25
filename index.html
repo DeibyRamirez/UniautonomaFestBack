@@ -245,7 +245,9 @@ p{margin:0;}
 .modal-compra{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s;}
 .modal-compra.activo{pointer-events:auto;opacity:1;visibility:visible;}
 .modal-compra.pasarela-wompi{opacity:0;visibility:hidden;pointer-events:none!important;z-index:-1;}
-html.pasarela-wompi,html.pasarela-wompi body{overflow:auto!important;height:auto!important;overscroll-behavior:auto;touch-action:pan-y;}
+html.compra-scroll-lock,html.compra-scroll-lock body{overflow:hidden!important;overscroll-behavior:none;}
+html.compra-scroll-lock body>div:has(iframe[src*="wompi"]){position:fixed;inset:0;z-index:9999;max-height:100dvh;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+html.compra-scroll-lock iframe[src*="wompi"]{display:block;width:100%;min-height:100dvh;border:0;}
 .modal-compra__fondo{position:absolute;inset:0;background:rgba(5,11,20,.82);backdrop-filter:blur(6px);}
 .modal-compra__tarjeta{position:relative;width:min(640px,100%);max-height:min(92vh,900px);overflow:auto;border:1px solid var(--line);background:linear-gradient(165deg,rgba(10,21,34,.97),rgba(15,28,35,.98));padding:clamp(22px,4vw,36px);box-shadow:0 24px 80px rgba(0,0,0,.55);}
 .modal-compra__tarjeta .corner{position:absolute;width:14px;height:14px;border:1px solid var(--cyan);pointer-events:none;}

@@ -35,7 +35,7 @@ const mensajeCrearAdmin = document.getElementById('mensaje-crear-admin');
 const dialogoConfirmarEntrega = document.getElementById('dialogo-confirmar-entrega');
 const dialogoEntregaDetalle = document.getElementById('dialogo-entrega-detalle');
 
-const FILAS_POR_PAGINA = 6;
+const FILAS_POR_PAGINA = 15;
 
 let auth = null;
 let tokenActual = null;
@@ -48,10 +48,36 @@ let hayMasPaginas = false;
 let paginaIndiceEventos = 0;
 let cursoresInicioPaginaEventos = [null];
 let hayMasPaginasEventos = false;
+let registrosEventosCache = [];
+let eventosFiltrosCargados = '';
 
 function mostrarError(elemento, texto) {
   elemento.textContent = texto || '';
   elemento.hidden = !texto;
+}
+
+function claveFiltrosEventos() {
+  return `${filtroTipoEvento.value}|${filtroBusquedaEventos.value.trim()}`;
+}
+
+function claveCacheEventos() {
+  return `${claveFiltrosEventos()}|p${paginaIndiceEventos}`;
+}
+
+async function fetchAdmin(url, opciones = {}) {
+  const encabezados = {
+    ...(opciones.headers || {}),
+    Authorization: `Bearer ${tokenActual}`,
+  };
+  let respuesta = await fetch(url, { ...opciones, headers: encabezados });
+
+  if (respuesta.status === 401 && auth?.currentUser) {
+    tokenActual = await auth.currentUser.getIdToken(true);
+    encabezados.Authorization = `Bearer ${tokenActual}`;
+    respuesta = await fetch(url, { ...opciones, headers: encabezados });
+  }
+
+  return respuesta;
 }
 
 function irALogin() {
@@ -73,6 +99,12 @@ function activarPestana(nombre) {
 
   if (esEventos) {
     actualizarCabeceraTablaEventos();
+    const claveActual = claveCacheEventos();
+    if (eventosFiltrosCargados === claveActual && registrosEventosCache.length) {
+      renderizarTablaEventos(registrosEventosCache);
+      actualizarControlesPaginacionEventos();
+      return;
+    }
     obtenerInscripcionesEventos({ reiniciar: true }).catch((e) =>
       mostrarError(errorPanelEventos, e.message)
     );
@@ -194,9 +226,7 @@ function renderizarTablaAdmins(registros) {
 }
 
 async function cargarPerfilAdmin() {
-  const respuesta = await fetch('/api/admin/perfil', {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin('/api/admin/perfil');
   const datos = await respuesta.json();
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || 'No se pudo cargar el perfil');
@@ -206,9 +236,7 @@ async function cargarPerfilAdmin() {
 }
 
 async function cargarListadoAdmins() {
-  const respuesta = await fetch('/api/admin/admins', {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin('/api/admin/admins');
   const datos = await respuesta.json();
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || 'No se pudo cargar administradores');
@@ -246,9 +274,7 @@ async function obtenerRegistros(opciones = {}) {
   const cursor = cursoresInicioPagina[paginaIndice];
   if (cursor) params.set('cursor', cursor);
 
-  const respuesta = await fetch(`/api/admin/students?${params}`, {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
 
   const datos = await respuesta.json();
   if (!respuesta.ok) {
@@ -286,9 +312,8 @@ async function marcarEntregado(registro, boton) {
 
   boton.disabled = true;
   try {
-    const respuesta = await fetch(`/api/admin/students/${registro.id}/deliver`, {
+    const respuesta = await fetchAdmin(`/api/admin/students/${registro.id}/deliver`, {
       method: 'PATCH',
-      headers: { Authorization: `Bearer ${tokenActual}` },
     });
     const datos = await respuesta.json();
     if (!respuesta.ok) throw new Error(datos.mensaje || 'No se pudo marcar entrega');
@@ -305,9 +330,7 @@ async function obtenerTodosParaExportar() {
   if (filtroEstado.value) params.set('status', filtroEstado.value);
   if (filtroBusqueda.value.trim()) params.set('search', filtroBusqueda.value.trim());
 
-  const respuesta = await fetch(`/api/admin/students?${params}`, {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
   const datos = await respuesta.json();
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || 'Error al cargar datos para exportar');
@@ -392,6 +415,8 @@ function reiniciarPaginacionEventos() {
   paginaIndiceEventos = 0;
   cursoresInicioPaginaEventos = [null];
   hayMasPaginasEventos = false;
+  eventosFiltrosCargados = '';
+  registrosEventosCache = [];
 }
 
 function actualizarControlesPaginacionEventos() {
@@ -414,9 +439,7 @@ async function obtenerInscripcionesEventos(opciones = {}) {
   const cursor = cursoresInicioPaginaEventos[paginaIndiceEventos];
   if (cursor) params.set('cursor', cursor);
 
-  const respuesta = await fetch(`/api/admin/eventos?${params}`, {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin(`/api/admin/eventos?${params}`);
   const datos = await respuesta.json();
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || 'Error al cargar inscripciones');
@@ -429,7 +452,9 @@ async function obtenerInscripcionesEventos(opciones = {}) {
     cursoresInicioPaginaEventos = cursoresInicioPaginaEventos.slice(0, paginaIndiceEventos + 1);
   }
 
-  renderizarTablaEventos(datos.datos || []);
+  registrosEventosCache = datos.datos || [];
+  eventosFiltrosCargados = claveCacheEventos();
+  renderizarTablaEventos(registrosEventosCache);
   actualizarControlesPaginacionEventos();
 }
 
@@ -438,9 +463,7 @@ async function obtenerEventosParaExportar(tipoEvento) {
   params.set('tipoEvento', tipoEvento);
   params.set('limit', '500');
 
-  const respuesta = await fetch(`/api/admin/eventos?${params}`, {
-    headers: { Authorization: `Bearer ${tokenActual}` },
-  });
+  const respuesta = await fetchAdmin(`/api/admin/eventos?${params}`);
   const datos = await respuesta.json();
   if (!respuesta.ok) {
     throw new Error(datos.mensaje || 'Error al cargar datos de eventos');
@@ -549,12 +572,11 @@ async function exportarExcel() {
 }
 
 async function iniciarPanel(usuario) {
-  tokenActual = await usuario.getIdToken(true);
+  tokenActual = await usuario.getIdToken();
   correoAdmin.textContent = usuario.email;
   mostrarError(errorPanel, '');
   activarPestana('financiera');
-  await cargarPerfilAdmin();
-  await obtenerRegistros({ reiniciar: true });
+  await Promise.all([cargarPerfilAdmin(), obtenerRegistros({ reiniciar: true })]);
 }
 
 document.getElementById('boton-cerrar-sesion').addEventListener('click', async () => {
@@ -637,12 +659,9 @@ formularioCrearAdmin.addEventListener('submit', async (evento) => {
   const role = formularioCrearAdmin.rol.value;
 
   try {
-    const respuesta = await fetch('/api/admin/create-admin', {
+    const respuesta = await fetchAdmin('/api/admin/create-admin', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${tokenActual}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: correo, password: contrasena, role }),
     });
     const datos = await respuesta.json();
