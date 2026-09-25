@@ -245,7 +245,7 @@ p{margin:0;}
 .modal-compra{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s;}
 .modal-compra.activo{pointer-events:auto;opacity:1;visibility:visible;}
 .modal-compra.pasarela-wompi{opacity:0;visibility:hidden;pointer-events:none!important;z-index:-1;}
-html.pasarela-wompi,html.pasarela-wompi body{overflow:auto!important;height:auto!important;overscroll-behavior:auto;touch-action:pan-y;}
+html.scroll-bloqueado,html.scroll-bloqueado body{overflow:hidden!important;overscroll-behavior:none;touch-action:none;height:100%;}
 .modal-compra__fondo{position:absolute;inset:0;background:rgba(5,11,20,.82);backdrop-filter:blur(6px);}
 .modal-compra__tarjeta{position:relative;width:min(640px,100%);max-height:min(92vh,900px);overflow:auto;border:1px solid var(--line);background:linear-gradient(165deg,rgba(10,21,34,.97),rgba(15,28,35,.98));padding:clamp(22px,4vw,36px);box-shadow:0 24px 80px rgba(0,0,0,.55);}
 .modal-compra__tarjeta .corner{position:absolute;width:14px;height:14px;border:1px solid var(--cyan);pointer-events:none;}
@@ -553,7 +553,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
           <li class="hi">Participas en la rifa de la moto</li>
         </ul>
         <div class="price">
-          <div class="num">$ 75.000<small>COP</small></div>
+          <div class="num" data-precio-kit="uniautonomo">$ 75.000<small>COP</small></div>
           <div class="hero-cta" style="justify-content:flex-start;margin-top:18px">
             <button type="button" class="btn solid" data-abrir-compra="uniautonomo"><i class="tick"></i>Comprar kit uniautónomo</button>
           </div>
@@ -571,7 +571,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
           <li class="no">No participa en la rifa de la moto</li>
         </ul>
         <div class="price">
-          <div class="num">$ 80.000<small>COP</small></div>
+          <div class="num" data-precio-kit="general">$ 80.000<small>COP</small></div>
           <div class="hero-cta" style="justify-content:flex-start;margin-top:18px">
             <button type="button" class="btn" data-abrir-compra="general"><i class="tick"></i>Comprar kit externo</button>
           </div>
@@ -801,6 +801,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
 </script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin="" defer></script>
 <script src="js/mapa-carrera-5k.js" defer></script>
+<script src="js/precios-kit.js" defer></script>
 <script src="js/modal-compra.js" defer></script>
 </body>
 </html>
