@@ -1,0 +1,6740 @@
+[
+    {
+        "id": 13,
+        "nombre": "Abejorral",
+        "departamento": "Antioquia",
+        "etiqueta": "Abejorral, Antioquia"
+    },
+    {
+        "id": 859,
+        "nombre": "Ábrego",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Ábrego, Norte de Santander"
+    },
+    {
+        "id": 14,
+        "nombre": "Abriaquí",
+        "departamento": "Antioquia",
+        "etiqueta": "Abriaquí, Antioquia"
+    },
+    {
+        "id": 741,
+        "nombre": "Acacías",
+        "departamento": "Meta",
+        "etiqueta": "Acacías, Meta"
+    },
+    {
+        "id": 468,
+        "nombre": "Acandí",
+        "departamento": "Chocó",
+        "etiqueta": "Acandí, Chocó"
+    },
+    {
+        "id": 658,
+        "nombre": "Acevedo",
+        "departamento": "Huila",
+        "etiqueta": "Acevedo, Huila"
+    },
+    {
+        "id": 168,
+        "nombre": "Achí",
+        "departamento": "Bolívar",
+        "etiqueta": "Achí, Bolívar"
+    },
+    {
+        "id": 659,
+        "nombre": "Agrado",
+        "departamento": "Huila",
+        "etiqueta": "Agrado, Huila"
+    },
+    {
+        "id": 629,
+        "nombre": "Agua de Dios",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Agua de Dios, Cundinamarca"
+    },
+    {
+        "id": 442,
+        "nombre": "Aguachica",
+        "departamento": "Cesar",
+        "etiqueta": "Aguachica, Cesar"
+    },
+    {
+        "id": 916,
+        "nombre": "Aguada",
+        "departamento": "Santander",
+        "etiqueta": "Aguada, Santander"
+    },
+    {
+        "id": 338,
+        "nombre": "Aguadas",
+        "departamento": "Caldas",
+        "etiqueta": "Aguadas, Caldas"
+    },
+    {
+        "id": 381,
+        "nombre": "Aguazul",
+        "departamento": "Casanare",
+        "etiqueta": "Aguazul, Casanare"
+    },
+    {
+        "id": 443,
+        "nombre": "Agustín Codazzi",
+        "departamento": "Cesar",
+        "etiqueta": "Agustín Codazzi, Cesar"
+    },
+    {
+        "id": 660,
+        "nombre": "Aipe",
+        "departamento": "Huila",
+        "etiqueta": "Aipe, Huila"
+    },
+    {
+        "id": 632,
+        "nombre": "Albán",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Albán, Cundinamarca"
+    },
+    {
+        "id": 770,
+        "nombre": "Albán",
+        "departamento": "Nariño",
+        "etiqueta": "Albán, Nariño"
+    },
+    {
+        "id": 365,
+        "nombre": "Albania",
+        "departamento": "Caquetá",
+        "etiqueta": "Albania, Caquetá"
+    },
+    {
+        "id": 695,
+        "nombre": "Albania",
+        "departamento": "La Guajira",
+        "etiqueta": "Albania, La Guajira"
+    },
+    {
+        "id": 917,
+        "nombre": "Albania",
+        "departamento": "Santander",
+        "etiqueta": "Albania, Santander"
+    },
+    {
+        "id": 1102,
+        "nombre": "Alcalá",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Alcalá, Valle del Cauca"
+    },
+    {
+        "id": 771,
+        "nombre": "Aldana",
+        "departamento": "Nariño",
+        "etiqueta": "Aldana, Nariño"
+    },
+    {
+        "id": 15,
+        "nombre": "Alejandría",
+        "departamento": "Antioquia",
+        "etiqueta": "Alejandría, Antioquia"
+    },
+    {
+        "id": 710,
+        "nombre": "Algarrobo",
+        "departamento": "Magdalena",
+        "etiqueta": "Algarrobo, Magdalena"
+    },
+    {
+        "id": 661,
+        "nombre": "Algeciras",
+        "departamento": "Huila",
+        "etiqueta": "Algeciras, Huila"
+    },
+    {
+        "id": 400,
+        "nombre": "Almaguer",
+        "departamento": "Cauca",
+        "etiqueta": "Almaguer, Cauca"
+    },
+    {
+        "id": 218,
+        "nombre": "Almeida",
+        "departamento": "Boyacá",
+        "etiqueta": "Almeida, Boyacá"
+    },
+    {
+        "id": 1026,
+        "nombre": "Alpujarra",
+        "departamento": "Tolima",
+        "etiqueta": "Alpujarra, Tolima"
+    },
+    {
+        "id": 662,
+        "nombre": "Altamira",
+        "departamento": "Huila",
+        "etiqueta": "Altamira, Huila"
+    },
+    {
+        "id": 469,
+        "nombre": "Alto Baudó",
+        "departamento": "Chocó",
+        "etiqueta": "Alto Baudó, Chocó"
+    },
+    {
+        "id": 205,
+        "nombre": "Altos del Rosario",
+        "departamento": "Bolívar",
+        "etiqueta": "Altos del Rosario, Bolívar"
+    },
+    {
+        "id": 1027,
+        "nombre": "Alvarado",
+        "departamento": "Tolima",
+        "etiqueta": "Alvarado, Tolima"
+    },
+    {
+        "id": 16,
+        "nombre": "Amagá",
+        "departamento": "Antioquia",
+        "etiqueta": "Amagá, Antioquia"
+    },
+    {
+        "id": 17,
+        "nombre": "Amalfi",
+        "departamento": "Antioquia",
+        "etiqueta": "Amalfi, Antioquia"
+    },
+    {
+        "id": 1028,
+        "nombre": "Ambalema",
+        "departamento": "Tolima",
+        "etiqueta": "Ambalema, Tolima"
+    },
+    {
+        "id": 527,
+        "nombre": "Anapoima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Anapoima, Cundinamarca"
+    },
+    {
+        "id": 772,
+        "nombre": "Ancuyá",
+        "departamento": "Nariño",
+        "etiqueta": "Ancuyá, Nariño"
+    },
+    {
+        "id": 1097,
+        "nombre": "Andalucía",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Andalucía, Valle del Cauca"
+    },
+    {
+        "id": 18,
+        "nombre": "Andes",
+        "departamento": "Antioquia",
+        "etiqueta": "Andes, Antioquia"
+    },
+    {
+        "id": 19,
+        "nombre": "Angelópolis",
+        "departamento": "Antioquia",
+        "etiqueta": "Angelópolis, Antioquia"
+    },
+    {
+        "id": 20,
+        "nombre": "Angostura",
+        "departamento": "Antioquia",
+        "etiqueta": "Angostura, Antioquia"
+    },
+    {
+        "id": 633,
+        "nombre": "Anolaima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Anolaima, Cundinamarca"
+    },
+    {
+        "id": 21,
+        "nombre": "Anorí",
+        "departamento": "Antioquia",
+        "etiqueta": "Anorí, Antioquia"
+    },
+    {
+        "id": 339,
+        "nombre": "Anserma",
+        "departamento": "Caldas",
+        "etiqueta": "Anserma, Caldas"
+    },
+    {
+        "id": 1086,
+        "nombre": "Ansermanuevo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Ansermanuevo, Valle del Cauca"
+    },
+    {
+        "id": 22,
+        "nombre": "Anzá",
+        "departamento": "Antioquia",
+        "etiqueta": "Anzá, Antioquia"
+    },
+    {
+        "id": 1068,
+        "nombre": "Anzoátegui",
+        "departamento": "Tolima",
+        "etiqueta": "Anzoátegui, Tolima"
+    },
+    {
+        "id": 23,
+        "nombre": "Apartadó",
+        "departamento": "Antioquia",
+        "etiqueta": "Apartadó, Antioquia"
+    },
+    {
+        "id": 898,
+        "nombre": "Apía",
+        "departamento": "Risaralda",
+        "etiqueta": "Apía, Risaralda"
+    },
+    {
+        "id": 591,
+        "nombre": "Apulo",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Apulo, Cundinamarca"
+    },
+    {
+        "id": 219,
+        "nombre": "Aquitania",
+        "departamento": "Boyacá",
+        "etiqueta": "Aquitania, Boyacá"
+    },
+    {
+        "id": 711,
+        "nombre": "Aracataca",
+        "departamento": "Magdalena",
+        "etiqueta": "Aracataca, Magdalena"
+    },
+    {
+        "id": 340,
+        "nombre": "Aranzazu",
+        "departamento": "Caldas",
+        "etiqueta": "Aranzazu, Caldas"
+    },
+    {
+        "id": 918,
+        "nombre": "Aratoca",
+        "departamento": "Santander",
+        "etiqueta": "Aratoca, Santander"
+    },
+    {
+        "id": 143,
+        "nombre": "Arauca",
+        "departamento": "Arauca",
+        "etiqueta": "Arauca, Arauca"
+    },
+    {
+        "id": 137,
+        "nombre": "Arauquita",
+        "departamento": "Arauca",
+        "etiqueta": "Arauquita, Arauca"
+    },
+    {
+        "id": 528,
+        "nombre": "Arbeláez",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Arbeláez, Cundinamarca"
+    },
+    {
+        "id": 831,
+        "nombre": "Arboleda",
+        "departamento": "Nariño",
+        "etiqueta": "Arboleda, Nariño"
+    },
+    {
+        "id": 843,
+        "nombre": "Arboledas",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Arboledas, Norte de Santander"
+    },
+    {
+        "id": 24,
+        "nombre": "Arboletes",
+        "departamento": "Antioquia",
+        "etiqueta": "Arboletes, Antioquia"
+    },
+    {
+        "id": 220,
+        "nombre": "Arcabuco",
+        "departamento": "Boyacá",
+        "etiqueta": "Arcabuco, Boyacá"
+    },
+    {
+        "id": 169,
+        "nombre": "Arenal",
+        "departamento": "Bolívar",
+        "etiqueta": "Arenal, Bolívar"
+    },
+    {
+        "id": 25,
+        "nombre": "Argelia",
+        "departamento": "Antioquia",
+        "etiqueta": "Argelia, Antioquia"
+    },
+    {
+        "id": 401,
+        "nombre": "Argelia",
+        "departamento": "Cauca",
+        "etiqueta": "Argelia, Cauca"
+    },
+    {
+        "id": 1075,
+        "nombre": "Argelia",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Argelia, Valle del Cauca"
+    },
+    {
+        "id": 712,
+        "nombre": "Ariguaní",
+        "departamento": "Magdalena",
+        "etiqueta": "Ariguaní, Magdalena"
+    },
+    {
+        "id": 170,
+        "nombre": "Arjona",
+        "departamento": "Bolívar",
+        "etiqueta": "Arjona, Bolívar"
+    },
+    {
+        "id": 26,
+        "nombre": "Armenia",
+        "departamento": "Antioquia",
+        "etiqueta": "Armenia, Antioquia"
+    },
+    {
+        "id": 885,
+        "nombre": "Armenia",
+        "departamento": "Quindío",
+        "etiqueta": "Armenia, Quindío"
+    },
+    {
+        "id": 1029,
+        "nombre": "Armero",
+        "departamento": "Tolima",
+        "etiqueta": "Armero, Tolima"
+    },
+    {
+        "id": 171,
+        "nombre": "Arroyohondo",
+        "departamento": "Bolívar",
+        "etiqueta": "Arroyohondo, Bolívar"
+    },
+    {
+        "id": 444,
+        "nombre": "Astrea",
+        "departamento": "Cesar",
+        "etiqueta": "Astrea, Cesar"
+    },
+    {
+        "id": 1030,
+        "nombre": "Ataco",
+        "departamento": "Tolima",
+        "etiqueta": "Ataco, Tolima"
+    },
+    {
+        "id": 470,
+        "nombre": "Atrato",
+        "departamento": "Chocó",
+        "etiqueta": "Atrato, Chocó"
+    },
+    {
+        "id": 499,
+        "nombre": "Ayapel",
+        "departamento": "Córdoba",
+        "etiqueta": "Ayapel, Córdoba"
+    },
+    {
+        "id": 471,
+        "nombre": "Bagadó",
+        "departamento": "Chocó",
+        "etiqueta": "Bagadó, Chocó"
+    },
+    {
+        "id": 472,
+        "nombre": "Bahía Solano",
+        "departamento": "Chocó",
+        "etiqueta": "Bahía Solano, Chocó"
+    },
+    {
+        "id": 473,
+        "nombre": "Bajo Baudó",
+        "departamento": "Chocó",
+        "etiqueta": "Bajo Baudó, Chocó"
+    },
+    {
+        "id": 402,
+        "nombre": "Balboa",
+        "departamento": "Cauca",
+        "etiqueta": "Balboa, Cauca"
+    },
+    {
+        "id": 899,
+        "nombre": "Balboa",
+        "departamento": "Risaralda",
+        "etiqueta": "Balboa, Risaralda"
+    },
+    {
+        "id": 145,
+        "nombre": "Baranoa",
+        "departamento": "Atlántico",
+        "etiqueta": "Baranoa, Atlántico"
+    },
+    {
+        "id": 663,
+        "nombre": "Baraya",
+        "departamento": "Huila",
+        "etiqueta": "Baraya, Huila"
+    },
+    {
+        "id": 773,
+        "nombre": "Barbacoas",
+        "departamento": "Nariño",
+        "etiqueta": "Barbacoas, Nariño"
+    },
+    {
+        "id": 27,
+        "nombre": "Barbosa",
+        "departamento": "Antioquia",
+        "etiqueta": "Barbosa, Antioquia"
+    },
+    {
+        "id": 919,
+        "nombre": "Barbosa",
+        "departamento": "Santander",
+        "etiqueta": "Barbosa, Santander"
+    },
+    {
+        "id": 920,
+        "nombre": "Barichara",
+        "departamento": "Santander",
+        "etiqueta": "Barichara, Santander"
+    },
+    {
+        "id": 763,
+        "nombre": "Barranca de Upía",
+        "departamento": "Meta",
+        "etiqueta": "Barranca de Upía, Meta"
+    },
+    {
+        "id": 921,
+        "nombre": "Barrancabermeja",
+        "departamento": "Santander",
+        "etiqueta": "Barrancabermeja, Santander"
+    },
+    {
+        "id": 696,
+        "nombre": "Barrancas",
+        "departamento": "La Guajira",
+        "etiqueta": "Barrancas, La Guajira"
+    },
+    {
+        "id": 200,
+        "nombre": "Barranco de Loba",
+        "departamento": "Bolívar",
+        "etiqueta": "Barranco de Loba, Bolívar"
+    },
+    {
+        "id": 645,
+        "nombre": "Barranco Minas",
+        "departamento": "Guainía",
+        "etiqueta": "Barranco Minas, Guainía"
+    },
+    {
+        "id": 144,
+        "nombre": "Barranquilla",
+        "departamento": "Atlántico",
+        "etiqueta": "Barranquilla, Atlántico"
+    },
+    {
+        "id": 445,
+        "nombre": "Becerril",
+        "departamento": "Cesar",
+        "etiqueta": "Becerril, Cesar"
+    },
+    {
+        "id": 341,
+        "nombre": "Belalcázar",
+        "departamento": "Caldas",
+        "etiqueta": "Belalcázar, Caldas"
+    },
+    {
+        "id": 493,
+        "nombre": "Belén de Bajira",
+        "departamento": "Chocó",
+        "etiqueta": "Belén de Bajira, Chocó"
+    },
+    {
+        "id": 375,
+        "nombre": "Belén de Los Andaquíes",
+        "departamento": "Caquetá",
+        "etiqueta": "Belén de Los Andaquíes, Caquetá"
+    },
+    {
+        "id": 910,
+        "nombre": "Belén de Umbría",
+        "departamento": "Risaralda",
+        "etiqueta": "Belén de Umbría, Risaralda"
+    },
+    {
+        "id": 336,
+        "nombre": "Belén",
+        "departamento": "Boyacá",
+        "etiqueta": "Belén, Boyacá"
+    },
+    {
+        "id": 829,
+        "nombre": "Belén",
+        "departamento": "Nariño",
+        "etiqueta": "Belén, Nariño"
+    },
+    {
+        "id": 28,
+        "nombre": "Bello",
+        "departamento": "Antioquia",
+        "etiqueta": "Bello, Antioquia"
+    },
+    {
+        "id": 67,
+        "nombre": "Belmira",
+        "departamento": "Antioquia",
+        "etiqueta": "Belmira, Antioquia"
+    },
+    {
+        "id": 529,
+        "nombre": "Beltrán",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Beltrán, Cundinamarca"
+    },
+    {
+        "id": 221,
+        "nombre": "Berbeo",
+        "departamento": "Boyacá",
+        "etiqueta": "Berbeo, Boyacá"
+    },
+    {
+        "id": 29,
+        "nombre": "Betania",
+        "departamento": "Antioquia",
+        "etiqueta": "Betania, Antioquia"
+    },
+    {
+        "id": 222,
+        "nombre": "Betéitiva",
+        "departamento": "Boyacá",
+        "etiqueta": "Betéitiva, Boyacá"
+    },
+    {
+        "id": 30,
+        "nombre": "Betulia",
+        "departamento": "Antioquia",
+        "etiqueta": "Betulia, Antioquia"
+    },
+    {
+        "id": 922,
+        "nombre": "Betulia",
+        "departamento": "Santander",
+        "etiqueta": "Betulia, Santander"
+    },
+    {
+        "id": 530,
+        "nombre": "Bituima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Bituima, Cundinamarca"
+    },
+    {
+        "id": 223,
+        "nombre": "Boavita",
+        "departamento": "Boyacá",
+        "etiqueta": "Boavita, Boyacá"
+    },
+    {
+        "id": 845,
+        "nombre": "Bochalema",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Bochalema, Norte de Santander"
+    },
+    {
+        "id": 167,
+        "nombre": "Bogotá D.C.",
+        "departamento": "Bogotá",
+        "etiqueta": "Bogotá D.C., Bogotá"
+    },
+    {
+        "id": 531,
+        "nombre": "Bojacá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Bojacá, Cundinamarca"
+    },
+    {
+        "id": 474,
+        "nombre": "Bojayá",
+        "departamento": "Chocó",
+        "etiqueta": "Bojayá, Chocó"
+    },
+    {
+        "id": 403,
+        "nombre": "Bolívar",
+        "departamento": "Cauca",
+        "etiqueta": "Bolívar, Cauca"
+    },
+    {
+        "id": 923,
+        "nombre": "Bolívar",
+        "departamento": "Santander",
+        "etiqueta": "Bolívar, Santander"
+    },
+    {
+        "id": 1092,
+        "nombre": "Bolívar",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Bolívar, Valle del Cauca"
+    },
+    {
+        "id": 446,
+        "nombre": "Bosconia",
+        "departamento": "Cesar",
+        "etiqueta": "Bosconia, Cesar"
+    },
+    {
+        "id": 224,
+        "nombre": "Boyacá",
+        "departamento": "Boyacá",
+        "etiqueta": "Boyacá, Boyacá"
+    },
+    {
+        "id": 32,
+        "nombre": "Briceño",
+        "departamento": "Antioquia",
+        "etiqueta": "Briceño, Antioquia"
+    },
+    {
+        "id": 225,
+        "nombre": "Briceño",
+        "departamento": "Boyacá",
+        "etiqueta": "Briceño, Boyacá"
+    },
+    {
+        "id": 915,
+        "nombre": "Bucaramanga",
+        "departamento": "Santander",
+        "etiqueta": "Bucaramanga, Santander"
+    },
+    {
+        "id": 862,
+        "nombre": "Bucarasica",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Bucarasica, Norte de Santander"
+    },
+    {
+        "id": 226,
+        "nombre": "Buena Vista",
+        "departamento": "Boyacá",
+        "etiqueta": "Buena Vista, Boyacá"
+    },
+    {
+        "id": 1114,
+        "nombre": "Buenaventura",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Buenaventura, Valle del Cauca"
+    },
+    {
+        "id": 500,
+        "nombre": "Buenavista",
+        "departamento": "Córdoba",
+        "etiqueta": "Buenavista, Córdoba"
+    },
+    {
+        "id": 886,
+        "nombre": "Buenavista",
+        "departamento": "Quindío",
+        "etiqueta": "Buenavista, Quindío"
+    },
+    {
+        "id": 1001,
+        "nombre": "Buenavista",
+        "departamento": "Sucre",
+        "etiqueta": "Buenavista, Sucre"
+    },
+    {
+        "id": 404,
+        "nombre": "Buenos Aires",
+        "departamento": "Cauca",
+        "etiqueta": "Buenos Aires, Cauca"
+    },
+    {
+        "id": 827,
+        "nombre": "Buesaco",
+        "departamento": "Nariño",
+        "etiqueta": "Buesaco, Nariño"
+    },
+    {
+        "id": 1087,
+        "nombre": "Bugalagrande",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Bugalagrande, Valle del Cauca"
+    },
+    {
+        "id": 33,
+        "nombre": "Buriticá",
+        "departamento": "Antioquia",
+        "etiqueta": "Buriticá, Antioquia"
+    },
+    {
+        "id": 227,
+        "nombre": "Busbanzá",
+        "departamento": "Boyacá",
+        "etiqueta": "Busbanzá, Boyacá"
+    },
+    {
+        "id": 532,
+        "nombre": "Cabrera",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cabrera, Cundinamarca"
+    },
+    {
+        "id": 924,
+        "nombre": "Cabrera",
+        "departamento": "Santander",
+        "etiqueta": "Cabrera, Santander"
+    },
+    {
+        "id": 742,
+        "nombre": "Cabuyaro",
+        "departamento": "Meta",
+        "etiqueta": "Cabuyaro, Meta"
+    },
+    {
+        "id": 650,
+        "nombre": "Cacahual",
+        "departamento": "Guainía",
+        "etiqueta": "Cacahual, Guainía"
+    },
+    {
+        "id": 34,
+        "nombre": "Cáceres",
+        "departamento": "Antioquia",
+        "etiqueta": "Cáceres, Antioquia"
+    },
+    {
+        "id": 533,
+        "nombre": "Cachipay",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cachipay, Cundinamarca"
+    },
+    {
+        "id": 865,
+        "nombre": "Cáchira",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Cáchira, Norte de Santander"
+    },
+    {
+        "id": 833,
+        "nombre": "Cácota",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Cácota, Norte de Santander"
+    },
+    {
+        "id": 35,
+        "nombre": "Caicedo",
+        "departamento": "Antioquia",
+        "etiqueta": "Caicedo, Antioquia"
+    },
+    {
+        "id": 1080,
+        "nombre": "Caicedonia",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Caicedonia, Valle del Cauca"
+    },
+    {
+        "id": 1002,
+        "nombre": "Caimito",
+        "departamento": "Sucre",
+        "etiqueta": "Caimito, Sucre"
+    },
+    {
+        "id": 1031,
+        "nombre": "Cajamarca",
+        "departamento": "Tolima",
+        "etiqueta": "Cajamarca, Tolima"
+    },
+    {
+        "id": 405,
+        "nombre": "Cajibío",
+        "departamento": "Cauca",
+        "etiqueta": "Cajibío, Cauca"
+    },
+    {
+        "id": 534,
+        "nombre": "Cajicá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cajicá, Cundinamarca"
+    },
+    {
+        "id": 172,
+        "nombre": "Calamar",
+        "departamento": "Bolívar",
+        "etiqueta": "Calamar, Bolívar"
+    },
+    {
+        "id": 653,
+        "nombre": "Calamar",
+        "departamento": "Guaviare",
+        "etiqueta": "Calamar, Guaviare"
+    },
+    {
+        "id": 895,
+        "nombre": "Calarcá",
+        "departamento": "Quindío",
+        "etiqueta": "Calarcá, Quindío"
+    },
+    {
+        "id": 36,
+        "nombre": "Caldas",
+        "departamento": "Antioquia",
+        "etiqueta": "Caldas, Antioquia"
+    },
+    {
+        "id": 228,
+        "nombre": "Caldas",
+        "departamento": "Boyacá",
+        "etiqueta": "Caldas, Boyacá"
+    },
+    {
+        "id": 406,
+        "nombre": "Caldono",
+        "departamento": "Cauca",
+        "etiqueta": "Caldono, Cauca"
+    },
+    {
+        "id": 1093,
+        "nombre": "Cali",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Cali, Valle del Cauca"
+    },
+    {
+        "id": 925,
+        "nombre": "California",
+        "departamento": "Santander",
+        "etiqueta": "California, Santander"
+    },
+    {
+        "id": 1096,
+        "nombre": "Calima",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Calima, Valle del Cauca"
+    },
+    {
+        "id": 407,
+        "nombre": "Caloto",
+        "departamento": "Cauca",
+        "etiqueta": "Caloto, Cauca"
+    },
+    {
+        "id": 37,
+        "nombre": "Campamento",
+        "departamento": "Antioquia",
+        "etiqueta": "Campamento, Antioquia"
+    },
+    {
+        "id": 163,
+        "nombre": "Campo de La Cruz",
+        "departamento": "Atlántico",
+        "etiqueta": "Campo de La Cruz, Atlántico"
+    },
+    {
+        "id": 664,
+        "nombre": "Campoalegre",
+        "departamento": "Huila",
+        "etiqueta": "Campoalegre, Huila"
+    },
+    {
+        "id": 229,
+        "nombre": "Campohermoso",
+        "departamento": "Boyacá",
+        "etiqueta": "Campohermoso, Boyacá"
+    },
+    {
+        "id": 501,
+        "nombre": "Canalete",
+        "departamento": "Córdoba",
+        "etiqueta": "Canalete, Córdoba"
+    },
+    {
+        "id": 146,
+        "nombre": "Candelaria",
+        "departamento": "Atlántico",
+        "etiqueta": "Candelaria, Atlántico"
+    },
+    {
+        "id": 1106,
+        "nombre": "Candelaria",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Candelaria, Valle del Cauca"
+    },
+    {
+        "id": 173,
+        "nombre": "Cantagallo",
+        "departamento": "Bolívar",
+        "etiqueta": "Cantagallo, Bolívar"
+    },
+    {
+        "id": 38,
+        "nombre": "Cañasgordas",
+        "departamento": "Antioquia",
+        "etiqueta": "Cañasgordas, Antioquia"
+    },
+    {
+        "id": 535,
+        "nombre": "Caparrapí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Caparrapí, Cundinamarca"
+    },
+    {
+        "id": 998,
+        "nombre": "Capitanejo",
+        "departamento": "Santander",
+        "etiqueta": "Capitanejo, Santander"
+    },
+    {
+        "id": 536,
+        "nombre": "Cáqueza",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cáqueza, Cundinamarca"
+    },
+    {
+        "id": 39,
+        "nombre": "Caracolí",
+        "departamento": "Antioquia",
+        "etiqueta": "Caracolí, Antioquia"
+    },
+    {
+        "id": 40,
+        "nombre": "Caramanta",
+        "departamento": "Antioquia",
+        "etiqueta": "Caramanta, Antioquia"
+    },
+    {
+        "id": 926,
+        "nombre": "Carcasí",
+        "departamento": "Santander",
+        "etiqueta": "Carcasí, Santander"
+    },
+    {
+        "id": 41,
+        "nombre": "Carepa",
+        "departamento": "Antioquia",
+        "etiqueta": "Carepa, Antioquia"
+    },
+    {
+        "id": 1064,
+        "nombre": "Carmen de Apicalá",
+        "departamento": "Tolima",
+        "etiqueta": "Carmen de Apicalá, Tolima"
+    },
+    {
+        "id": 630,
+        "nombre": "Carmen de Carupa",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Carmen de Carupa, Cundinamarca"
+    },
+    {
+        "id": 494,
+        "nombre": "Carmen del Darien",
+        "departamento": "Chocó",
+        "etiqueta": "Carmen del Darien, Chocó"
+    },
+    {
+        "id": 42,
+        "nombre": "Carolina",
+        "departamento": "Antioquia",
+        "etiqueta": "Carolina, Antioquia"
+    },
+    {
+        "id": 376,
+        "nombre": "Cartagena del Chairá",
+        "departamento": "Caquetá",
+        "etiqueta": "Cartagena del Chairá, Caquetá"
+    },
+    {
+        "id": 210,
+        "nombre": "Cartagena",
+        "departamento": "Bolívar",
+        "etiqueta": "Cartagena, Bolívar"
+    },
+    {
+        "id": 1079,
+        "nombre": "Cartago",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Cartago, Valle del Cauca"
+    },
+    {
+        "id": 1116,
+        "nombre": "Carurú",
+        "departamento": "Vaupés",
+        "etiqueta": "Carurú, Vaupés"
+    },
+    {
+        "id": 1067,
+        "nombre": "Casabianca",
+        "departamento": "Tolima",
+        "etiqueta": "Casabianca, Tolima"
+    },
+    {
+        "id": 767,
+        "nombre": "Castilla la Nueva",
+        "departamento": "Meta",
+        "etiqueta": "Castilla la Nueva, Meta"
+    },
+    {
+        "id": 43,
+        "nombre": "Caucasia",
+        "departamento": "Antioquia",
+        "etiqueta": "Caucasia, Antioquia"
+    },
+    {
+        "id": 927,
+        "nombre": "Cepitá",
+        "departamento": "Santander",
+        "etiqueta": "Cepitá, Santander"
+    },
+    {
+        "id": 502,
+        "nombre": "Cereté",
+        "departamento": "Córdoba",
+        "etiqueta": "Cereté, Córdoba"
+    },
+    {
+        "id": 230,
+        "nombre": "Cerinza",
+        "departamento": "Boyacá",
+        "etiqueta": "Cerinza, Boyacá"
+    },
+    {
+        "id": 928,
+        "nombre": "Cerrito",
+        "departamento": "Santander",
+        "etiqueta": "Cerrito, Santander"
+    },
+    {
+        "id": 713,
+        "nombre": "Cerro San Antonio",
+        "departamento": "Magdalena",
+        "etiqueta": "Cerro San Antonio, Magdalena"
+    },
+    {
+        "id": 475,
+        "nombre": "Cértegui",
+        "departamento": "Chocó",
+        "etiqueta": "Cértegui, Chocó"
+    },
+    {
+        "id": 830,
+        "nombre": "Chachagüí",
+        "departamento": "Nariño",
+        "etiqueta": "Chachagüí, Nariño"
+    },
+    {
+        "id": 537,
+        "nombre": "Chaguaní",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Chaguaní, Cundinamarca"
+    },
+    {
+        "id": 1005,
+        "nombre": "Chalán",
+        "departamento": "Sucre",
+        "etiqueta": "Chalán, Sucre"
+    },
+    {
+        "id": 382,
+        "nombre": "Chámeza",
+        "departamento": "Casanare",
+        "etiqueta": "Chámeza, Casanare"
+    },
+    {
+        "id": 1032,
+        "nombre": "Chaparral",
+        "departamento": "Tolima",
+        "etiqueta": "Chaparral, Tolima"
+    },
+    {
+        "id": 929,
+        "nombre": "Charalá",
+        "departamento": "Santander",
+        "etiqueta": "Charalá, Santander"
+    },
+    {
+        "id": 930,
+        "nombre": "Charta",
+        "departamento": "Santander",
+        "etiqueta": "Charta, Santander"
+    },
+    {
+        "id": 634,
+        "nombre": "Chía",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Chía, Cundinamarca"
+    },
+    {
+        "id": 44,
+        "nombre": "Chigorodó",
+        "departamento": "Antioquia",
+        "etiqueta": "Chigorodó, Antioquia"
+    },
+    {
+        "id": 503,
+        "nombre": "Chimá",
+        "departamento": "Córdoba",
+        "etiqueta": "Chimá, Córdoba"
+    },
+    {
+        "id": 997,
+        "nombre": "Chimá",
+        "departamento": "Santander",
+        "etiqueta": "Chimá, Santander"
+    },
+    {
+        "id": 447,
+        "nombre": "Chimichagua",
+        "departamento": "Cesar",
+        "etiqueta": "Chimichagua, Cesar"
+    },
+    {
+        "id": 853,
+        "nombre": "Chinácota",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Chinácota, Norte de Santander"
+    },
+    {
+        "id": 231,
+        "nombre": "Chinavita",
+        "departamento": "Boyacá",
+        "etiqueta": "Chinavita, Boyacá"
+    },
+    {
+        "id": 342,
+        "nombre": "Chinchiná",
+        "departamento": "Caldas",
+        "etiqueta": "Chinchiná, Caldas"
+    },
+    {
+        "id": 504,
+        "nombre": "Chinú",
+        "departamento": "Córdoba",
+        "etiqueta": "Chinú, Córdoba"
+    },
+    {
+        "id": 538,
+        "nombre": "Chipaque",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Chipaque, Cundinamarca"
+    },
+    {
+        "id": 931,
+        "nombre": "Chipatá",
+        "departamento": "Santander",
+        "etiqueta": "Chipatá, Santander"
+    },
+    {
+        "id": 232,
+        "nombre": "Chiquinquirá",
+        "departamento": "Boyacá",
+        "etiqueta": "Chiquinquirá, Boyacá"
+    },
+    {
+        "id": 244,
+        "nombre": "Chíquiza",
+        "departamento": "Boyacá",
+        "etiqueta": "Chíquiza, Boyacá"
+    },
+    {
+        "id": 448,
+        "nombre": "Chiriguaná",
+        "departamento": "Cesar",
+        "etiqueta": "Chiriguaná, Cesar"
+    },
+    {
+        "id": 233,
+        "nombre": "Chiscas",
+        "departamento": "Boyacá",
+        "etiqueta": "Chiscas, Boyacá"
+    },
+    {
+        "id": 234,
+        "nombre": "Chita",
+        "departamento": "Boyacá",
+        "etiqueta": "Chita, Boyacá"
+    },
+    {
+        "id": 857,
+        "nombre": "Chitagá",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Chitagá, Norte de Santander"
+    },
+    {
+        "id": 235,
+        "nombre": "Chitaraque",
+        "departamento": "Boyacá",
+        "etiqueta": "Chitaraque, Boyacá"
+    },
+    {
+        "id": 236,
+        "nombre": "Chivatá",
+        "departamento": "Boyacá",
+        "etiqueta": "Chivatá, Boyacá"
+    },
+    {
+        "id": 714,
+        "nombre": "Chivolo",
+        "departamento": "Magdalena",
+        "etiqueta": "Chivolo, Magdalena"
+    },
+    {
+        "id": 245,
+        "nombre": "Chivor",
+        "departamento": "Boyacá",
+        "etiqueta": "Chivor, Boyacá"
+    },
+    {
+        "id": 539,
+        "nombre": "Choachí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Choachí, Cundinamarca"
+    },
+    {
+        "id": 540,
+        "nombre": "Chocontá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Chocontá, Cundinamarca"
+    },
+    {
+        "id": 174,
+        "nombre": "Cicuco",
+        "departamento": "Bolívar",
+        "etiqueta": "Cicuco, Bolívar"
+    },
+    {
+        "id": 522,
+        "nombre": "Ciénaga de Oro",
+        "departamento": "Córdoba",
+        "etiqueta": "Ciénaga de Oro, Córdoba"
+    },
+    {
+        "id": 738,
+        "nombre": "Ciénaga",
+        "departamento": "Magdalena",
+        "etiqueta": "Ciénaga, Magdalena"
+    },
+    {
+        "id": 216,
+        "nombre": "Ciénega",
+        "departamento": "Boyacá",
+        "etiqueta": "Ciénega, Boyacá"
+    },
+    {
+        "id": 932,
+        "nombre": "Cimitarra",
+        "departamento": "Santander",
+        "etiqueta": "Cimitarra, Santander"
+    },
+    {
+        "id": 887,
+        "nombre": "Circasia",
+        "departamento": "Quindío",
+        "etiqueta": "Circasia, Quindío"
+    },
+    {
+        "id": 45,
+        "nombre": "Cisneros",
+        "departamento": "Antioquia",
+        "etiqueta": "Cisneros, Antioquia"
+    },
+    {
+        "id": 31,
+        "nombre": "Ciudad Bolívar",
+        "departamento": "Antioquia",
+        "etiqueta": "Ciudad Bolívar, Antioquia"
+    },
+    {
+        "id": 176,
+        "nombre": "Clemencia",
+        "departamento": "Bolívar",
+        "etiqueta": "Clemencia, Bolívar"
+    },
+    {
+        "id": 46,
+        "nombre": "Cocorná",
+        "departamento": "Antioquia",
+        "etiqueta": "Cocorná, Antioquia"
+    },
+    {
+        "id": 1033,
+        "nombre": "Coello",
+        "departamento": "Tolima",
+        "etiqueta": "Coello, Tolima"
+    },
+    {
+        "id": 541,
+        "nombre": "Cogua",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cogua, Cundinamarca"
+    },
+    {
+        "id": 665,
+        "nombre": "Colombia",
+        "departamento": "Huila",
+        "etiqueta": "Colombia, Huila"
+    },
+    {
+        "id": 774,
+        "nombre": "Colón",
+        "departamento": "Nariño",
+        "etiqueta": "Colón, Nariño"
+    },
+    {
+        "id": 873,
+        "nombre": "Colón",
+        "departamento": "Putumayo",
+        "etiqueta": "Colón, Putumayo"
+    },
+    {
+        "id": 1003,
+        "nombre": "Colosó",
+        "departamento": "Sucre",
+        "etiqueta": "Colosó, Sucre"
+    },
+    {
+        "id": 237,
+        "nombre": "Cómbita",
+        "departamento": "Boyacá",
+        "etiqueta": "Cómbita, Boyacá"
+    },
+    {
+        "id": 47,
+        "nombre": "Concepción",
+        "departamento": "Antioquia",
+        "etiqueta": "Concepción, Antioquia"
+    },
+    {
+        "id": 933,
+        "nombre": "Concepción",
+        "departamento": "Santander",
+        "etiqueta": "Concepción, Santander"
+    },
+    {
+        "id": 48,
+        "nombre": "Concordia",
+        "departamento": "Antioquia",
+        "etiqueta": "Concordia, Antioquia"
+    },
+    {
+        "id": 715,
+        "nombre": "Concordia",
+        "departamento": "Magdalena",
+        "etiqueta": "Concordia, Magdalena"
+    },
+    {
+        "id": 476,
+        "nombre": "Condoto",
+        "departamento": "Chocó",
+        "etiqueta": "Condoto, Chocó"
+    },
+    {
+        "id": 934,
+        "nombre": "Confines",
+        "departamento": "Santander",
+        "etiqueta": "Confines, Santander"
+    },
+    {
+        "id": 775,
+        "nombre": "Consacá",
+        "departamento": "Nariño",
+        "etiqueta": "Consacá, Nariño"
+    },
+    {
+        "id": 776,
+        "nombre": "Contadero",
+        "departamento": "Nariño",
+        "etiqueta": "Contadero, Nariño"
+    },
+    {
+        "id": 935,
+        "nombre": "Contratación",
+        "departamento": "Santander",
+        "etiqueta": "Contratación, Santander"
+    },
+    {
+        "id": 846,
+        "nombre": "Convención",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Convención, Norte de Santander"
+    },
+    {
+        "id": 49,
+        "nombre": "Copacabana",
+        "departamento": "Antioquia",
+        "etiqueta": "Copacabana, Antioquia"
+    },
+    {
+        "id": 238,
+        "nombre": "Coper",
+        "departamento": "Boyacá",
+        "etiqueta": "Coper, Boyacá"
+    },
+    {
+        "id": 175,
+        "nombre": "Córdoba",
+        "departamento": "Bolívar",
+        "etiqueta": "Córdoba, Bolívar"
+    },
+    {
+        "id": 777,
+        "nombre": "Córdoba",
+        "departamento": "Nariño",
+        "etiqueta": "Córdoba, Nariño"
+    },
+    {
+        "id": 888,
+        "nombre": "Córdoba",
+        "departamento": "Quindío",
+        "etiqueta": "Córdoba, Quindío"
+    },
+    {
+        "id": 408,
+        "nombre": "Corinto",
+        "departamento": "Cauca",
+        "etiqueta": "Corinto, Cauca"
+    },
+    {
+        "id": 936,
+        "nombre": "Coromoro",
+        "departamento": "Santander",
+        "etiqueta": "Coromoro, Santander"
+    },
+    {
+        "id": 1025,
+        "nombre": "Corozal",
+        "departamento": "Sucre",
+        "etiqueta": "Corozal, Sucre"
+    },
+    {
+        "id": 239,
+        "nombre": "Corrales",
+        "departamento": "Boyacá",
+        "etiqueta": "Corrales, Boyacá"
+    },
+    {
+        "id": 542,
+        "nombre": "Cota",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cota, Cundinamarca"
+    },
+    {
+        "id": 505,
+        "nombre": "Cotorra",
+        "departamento": "Córdoba",
+        "etiqueta": "Cotorra, Córdoba"
+    },
+    {
+        "id": 240,
+        "nombre": "Covarachía",
+        "departamento": "Boyacá",
+        "etiqueta": "Covarachía, Boyacá"
+    },
+    {
+        "id": 1004,
+        "nombre": "Coveñas",
+        "departamento": "Sucre",
+        "etiqueta": "Coveñas, Sucre"
+    },
+    {
+        "id": 1034,
+        "nombre": "Coyaima",
+        "departamento": "Tolima",
+        "etiqueta": "Coyaima, Tolima"
+    },
+    {
+        "id": 138,
+        "nombre": "Cravo Norte",
+        "departamento": "Arauca",
+        "etiqueta": "Cravo Norte, Arauca"
+    },
+    {
+        "id": 778,
+        "nombre": "Cuaspud",
+        "departamento": "Nariño",
+        "etiqueta": "Cuaspud, Nariño"
+    },
+    {
+        "id": 241,
+        "nombre": "Cubará",
+        "departamento": "Boyacá",
+        "etiqueta": "Cubará, Boyacá"
+    },
+    {
+        "id": 743,
+        "nombre": "Cubarral",
+        "departamento": "Meta",
+        "etiqueta": "Cubarral, Meta"
+    },
+    {
+        "id": 242,
+        "nombre": "Cucaita",
+        "departamento": "Boyacá",
+        "etiqueta": "Cucaita, Boyacá"
+    },
+    {
+        "id": 543,
+        "nombre": "Cucunubá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Cucunubá, Cundinamarca"
+    },
+    {
+        "id": 870,
+        "nombre": "Cúcuta",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Cúcuta, Norte de Santander"
+    },
+    {
+        "id": 838,
+        "nombre": "Cucutilla",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Cucutilla, Norte de Santander"
+    },
+    {
+        "id": 243,
+        "nombre": "Cuítiva",
+        "departamento": "Boyacá",
+        "etiqueta": "Cuítiva, Boyacá"
+    },
+    {
+        "id": 744,
+        "nombre": "Cumaral",
+        "departamento": "Meta",
+        "etiqueta": "Cumaral, Meta"
+    },
+    {
+        "id": 1124,
+        "nombre": "Cumaribo",
+        "departamento": "Vichada",
+        "etiqueta": "Cumaribo, Vichada"
+    },
+    {
+        "id": 779,
+        "nombre": "Cumbal",
+        "departamento": "Nariño",
+        "etiqueta": "Cumbal, Nariño"
+    },
+    {
+        "id": 780,
+        "nombre": "Cumbitara",
+        "departamento": "Nariño",
+        "etiqueta": "Cumbitara, Nariño"
+    },
+    {
+        "id": 1035,
+        "nombre": "Cunday",
+        "departamento": "Tolima",
+        "etiqueta": "Cunday, Tolima"
+    },
+    {
+        "id": 366,
+        "nombre": "Curillo",
+        "departamento": "Caquetá",
+        "etiqueta": "Curillo, Caquetá"
+    },
+    {
+        "id": 937,
+        "nombre": "Curití",
+        "departamento": "Santander",
+        "etiqueta": "Curití, Santander"
+    },
+    {
+        "id": 449,
+        "nombre": "Curumaní",
+        "departamento": "Cesar",
+        "etiqueta": "Curumaní, Cesar"
+    },
+    {
+        "id": 50,
+        "nombre": "Dabeiba",
+        "departamento": "Antioquia",
+        "etiqueta": "Dabeiba, Antioquia"
+    },
+    {
+        "id": 1084,
+        "nombre": "Dagua",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Dagua, Valle del Cauca"
+    },
+    {
+        "id": 697,
+        "nombre": "Dibula",
+        "departamento": "La Guajira",
+        "etiqueta": "Dibula, La Guajira"
+    },
+    {
+        "id": 698,
+        "nombre": "Distracción",
+        "departamento": "La Guajira",
+        "etiqueta": "Distracción, La Guajira"
+    },
+    {
+        "id": 1036,
+        "nombre": "Dolores",
+        "departamento": "Tolima",
+        "etiqueta": "Dolores, Tolima"
+    },
+    {
+        "id": 51,
+        "nombre": "Don Matías",
+        "departamento": "Antioquia",
+        "etiqueta": "Don Matías, Antioquia"
+    },
+    {
+        "id": 900,
+        "nombre": "Dosquebradas",
+        "departamento": "Risaralda",
+        "etiqueta": "Dosquebradas, Risaralda"
+    },
+    {
+        "id": 246,
+        "nombre": "Duitama",
+        "departamento": "Boyacá",
+        "etiqueta": "Duitama, Boyacá"
+    },
+    {
+        "id": 867,
+        "nombre": "Duranía",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Duranía, Norte de Santander"
+    },
+    {
+        "id": 52,
+        "nombre": "Ebéjico",
+        "departamento": "Antioquia",
+        "etiqueta": "Ebéjico, Antioquia"
+    },
+    {
+        "id": 1104,
+        "nombre": "El Águila",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "El Águila, Valle del Cauca"
+    },
+    {
+        "id": 53,
+        "nombre": "El Bagre",
+        "departamento": "Antioquia",
+        "etiqueta": "El Bagre, Antioquia"
+    },
+    {
+        "id": 716,
+        "nombre": "El Banco",
+        "departamento": "Magdalena",
+        "etiqueta": "El Banco, Magdalena"
+    },
+    {
+        "id": 1081,
+        "nombre": "El Cairo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "El Cairo, Valle del Cauca"
+    },
+    {
+        "id": 745,
+        "nombre": "El Calvario",
+        "departamento": "Meta",
+        "etiqueta": "El Calvario, Meta"
+    },
+    {
+        "id": 490,
+        "nombre": "El Cantón del San Pablo",
+        "departamento": "Chocó",
+        "etiqueta": "El Cantón del San Pablo, Chocó"
+    },
+    {
+        "id": 491,
+        "nombre": "El Carmen de Atrato",
+        "departamento": "Chocó",
+        "etiqueta": "El Carmen de Atrato, Chocó"
+    },
+    {
+        "id": 203,
+        "nombre": "El Carmen de Bolívar",
+        "departamento": "Bolívar",
+        "etiqueta": "El Carmen de Bolívar, Bolívar"
+    },
+    {
+        "id": 993,
+        "nombre": "El Carmen de Chucurí",
+        "departamento": "Santander",
+        "etiqueta": "El Carmen de Chucurí, Santander"
+    },
+    {
+        "id": 131,
+        "nombre": "El Carmen de Viboral",
+        "departamento": "Antioquia",
+        "etiqueta": "El Carmen de Viboral, Antioquia"
+    },
+    {
+        "id": 871,
+        "nombre": "El Carmen",
+        "departamento": "Norte de Santander",
+        "etiqueta": "El Carmen, Norte de Santander"
+    },
+    {
+        "id": 746,
+        "nombre": "El Castillo",
+        "departamento": "Meta",
+        "etiqueta": "El Castillo, Meta"
+    },
+    {
+        "id": 1078,
+        "nombre": "El Cerrito",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "El Cerrito, Valle del Cauca"
+    },
+    {
+        "id": 781,
+        "nombre": "El Charco",
+        "departamento": "Nariño",
+        "etiqueta": "El Charco, Nariño"
+    },
+    {
+        "id": 247,
+        "nombre": "El Cocuy",
+        "departamento": "Boyacá",
+        "etiqueta": "El Cocuy, Boyacá"
+    },
+    {
+        "id": 544,
+        "nombre": "El Colegio",
+        "departamento": "Cundinamarca",
+        "etiqueta": "El Colegio, Cundinamarca"
+    },
+    {
+        "id": 450,
+        "nombre": "El Copey",
+        "departamento": "Cesar",
+        "etiqueta": "El Copey, Cesar"
+    },
+    {
+        "id": 367,
+        "nombre": "El Doncello",
+        "departamento": "Caquetá",
+        "etiqueta": "El Doncello, Caquetá"
+    },
+    {
+        "id": 747,
+        "nombre": "El Dorado",
+        "departamento": "Meta",
+        "etiqueta": "El Dorado, Meta"
+    },
+    {
+        "id": 1073,
+        "nombre": "El Dovio",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "El Dovio, Valle del Cauca"
+    },
+    {
+        "id": 2,
+        "nombre": "El Encanto",
+        "departamento": "Amazonas",
+        "etiqueta": "El Encanto, Amazonas"
+    },
+    {
+        "id": 248,
+        "nombre": "El Espino",
+        "departamento": "Boyacá",
+        "etiqueta": "El Espino, Boyacá"
+    },
+    {
+        "id": 938,
+        "nombre": "El Guacamayo",
+        "departamento": "Santander",
+        "etiqueta": "El Guacamayo, Santander"
+    },
+    {
+        "id": 177,
+        "nombre": "El Guamo",
+        "departamento": "Bolívar",
+        "etiqueta": "El Guamo, Bolívar"
+    },
+    {
+        "id": 489,
+        "nombre": "El Litoral del San Juan",
+        "departamento": "Chocó",
+        "etiqueta": "El Litoral del San Juan, Chocó"
+    },
+    {
+        "id": 699,
+        "nombre": "El Molino",
+        "departamento": "La Guajira",
+        "etiqueta": "El Molino, La Guajira"
+    },
+    {
+        "id": 451,
+        "nombre": "El Paso",
+        "departamento": "Cesar",
+        "etiqueta": "El Paso, Cesar"
+    },
+    {
+        "id": 368,
+        "nombre": "El Paujil",
+        "departamento": "Caquetá",
+        "etiqueta": "El Paujil, Caquetá"
+    },
+    {
+        "id": 782,
+        "nombre": "El Peñol",
+        "departamento": "Nariño",
+        "etiqueta": "El Peñol, Nariño"
+    },
+    {
+        "id": 209,
+        "nombre": "El Peñón",
+        "departamento": "Bolívar",
+        "etiqueta": "El Peñón, Bolívar"
+    },
+    {
+        "id": 635,
+        "nombre": "El Peñón",
+        "departamento": "Cundinamarca",
+        "etiqueta": "El Peñón, Cundinamarca"
+    },
+    {
+        "id": 999,
+        "nombre": "El Peñón",
+        "departamento": "Santander",
+        "etiqueta": "El Peñón, Santander"
+    },
+    {
+        "id": 717,
+        "nombre": "El Piñón",
+        "departamento": "Magdalena",
+        "etiqueta": "El Piñón, Magdalena"
+    },
+    {
+        "id": 939,
+        "nombre": "El Playón",
+        "departamento": "Santander",
+        "etiqueta": "El Playón, Santander"
+    },
+    {
+        "id": 718,
+        "nombre": "El Retén",
+        "departamento": "Magdalena",
+        "etiqueta": "El Retén, Magdalena"
+    },
+    {
+        "id": 656,
+        "nombre": "El Retorno",
+        "departamento": "Guaviare",
+        "etiqueta": "El Retorno, Guaviare"
+    },
+    {
+        "id": 1006,
+        "nombre": "El Roble",
+        "departamento": "Sucre",
+        "etiqueta": "El Roble, Sucre"
+    },
+    {
+        "id": 545,
+        "nombre": "El Rosal",
+        "departamento": "Cundinamarca",
+        "etiqueta": "El Rosal, Cundinamarca"
+    },
+    {
+        "id": 783,
+        "nombre": "El Rosario",
+        "departamento": "Nariño",
+        "etiqueta": "El Rosario, Nariño"
+    },
+    {
+        "id": 104,
+        "nombre": "El Santuario",
+        "departamento": "Antioquia",
+        "etiqueta": "El Santuario, Antioquia"
+    },
+    {
+        "id": 826,
+        "nombre": "El Tablón de Gómez",
+        "departamento": "Nariño",
+        "etiqueta": "El Tablón de Gómez, Nariño"
+    },
+    {
+        "id": 409,
+        "nombre": "El Tambo",
+        "departamento": "Cauca",
+        "etiqueta": "El Tambo, Cauca"
+    },
+    {
+        "id": 784,
+        "nombre": "El Tambo",
+        "departamento": "Nariño",
+        "etiqueta": "El Tambo, Nariño"
+    },
+    {
+        "id": 841,
+        "nombre": "El Tarra",
+        "departamento": "Norte de Santander",
+        "etiqueta": "El Tarra, Norte de Santander"
+    },
+    {
+        "id": 836,
+        "nombre": "El Zulia",
+        "departamento": "Norte de Santander",
+        "etiqueta": "El Zulia, Norte de Santander"
+    },
+    {
+        "id": 666,
+        "nombre": "Elías",
+        "departamento": "Huila",
+        "etiqueta": "Elías, Huila"
+    },
+    {
+        "id": 940,
+        "nombre": "Encino",
+        "departamento": "Santander",
+        "etiqueta": "Encino, Santander"
+    },
+    {
+        "id": 941,
+        "nombre": "Enciso",
+        "departamento": "Santander",
+        "etiqueta": "Enciso, Santander"
+    },
+    {
+        "id": 54,
+        "nombre": "Entrerríos",
+        "departamento": "Antioquia",
+        "etiqueta": "Entrerríos, Antioquia"
+    },
+    {
+        "id": 55,
+        "nombre": "Envigado",
+        "departamento": "Antioquia",
+        "etiqueta": "Envigado, Antioquia"
+    },
+    {
+        "id": 1037,
+        "nombre": "Espinal",
+        "departamento": "Tolima",
+        "etiqueta": "Espinal, Tolima"
+    },
+    {
+        "id": 642,
+        "nombre": "Facatativá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Facatativá, Cundinamarca"
+    },
+    {
+        "id": 1038,
+        "nombre": "Falán",
+        "departamento": "Tolima",
+        "etiqueta": "Falán, Tolima"
+    },
+    {
+        "id": 343,
+        "nombre": "Filadelfia",
+        "departamento": "Caldas",
+        "etiqueta": "Filadelfia, Caldas"
+    },
+    {
+        "id": 889,
+        "nombre": "Filandia",
+        "departamento": "Quindío",
+        "etiqueta": "Filandia, Quindío"
+    },
+    {
+        "id": 249,
+        "nombre": "Firavitoba",
+        "departamento": "Boyacá",
+        "etiqueta": "Firavitoba, Boyacá"
+    },
+    {
+        "id": 1039,
+        "nombre": "Flandes",
+        "departamento": "Tolima",
+        "etiqueta": "Flandes, Tolima"
+    },
+    {
+        "id": 364,
+        "nombre": "Florencia",
+        "departamento": "Caquetá",
+        "etiqueta": "Florencia, Caquetá"
+    },
+    {
+        "id": 410,
+        "nombre": "Florencia",
+        "departamento": "Cauca",
+        "etiqueta": "Florencia, Cauca"
+    },
+    {
+        "id": 250,
+        "nombre": "Floresta",
+        "departamento": "Boyacá",
+        "etiqueta": "Floresta, Boyacá"
+    },
+    {
+        "id": 942,
+        "nombre": "Florián",
+        "departamento": "Santander",
+        "etiqueta": "Florián, Santander"
+    },
+    {
+        "id": 1112,
+        "nombre": "Florida",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Florida, Valle del Cauca"
+    },
+    {
+        "id": 943,
+        "nombre": "Floridablanca",
+        "departamento": "Santander",
+        "etiqueta": "Floridablanca, Santander"
+    },
+    {
+        "id": 546,
+        "nombre": "Fómeque",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Fómeque, Cundinamarca"
+    },
+    {
+        "id": 700,
+        "nombre": "Fonseca",
+        "departamento": "La Guajira",
+        "etiqueta": "Fonseca, La Guajira"
+    },
+    {
+        "id": 139,
+        "nombre": "Fortul",
+        "departamento": "Arauca",
+        "etiqueta": "Fortul, Arauca"
+    },
+    {
+        "id": 547,
+        "nombre": "Fosca",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Fosca, Cundinamarca"
+    },
+    {
+        "id": 806,
+        "nombre": "Francisco Pizarro",
+        "departamento": "Nariño",
+        "etiqueta": "Francisco Pizarro, Nariño"
+    },
+    {
+        "id": 56,
+        "nombre": "Fredonia",
+        "departamento": "Antioquia",
+        "etiqueta": "Fredonia, Antioquia"
+    },
+    {
+        "id": 1040,
+        "nombre": "Fresno",
+        "departamento": "Tolima",
+        "etiqueta": "Fresno, Tolima"
+    },
+    {
+        "id": 133,
+        "nombre": "Frontino",
+        "departamento": "Antioquia",
+        "etiqueta": "Frontino, Antioquia"
+    },
+    {
+        "id": 764,
+        "nombre": "Fuente de Oro",
+        "departamento": "Meta",
+        "etiqueta": "Fuente de Oro, Meta"
+    },
+    {
+        "id": 719,
+        "nombre": "Fundación",
+        "departamento": "Magdalena",
+        "etiqueta": "Fundación, Magdalena"
+    },
+    {
+        "id": 785,
+        "nombre": "Funes",
+        "departamento": "Nariño",
+        "etiqueta": "Funes, Nariño"
+    },
+    {
+        "id": 548,
+        "nombre": "Funza",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Funza, Cundinamarca"
+    },
+    {
+        "id": 549,
+        "nombre": "Fúquene",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Fúquene, Cundinamarca"
+    },
+    {
+        "id": 640,
+        "nombre": "Fusagasugá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Fusagasugá, Cundinamarca"
+    },
+    {
+        "id": 550,
+        "nombre": "Gachalá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Gachalá, Cundinamarca"
+    },
+    {
+        "id": 551,
+        "nombre": "Gachancipá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Gachancipá, Cundinamarca"
+    },
+    {
+        "id": 251,
+        "nombre": "Gachantivá",
+        "departamento": "Boyacá",
+        "etiqueta": "Gachantivá, Boyacá"
+    },
+    {
+        "id": 552,
+        "nombre": "Gachetá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Gachetá, Cundinamarca"
+    },
+    {
+        "id": 944,
+        "nombre": "Galán",
+        "departamento": "Santander",
+        "etiqueta": "Galán, Santander"
+    },
+    {
+        "id": 147,
+        "nombre": "Galapa",
+        "departamento": "Atlántico",
+        "etiqueta": "Galapa, Atlántico"
+    },
+    {
+        "id": 1007,
+        "nombre": "Galeras",
+        "departamento": "Sucre",
+        "etiqueta": "Galeras, Sucre"
+    },
+    {
+        "id": 637,
+        "nombre": "Gama",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Gama, Cundinamarca"
+    },
+    {
+        "id": 452,
+        "nombre": "Gamarra",
+        "departamento": "Cesar",
+        "etiqueta": "Gamarra, Cesar"
+    },
+    {
+        "id": 945,
+        "nombre": "Gámbita",
+        "departamento": "Santander",
+        "etiqueta": "Gámbita, Santander"
+    },
+    {
+        "id": 252,
+        "nombre": "Gámeza",
+        "departamento": "Boyacá",
+        "etiqueta": "Gámeza, Boyacá"
+    },
+    {
+        "id": 253,
+        "nombre": "Garagoa",
+        "departamento": "Boyacá",
+        "etiqueta": "Garagoa, Boyacá"
+    },
+    {
+        "id": 667,
+        "nombre": "Garzón",
+        "departamento": "Huila",
+        "etiqueta": "Garzón, Huila"
+    },
+    {
+        "id": 896,
+        "nombre": "Génova",
+        "departamento": "Quindío",
+        "etiqueta": "Génova, Quindío"
+    },
+    {
+        "id": 668,
+        "nombre": "Gigante",
+        "departamento": "Huila",
+        "etiqueta": "Gigante, Huila"
+    },
+    {
+        "id": 1089,
+        "nombre": "Ginebra",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Ginebra, Valle del Cauca"
+    },
+    {
+        "id": 57,
+        "nombre": "Giraldo",
+        "departamento": "Antioquia",
+        "etiqueta": "Giraldo, Antioquia"
+    },
+    {
+        "id": 553,
+        "nombre": "Girardot",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Girardot, Cundinamarca"
+    },
+    {
+        "id": 58,
+        "nombre": "Girardota",
+        "departamento": "Antioquia",
+        "etiqueta": "Girardota, Antioquia"
+    },
+    {
+        "id": 946,
+        "nombre": "Girón",
+        "departamento": "Santander",
+        "etiqueta": "Girón, Santander"
+    },
+    {
+        "id": 59,
+        "nombre": "Gómez Plata",
+        "departamento": "Antioquia",
+        "etiqueta": "Gómez Plata, Antioquia"
+    },
+    {
+        "id": 453,
+        "nombre": "González",
+        "departamento": "Cesar",
+        "etiqueta": "González, Cesar"
+    },
+    {
+        "id": 840,
+        "nombre": "Gramalote",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Gramalote, Norte de Santander"
+    },
+    {
+        "id": 134,
+        "nombre": "Granada",
+        "departamento": "Antioquia",
+        "etiqueta": "Granada, Antioquia"
+    },
+    {
+        "id": 554,
+        "nombre": "Granada",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Granada, Cundinamarca"
+    },
+    {
+        "id": 748,
+        "nombre": "Granada",
+        "departamento": "Meta",
+        "etiqueta": "Granada, Meta"
+    },
+    {
+        "id": 947,
+        "nombre": "Guaca",
+        "departamento": "Santander",
+        "etiqueta": "Guaca, Santander"
+    },
+    {
+        "id": 254,
+        "nombre": "Guacamayas",
+        "departamento": "Boyacá",
+        "etiqueta": "Guacamayas, Boyacá"
+    },
+    {
+        "id": 1085,
+        "nombre": "Guacarí",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Guacarí, Valle del Cauca"
+    },
+    {
+        "id": 411,
+        "nombre": "Guachené",
+        "departamento": "Cauca",
+        "etiqueta": "Guachené, Cauca"
+    },
+    {
+        "id": 555,
+        "nombre": "Guachetá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guachetá, Cundinamarca"
+    },
+    {
+        "id": 786,
+        "nombre": "Guachucal",
+        "departamento": "Nariño",
+        "etiqueta": "Guachucal, Nariño"
+    },
+    {
+        "id": 1095,
+        "nombre": "Guadalajara de Buga",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Guadalajara de Buga, Valle del Cauca"
+    },
+    {
+        "id": 60,
+        "nombre": "Guadalupe",
+        "departamento": "Antioquia",
+        "etiqueta": "Guadalupe, Antioquia"
+    },
+    {
+        "id": 669,
+        "nombre": "Guadalupe",
+        "departamento": "Huila",
+        "etiqueta": "Guadalupe, Huila"
+    },
+    {
+        "id": 948,
+        "nombre": "Guadalupe",
+        "departamento": "Santander",
+        "etiqueta": "Guadalupe, Santander"
+    },
+    {
+        "id": 556,
+        "nombre": "Guaduas",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guaduas, Cundinamarca"
+    },
+    {
+        "id": 787,
+        "nombre": "Guaitarilla",
+        "departamento": "Nariño",
+        "etiqueta": "Guaitarilla, Nariño"
+    },
+    {
+        "id": 788,
+        "nombre": "Gualmatán",
+        "departamento": "Nariño",
+        "etiqueta": "Gualmatán, Nariño"
+    },
+    {
+        "id": 720,
+        "nombre": "Guamal",
+        "departamento": "Magdalena",
+        "etiqueta": "Guamal, Magdalena"
+    },
+    {
+        "id": 749,
+        "nombre": "Guamal",
+        "departamento": "Meta",
+        "etiqueta": "Guamal, Meta"
+    },
+    {
+        "id": 1041,
+        "nombre": "Guamo",
+        "departamento": "Tolima",
+        "etiqueta": "Guamo, Tolima"
+    },
+    {
+        "id": 412,
+        "nombre": "Guapí",
+        "departamento": "Cauca",
+        "etiqueta": "Guapí, Cauca"
+    },
+    {
+        "id": 949,
+        "nombre": "Guapotá",
+        "departamento": "Santander",
+        "etiqueta": "Guapotá, Santander"
+    },
+    {
+        "id": 1008,
+        "nombre": "Guaranda",
+        "departamento": "Sucre",
+        "etiqueta": "Guaranda, Sucre"
+    },
+    {
+        "id": 61,
+        "nombre": "Guarne",
+        "departamento": "Antioquia",
+        "etiqueta": "Guarne, Antioquia"
+    },
+    {
+        "id": 557,
+        "nombre": "Guasca",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guasca, Cundinamarca"
+    },
+    {
+        "id": 62,
+        "nombre": "Guatapé",
+        "departamento": "Antioquia",
+        "etiqueta": "Guatapé, Antioquia"
+    },
+    {
+        "id": 558,
+        "nombre": "Guataquí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guataquí, Cundinamarca"
+    },
+    {
+        "id": 559,
+        "nombre": "Guatavita",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guatavita, Cundinamarca"
+    },
+    {
+        "id": 255,
+        "nombre": "Guateque",
+        "departamento": "Boyacá",
+        "etiqueta": "Guateque, Boyacá"
+    },
+    {
+        "id": 901,
+        "nombre": "Guática",
+        "departamento": "Risaralda",
+        "etiqueta": "Guática, Risaralda"
+    },
+    {
+        "id": 950,
+        "nombre": "Guavatá",
+        "departamento": "Santander",
+        "etiqueta": "Guavatá, Santander"
+    },
+    {
+        "id": 627,
+        "nombre": "Guayabal de Síquima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guayabal de Síquima, Cundinamarca"
+    },
+    {
+        "id": 560,
+        "nombre": "Guayabetal",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Guayabetal, Cundinamarca"
+    },
+    {
+        "id": 256,
+        "nombre": "Guayatá",
+        "departamento": "Boyacá",
+        "etiqueta": "Guayatá, Boyacá"
+    },
+    {
+        "id": 951,
+        "nombre": "Güepsa",
+        "departamento": "Santander",
+        "etiqueta": "Güepsa, Santander"
+    },
+    {
+        "id": 257,
+        "nombre": "Güicán",
+        "departamento": "Boyacá",
+        "etiqueta": "Güicán, Boyacá"
+    },
+    {
+        "id": 561,
+        "nombre": "Gutiérrez",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Gutiérrez, Cundinamarca"
+    },
+    {
+        "id": 847,
+        "nombre": "Hacarí",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Hacarí, Norte de Santander"
+    },
+    {
+        "id": 202,
+        "nombre": "Hatillo de Loba",
+        "departamento": "Bolívar",
+        "etiqueta": "Hatillo de Loba, Bolívar"
+    },
+    {
+        "id": 383,
+        "nombre": "Hato Corozal",
+        "departamento": "Casanare",
+        "etiqueta": "Hato Corozal, Casanare"
+    },
+    {
+        "id": 996,
+        "nombre": "Hato",
+        "departamento": "Santander",
+        "etiqueta": "Hato, Santander"
+    },
+    {
+        "id": 701,
+        "nombre": "Hatonuevo",
+        "departamento": "La Guajira",
+        "etiqueta": "Hatonuevo, La Guajira"
+    },
+    {
+        "id": 63,
+        "nombre": "Heliconia",
+        "departamento": "Antioquia",
+        "etiqueta": "Heliconia, Antioquia"
+    },
+    {
+        "id": 848,
+        "nombre": "Herrán",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Herrán, Norte de Santander"
+    },
+    {
+        "id": 1042,
+        "nombre": "Herveo",
+        "departamento": "Tolima",
+        "etiqueta": "Herveo, Tolima"
+    },
+    {
+        "id": 64,
+        "nombre": "Hispania",
+        "departamento": "Antioquia",
+        "etiqueta": "Hispania, Antioquia"
+    },
+    {
+        "id": 670,
+        "nombre": "Hobo",
+        "departamento": "Huila",
+        "etiqueta": "Hobo, Huila"
+    },
+    {
+        "id": 1043,
+        "nombre": "Honda",
+        "departamento": "Tolima",
+        "etiqueta": "Honda, Tolima"
+    },
+    {
+        "id": 1069,
+        "nombre": "Ibagué",
+        "departamento": "Tolima",
+        "etiqueta": "Ibagué, Tolima"
+    },
+    {
+        "id": 1044,
+        "nombre": "Icononzo",
+        "departamento": "Tolima",
+        "etiqueta": "Icononzo, Tolima"
+    },
+    {
+        "id": 789,
+        "nombre": "Iles",
+        "departamento": "Nariño",
+        "etiqueta": "Iles, Nariño"
+    },
+    {
+        "id": 790,
+        "nombre": "Imués",
+        "departamento": "Nariño",
+        "etiqueta": "Imués, Nariño"
+    },
+    {
+        "id": 644,
+        "nombre": "Inírida",
+        "departamento": "Guainía",
+        "etiqueta": "Inírida, Guainía"
+    },
+    {
+        "id": 413,
+        "nombre": "Inzá",
+        "departamento": "Cauca",
+        "etiqueta": "Inzá, Cauca"
+    },
+    {
+        "id": 791,
+        "nombre": "Ipiales",
+        "departamento": "Nariño",
+        "etiqueta": "Ipiales, Nariño"
+    },
+    {
+        "id": 671,
+        "nombre": "Íquira",
+        "departamento": "Huila",
+        "etiqueta": "Íquira, Huila"
+    },
+    {
+        "id": 672,
+        "nombre": "Isnos",
+        "departamento": "Huila",
+        "etiqueta": "Isnos, Huila"
+    },
+    {
+        "id": 466,
+        "nombre": "Istmina",
+        "departamento": "Chocó",
+        "etiqueta": "Istmina, Chocó"
+    },
+    {
+        "id": 65,
+        "nombre": "Itagüí",
+        "departamento": "Antioquia",
+        "etiqueta": "Itagüí, Antioquia"
+    },
+    {
+        "id": 66,
+        "nombre": "Ituango",
+        "departamento": "Antioquia",
+        "etiqueta": "Ituango, Antioquia"
+    },
+    {
+        "id": 258,
+        "nombre": "Iza",
+        "departamento": "Boyacá",
+        "etiqueta": "Iza, Boyacá"
+    },
+    {
+        "id": 414,
+        "nombre": "Jambaló",
+        "departamento": "Cauca",
+        "etiqueta": "Jambaló, Cauca"
+    },
+    {
+        "id": 1113,
+        "nombre": "Jamundí",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Jamundí, Valle del Cauca"
+    },
+    {
+        "id": 135,
+        "nombre": "Jardín",
+        "departamento": "Antioquia",
+        "etiqueta": "Jardín, Antioquia"
+    },
+    {
+        "id": 259,
+        "nombre": "Jenesano",
+        "departamento": "Boyacá",
+        "etiqueta": "Jenesano, Boyacá"
+    },
+    {
+        "id": 68,
+        "nombre": "Jericó",
+        "departamento": "Antioquia",
+        "etiqueta": "Jericó, Antioquia"
+    },
+    {
+        "id": 260,
+        "nombre": "Jericó",
+        "departamento": "Boyacá",
+        "etiqueta": "Jericó, Boyacá"
+    },
+    {
+        "id": 562,
+        "nombre": "Jerusalén",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Jerusalén, Cundinamarca"
+    },
+    {
+        "id": 952,
+        "nombre": "Jesús María",
+        "departamento": "Santander",
+        "etiqueta": "Jesús María, Santander"
+    },
+    {
+        "id": 953,
+        "nombre": "Jordán",
+        "departamento": "Santander",
+        "etiqueta": "Jordán, Santander"
+    },
+    {
+        "id": 161,
+        "nombre": "Juan de Acosta",
+        "departamento": "Atlántico",
+        "etiqueta": "Juan de Acosta, Atlántico"
+    },
+    {
+        "id": 563,
+        "nombre": "Junín",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Junín, Cundinamarca"
+    },
+    {
+        "id": 477,
+        "nombre": "Juradó",
+        "departamento": "Chocó",
+        "etiqueta": "Juradó, Chocó"
+    },
+    {
+        "id": 525,
+        "nombre": "La Apartada",
+        "departamento": "Córdoba",
+        "etiqueta": "La Apartada, Córdoba"
+    },
+    {
+        "id": 673,
+        "nombre": "La Argentina",
+        "departamento": "Huila",
+        "etiqueta": "La Argentina, Huila"
+    },
+    {
+        "id": 954,
+        "nombre": "La Belleza",
+        "departamento": "Santander",
+        "etiqueta": "La Belleza, Santander"
+    },
+    {
+        "id": 564,
+        "nombre": "La Calera",
+        "departamento": "Cundinamarca",
+        "etiqueta": "La Calera, Cundinamarca"
+    },
+    {
+        "id": 262,
+        "nombre": "La Capilla",
+        "departamento": "Boyacá",
+        "etiqueta": "La Capilla, Boyacá"
+    },
+    {
+        "id": 69,
+        "nombre": "La Ceja",
+        "departamento": "Antioquia",
+        "etiqueta": "La Ceja, Antioquia"
+    },
+    {
+        "id": 902,
+        "nombre": "La Celia",
+        "departamento": "Risaralda",
+        "etiqueta": "La Celia, Risaralda"
+    },
+    {
+        "id": 3,
+        "nombre": "La Chorrera",
+        "departamento": "Amazonas",
+        "etiqueta": "La Chorrera, Amazonas"
+    },
+    {
+        "id": 792,
+        "nombre": "La Cruz",
+        "departamento": "Nariño",
+        "etiqueta": "La Cruz, Nariño"
+    },
+    {
+        "id": 1107,
+        "nombre": "La Cumbre",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "La Cumbre, Valle del Cauca"
+    },
+    {
+        "id": 344,
+        "nombre": "La Dorada",
+        "departamento": "Caldas",
+        "etiqueta": "La Dorada, Caldas"
+    },
+    {
+        "id": 855,
+        "nombre": "La Esperanza",
+        "departamento": "Norte de Santander",
+        "etiqueta": "La Esperanza, Norte de Santander"
+    },
+    {
+        "id": 70,
+        "nombre": "La Estrella",
+        "departamento": "Antioquia",
+        "etiqueta": "La Estrella, Antioquia"
+    },
+    {
+        "id": 793,
+        "nombre": "La Florida",
+        "departamento": "Nariño",
+        "etiqueta": "La Florida, Nariño"
+    },
+    {
+        "id": 454,
+        "nombre": "La Gloria",
+        "departamento": "Cesar",
+        "etiqueta": "La Gloria, Cesar"
+    },
+    {
+        "id": 649,
+        "nombre": "La Guadalupe",
+        "departamento": "Guainía",
+        "etiqueta": "La Guadalupe, Guainía"
+    },
+    {
+        "id": 465,
+        "nombre": "La Jagua de Ibirico",
+        "departamento": "Cesar",
+        "etiqueta": "La Jagua de Ibirico, Cesar"
+    },
+    {
+        "id": 707,
+        "nombre": "La Jagua del Pilar",
+        "departamento": "La Guajira",
+        "etiqueta": "La Jagua del Pilar, La Guajira"
+    },
+    {
+        "id": 794,
+        "nombre": "La Llanada",
+        "departamento": "Nariño",
+        "etiqueta": "La Llanada, Nariño"
+    },
+    {
+        "id": 752,
+        "nombre": "La Macarena",
+        "departamento": "Meta",
+        "etiqueta": "La Macarena, Meta"
+    },
+    {
+        "id": 345,
+        "nombre": "La Merced",
+        "departamento": "Caldas",
+        "etiqueta": "La Merced, Caldas"
+    },
+    {
+        "id": 565,
+        "nombre": "La Mesa",
+        "departamento": "Cundinamarca",
+        "etiqueta": "La Mesa, Cundinamarca"
+    },
+    {
+        "id": 378,
+        "nombre": "La Montañita",
+        "departamento": "Caquetá",
+        "etiqueta": "La Montañita, Caquetá"
+    },
+    {
+        "id": 566,
+        "nombre": "La Palma",
+        "departamento": "Cundinamarca",
+        "etiqueta": "La Palma, Cundinamarca"
+    },
+    {
+        "id": 459,
+        "nombre": "La Paz",
+        "departamento": "Cesar",
+        "etiqueta": "La Paz, Cesar"
+    },
+    {
+        "id": 956,
+        "nombre": "La Paz",
+        "departamento": "Santander",
+        "etiqueta": "La Paz, Santander"
+    },
+    {
+        "id": 4,
+        "nombre": "La Pedrera",
+        "departamento": "Amazonas",
+        "etiqueta": "La Pedrera, Amazonas"
+    },
+    {
+        "id": 567,
+        "nombre": "La Peña",
+        "departamento": "Cundinamarca",
+        "etiqueta": "La Peña, Cundinamarca"
+    },
+    {
+        "id": 71,
+        "nombre": "La Pintada",
+        "departamento": "Antioquia",
+        "etiqueta": "La Pintada, Antioquia"
+    },
+    {
+        "id": 674,
+        "nombre": "La Plata",
+        "departamento": "Huila",
+        "etiqueta": "La Plata, Huila"
+    },
+    {
+        "id": 852,
+        "nombre": "La Playa",
+        "departamento": "Norte de Santander",
+        "etiqueta": "La Playa, Norte de Santander"
+    },
+    {
+        "id": 1122,
+        "nombre": "La Primavera",
+        "departamento": "Vichada",
+        "etiqueta": "La Primavera, Vichada"
+    },
+    {
+        "id": 384,
+        "nombre": "La Salina",
+        "departamento": "Casanare",
+        "etiqueta": "La Salina, Casanare"
+    },
+    {
+        "id": 415,
+        "nombre": "La Sierra",
+        "departamento": "Cauca",
+        "etiqueta": "La Sierra, Cauca"
+    },
+    {
+        "id": 890,
+        "nombre": "La Tebaida",
+        "departamento": "Quindío",
+        "etiqueta": "La Tebaida, Quindío"
+    },
+    {
+        "id": 795,
+        "nombre": "La Tola",
+        "departamento": "Nariño",
+        "etiqueta": "La Tola, Nariño"
+    },
+    {
+        "id": 72,
+        "nombre": "La Unión",
+        "departamento": "Antioquia",
+        "etiqueta": "La Unión, Antioquia"
+    },
+    {
+        "id": 796,
+        "nombre": "La Unión",
+        "departamento": "Nariño",
+        "etiqueta": "La Unión, Nariño"
+    },
+    {
+        "id": 1009,
+        "nombre": "La Unión",
+        "departamento": "Sucre",
+        "etiqueta": "La Unión, Sucre"
+    },
+    {
+        "id": 1082,
+        "nombre": "La Unión",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "La Unión, Valle del Cauca"
+    },
+    {
+        "id": 335,
+        "nombre": "La Uvita",
+        "departamento": "Boyacá",
+        "etiqueta": "La Uvita, Boyacá"
+    },
+    {
+        "id": 416,
+        "nombre": "La Vega",
+        "departamento": "Cauca",
+        "etiqueta": "La Vega, Cauca"
+    },
+    {
+        "id": 568,
+        "nombre": "La Vega",
+        "departamento": "Cundinamarca",
+        "etiqueta": "La Vega, Cundinamarca"
+    },
+    {
+        "id": 5,
+        "nombre": "La Victoria",
+        "departamento": "Amazonas",
+        "etiqueta": "La Victoria, Amazonas"
+    },
+    {
+        "id": 263,
+        "nombre": "La Victoria",
+        "departamento": "Boyacá",
+        "etiqueta": "La Victoria, Boyacá"
+    },
+    {
+        "id": 1088,
+        "nombre": "La Victoria",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "La Victoria, Valle del Cauca"
+    },
+    {
+        "id": 903,
+        "nombre": "La Virginia",
+        "departamento": "Risaralda",
+        "etiqueta": "La Virginia, Risaralda"
+    },
+    {
+        "id": 864,
+        "nombre": "Labateca",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Labateca, Norte de Santander"
+    },
+    {
+        "id": 261,
+        "nombre": "Labranzagrande",
+        "departamento": "Boyacá",
+        "etiqueta": "Labranzagrande, Boyacá"
+    },
+    {
+        "id": 955,
+        "nombre": "Landázuri",
+        "departamento": "Santander",
+        "etiqueta": "Landázuri, Santander"
+    },
+    {
+        "id": 957,
+        "nombre": "Lebrija",
+        "departamento": "Santander",
+        "etiqueta": "Lebrija, Santander"
+    },
+    {
+        "id": 877,
+        "nombre": "Leguízamo",
+        "departamento": "Putumayo",
+        "etiqueta": "Leguízamo, Putumayo"
+    },
+    {
+        "id": 797,
+        "nombre": "Leiva",
+        "departamento": "Nariño",
+        "etiqueta": "Leiva, Nariño"
+    },
+    {
+        "id": 753,
+        "nombre": "Lejanías",
+        "departamento": "Meta",
+        "etiqueta": "Lejanías, Meta"
+    },
+    {
+        "id": 569,
+        "nombre": "Lenguazaque",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Lenguazaque, Cundinamarca"
+    },
+    {
+        "id": 1071,
+        "nombre": "Lérida",
+        "departamento": "Tolima",
+        "etiqueta": "Lérida, Tolima"
+    },
+    {
+        "id": 1,
+        "nombre": "Leticia",
+        "departamento": "Amazonas",
+        "etiqueta": "Leticia, Amazonas"
+    },
+    {
+        "id": 1070,
+        "nombre": "Líbano",
+        "departamento": "Tolima",
+        "etiqueta": "Líbano, Tolima"
+    },
+    {
+        "id": 73,
+        "nombre": "Liborina",
+        "departamento": "Antioquia",
+        "etiqueta": "Liborina, Antioquia"
+    },
+    {
+        "id": 798,
+        "nombre": "Linares",
+        "departamento": "Nariño",
+        "etiqueta": "Linares, Nariño"
+    },
+    {
+        "id": 478,
+        "nombre": "Lloró",
+        "departamento": "Chocó",
+        "etiqueta": "Lloró, Chocó"
+    },
+    {
+        "id": 417,
+        "nombre": "López",
+        "departamento": "Cauca",
+        "etiqueta": "López, Cauca"
+    },
+    {
+        "id": 506,
+        "nombre": "Lorica",
+        "departamento": "Córdoba",
+        "etiqueta": "Lorica, Córdoba"
+    },
+    {
+        "id": 799,
+        "nombre": "Los Andes",
+        "departamento": "Nariño",
+        "etiqueta": "Los Andes, Nariño"
+    },
+    {
+        "id": 507,
+        "nombre": "Los Córdobas",
+        "departamento": "Córdoba",
+        "etiqueta": "Los Córdobas, Córdoba"
+    },
+    {
+        "id": 1010,
+        "nombre": "Los Palmitos",
+        "departamento": "Sucre",
+        "etiqueta": "Los Palmitos, Sucre"
+    },
+    {
+        "id": 860,
+        "nombre": "Los Patios",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Los Patios, Norte de Santander"
+    },
+    {
+        "id": 958,
+        "nombre": "Los Santos",
+        "departamento": "Santander",
+        "etiqueta": "Los Santos, Santander"
+    },
+    {
+        "id": 844,
+        "nombre": "Lourdes",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Lourdes, Norte de Santander"
+    },
+    {
+        "id": 148,
+        "nombre": "Luruaco",
+        "departamento": "Atlántico",
+        "etiqueta": "Luruaco, Atlántico"
+    },
+    {
+        "id": 264,
+        "nombre": "Macanal",
+        "departamento": "Boyacá",
+        "etiqueta": "Macanal, Boyacá"
+    },
+    {
+        "id": 959,
+        "nombre": "Macaravita",
+        "departamento": "Santander",
+        "etiqueta": "Macaravita, Santander"
+    },
+    {
+        "id": 74,
+        "nombre": "Maceo",
+        "departamento": "Antioquia",
+        "etiqueta": "Maceo, Antioquia"
+    },
+    {
+        "id": 570,
+        "nombre": "Machetá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Machetá, Cundinamarca"
+    },
+    {
+        "id": 571,
+        "nombre": "Madrid",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Madrid, Cundinamarca"
+    },
+    {
+        "id": 178,
+        "nombre": "Magangué",
+        "departamento": "Bolívar",
+        "etiqueta": "Magangué, Bolívar"
+    },
+    {
+        "id": 800,
+        "nombre": "Magüí",
+        "departamento": "Nariño",
+        "etiqueta": "Magüí, Nariño"
+    },
+    {
+        "id": 179,
+        "nombre": "Mahates",
+        "departamento": "Bolívar",
+        "etiqueta": "Mahates, Bolívar"
+    },
+    {
+        "id": 702,
+        "nombre": "Maicao",
+        "departamento": "La Guajira",
+        "etiqueta": "Maicao, La Guajira"
+    },
+    {
+        "id": 1011,
+        "nombre": "Majagual",
+        "departamento": "Sucre",
+        "etiqueta": "Majagual, Sucre"
+    },
+    {
+        "id": 960,
+        "nombre": "Málaga",
+        "departamento": "Santander",
+        "etiqueta": "Málaga, Santander"
+    },
+    {
+        "id": 149,
+        "nombre": "Malambo",
+        "departamento": "Atlántico",
+        "etiqueta": "Malambo, Atlántico"
+    },
+    {
+        "id": 801,
+        "nombre": "Mallama",
+        "departamento": "Nariño",
+        "etiqueta": "Mallama, Nariño"
+    },
+    {
+        "id": 150,
+        "nombre": "Manatí",
+        "departamento": "Atlántico",
+        "etiqueta": "Manatí, Atlántico"
+    },
+    {
+        "id": 455,
+        "nombre": "Manaure",
+        "departamento": "Cesar",
+        "etiqueta": "Manaure, Cesar"
+    },
+    {
+        "id": 703,
+        "nombre": "Manaure",
+        "departamento": "La Guajira",
+        "etiqueta": "Manaure, La Guajira"
+    },
+    {
+        "id": 396,
+        "nombre": "Maní",
+        "departamento": "Casanare",
+        "etiqueta": "Maní, Casanare"
+    },
+    {
+        "id": 337,
+        "nombre": "Manizales",
+        "departamento": "Caldas",
+        "etiqueta": "Manizales, Caldas"
+    },
+    {
+        "id": 572,
+        "nombre": "Manta",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Manta, Cundinamarca"
+    },
+    {
+        "id": 346,
+        "nombre": "Manzanares",
+        "departamento": "Caldas",
+        "etiqueta": "Manzanares, Caldas"
+    },
+    {
+        "id": 750,
+        "nombre": "Mapiripán",
+        "departamento": "Meta",
+        "etiqueta": "Mapiripán, Meta"
+    },
+    {
+        "id": 646,
+        "nombre": "Mapiripana",
+        "departamento": "Guainía",
+        "etiqueta": "Mapiripana, Guainía"
+    },
+    {
+        "id": 180,
+        "nombre": "Margarita",
+        "departamento": "Bolívar",
+        "etiqueta": "Margarita, Bolívar"
+    },
+    {
+        "id": 211,
+        "nombre": "María la Baja",
+        "departamento": "Bolívar",
+        "etiqueta": "María la Baja, Bolívar"
+    },
+    {
+        "id": 75,
+        "nombre": "Marinilla",
+        "departamento": "Antioquia",
+        "etiqueta": "Marinilla, Antioquia"
+    },
+    {
+        "id": 265,
+        "nombre": "Maripí",
+        "departamento": "Boyacá",
+        "etiqueta": "Maripí, Boyacá"
+    },
+    {
+        "id": 1045,
+        "nombre": "Mariquita",
+        "departamento": "Tolima",
+        "etiqueta": "Mariquita, Tolima"
+    },
+    {
+        "id": 347,
+        "nombre": "Marmato",
+        "departamento": "Caldas",
+        "etiqueta": "Marmato, Caldas"
+    },
+    {
+        "id": 363,
+        "nombre": "Marquetalia",
+        "departamento": "Caldas",
+        "etiqueta": "Marquetalia, Caldas"
+    },
+    {
+        "id": 904,
+        "nombre": "Marsella",
+        "departamento": "Risaralda",
+        "etiqueta": "Marsella, Risaralda"
+    },
+    {
+        "id": 348,
+        "nombre": "Marulanda",
+        "departamento": "Caldas",
+        "etiqueta": "Marulanda, Caldas"
+    },
+    {
+        "id": 961,
+        "nombre": "Matanza",
+        "departamento": "Santander",
+        "etiqueta": "Matanza, Santander"
+    },
+    {
+        "id": 12,
+        "nombre": "Medellín",
+        "departamento": "Antioquia",
+        "etiqueta": "Medellín, Antioquia"
+    },
+    {
+        "id": 573,
+        "nombre": "Medina",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Medina, Cundinamarca"
+    },
+    {
+        "id": 479,
+        "nombre": "Medio Atrato",
+        "departamento": "Chocó",
+        "etiqueta": "Medio Atrato, Chocó"
+    },
+    {
+        "id": 480,
+        "nombre": "Medio Baudó",
+        "departamento": "Chocó",
+        "etiqueta": "Medio Baudó, Chocó"
+    },
+    {
+        "id": 481,
+        "nombre": "Medio San Juan",
+        "departamento": "Chocó",
+        "etiqueta": "Medio San Juan, Chocó"
+    },
+    {
+        "id": 1046,
+        "nombre": "Melgar",
+        "departamento": "Tolima",
+        "etiqueta": "Melgar, Tolima"
+    },
+    {
+        "id": 418,
+        "nombre": "Mercaderes",
+        "departamento": "Cauca",
+        "etiqueta": "Mercaderes, Cauca"
+    },
+    {
+        "id": 751,
+        "nombre": "Mesetas",
+        "departamento": "Meta",
+        "etiqueta": "Mesetas, Meta"
+    },
+    {
+        "id": 377,
+        "nombre": "Milán",
+        "departamento": "Caquetá",
+        "etiqueta": "Milán, Caquetá"
+    },
+    {
+        "id": 266,
+        "nombre": "Miraflores",
+        "departamento": "Boyacá",
+        "etiqueta": "Miraflores, Boyacá"
+    },
+    {
+        "id": 655,
+        "nombre": "Miraflores",
+        "departamento": "Guaviare",
+        "etiqueta": "Miraflores, Guaviare"
+    },
+    {
+        "id": 419,
+        "nombre": "Miranda",
+        "departamento": "Cauca",
+        "etiqueta": "Miranda, Cauca"
+    },
+    {
+        "id": 11,
+        "nombre": "Miriti Paraná",
+        "departamento": "Amazonas",
+        "etiqueta": "Miriti Paraná, Amazonas"
+    },
+    {
+        "id": 905,
+        "nombre": "Mistrató",
+        "departamento": "Risaralda",
+        "etiqueta": "Mistrató, Risaralda"
+    },
+    {
+        "id": 1115,
+        "nombre": "Mitú",
+        "departamento": "Vaupés",
+        "etiqueta": "Mitú, Vaupés"
+    },
+    {
+        "id": 872,
+        "nombre": "Mocoa",
+        "departamento": "Putumayo",
+        "etiqueta": "Mocoa, Putumayo"
+    },
+    {
+        "id": 962,
+        "nombre": "Mogotes",
+        "departamento": "Santander",
+        "etiqueta": "Mogotes, Santander"
+    },
+    {
+        "id": 963,
+        "nombre": "Molagavita",
+        "departamento": "Santander",
+        "etiqueta": "Molagavita, Santander"
+    },
+    {
+        "id": 508,
+        "nombre": "Momil",
+        "departamento": "Córdoba",
+        "etiqueta": "Momil, Córdoba"
+    },
+    {
+        "id": 182,
+        "nombre": "Mompós",
+        "departamento": "Bolívar",
+        "etiqueta": "Mompós, Bolívar"
+    },
+    {
+        "id": 267,
+        "nombre": "Mongua",
+        "departamento": "Boyacá",
+        "etiqueta": "Mongua, Boyacá"
+    },
+    {
+        "id": 268,
+        "nombre": "Monguí",
+        "departamento": "Boyacá",
+        "etiqueta": "Monguí, Boyacá"
+    },
+    {
+        "id": 269,
+        "nombre": "Moniquirá",
+        "departamento": "Boyacá",
+        "etiqueta": "Moniquirá, Boyacá"
+    },
+    {
+        "id": 76,
+        "nombre": "Montebello",
+        "departamento": "Antioquia",
+        "etiqueta": "Montebello, Antioquia"
+    },
+    {
+        "id": 181,
+        "nombre": "Montecristo",
+        "departamento": "Bolívar",
+        "etiqueta": "Montecristo, Bolívar"
+    },
+    {
+        "id": 524,
+        "nombre": "Montelíbano",
+        "departamento": "Córdoba",
+        "etiqueta": "Montelíbano, Córdoba"
+    },
+    {
+        "id": 891,
+        "nombre": "Montenegro",
+        "departamento": "Quindío",
+        "etiqueta": "Montenegro, Quindío"
+    },
+    {
+        "id": 498,
+        "nombre": "Montería",
+        "departamento": "Córdoba",
+        "etiqueta": "Montería, Córdoba"
+    },
+    {
+        "id": 385,
+        "nombre": "Monterrey",
+        "departamento": "Casanare",
+        "etiqueta": "Monterrey, Casanare"
+    },
+    {
+        "id": 509,
+        "nombre": "Moñitos",
+        "departamento": "Córdoba",
+        "etiqueta": "Moñitos, Córdoba"
+    },
+    {
+        "id": 183,
+        "nombre": "Morales",
+        "departamento": "Bolívar",
+        "etiqueta": "Morales, Bolívar"
+    },
+    {
+        "id": 420,
+        "nombre": "Morales",
+        "departamento": "Cauca",
+        "etiqueta": "Morales, Cauca"
+    },
+    {
+        "id": 369,
+        "nombre": "Morelia",
+        "departamento": "Caquetá",
+        "etiqueta": "Morelia, Caquetá"
+    },
+    {
+        "id": 652,
+        "nombre": "Morichal",
+        "departamento": "Guainía",
+        "etiqueta": "Morichal, Guainía"
+    },
+    {
+        "id": 1012,
+        "nombre": "Morroa",
+        "departamento": "Sucre",
+        "etiqueta": "Morroa, Sucre"
+    },
+    {
+        "id": 574,
+        "nombre": "Mosquera",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Mosquera, Cundinamarca"
+    },
+    {
+        "id": 802,
+        "nombre": "Mosquera",
+        "departamento": "Nariño",
+        "etiqueta": "Mosquera, Nariño"
+    },
+    {
+        "id": 215,
+        "nombre": "Motavita",
+        "departamento": "Boyacá",
+        "etiqueta": "Motavita, Boyacá"
+    },
+    {
+        "id": 1047,
+        "nombre": "Murillo",
+        "departamento": "Tolima",
+        "etiqueta": "Murillo, Tolima"
+    },
+    {
+        "id": 77,
+        "nombre": "Murindó",
+        "departamento": "Antioquia",
+        "etiqueta": "Murindó, Antioquia"
+    },
+    {
+        "id": 78,
+        "nombre": "Mutatá",
+        "departamento": "Antioquia",
+        "etiqueta": "Mutatá, Antioquia"
+    },
+    {
+        "id": 835,
+        "nombre": "Mutiscua",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Mutiscua, Norte de Santander"
+    },
+    {
+        "id": 270,
+        "nombre": "Muzo",
+        "departamento": "Boyacá",
+        "etiqueta": "Muzo, Boyacá"
+    },
+    {
+        "id": 79,
+        "nombre": "Nariño",
+        "departamento": "Antioquia",
+        "etiqueta": "Nariño, Antioquia"
+    },
+    {
+        "id": 575,
+        "nombre": "Nariño",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Nariño, Cundinamarca"
+    },
+    {
+        "id": 803,
+        "nombre": "Nariño",
+        "departamento": "Nariño",
+        "etiqueta": "Nariño, Nariño"
+    },
+    {
+        "id": 675,
+        "nombre": "Nátaga",
+        "departamento": "Huila",
+        "etiqueta": "Nátaga, Huila"
+    },
+    {
+        "id": 1048,
+        "nombre": "Natagaima",
+        "departamento": "Tolima",
+        "etiqueta": "Natagaima, Tolima"
+    },
+    {
+        "id": 81,
+        "nombre": "Nechí",
+        "departamento": "Antioquia",
+        "etiqueta": "Nechí, Antioquia"
+    },
+    {
+        "id": 80,
+        "nombre": "Necoclí",
+        "departamento": "Antioquia",
+        "etiqueta": "Necoclí, Antioquia"
+    },
+    {
+        "id": 349,
+        "nombre": "Neira",
+        "departamento": "Caldas",
+        "etiqueta": "Neira, Caldas"
+    },
+    {
+        "id": 657,
+        "nombre": "Neiva",
+        "departamento": "Huila",
+        "etiqueta": "Neiva, Huila"
+    },
+    {
+        "id": 576,
+        "nombre": "Nemocón",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Nemocón, Cundinamarca"
+    },
+    {
+        "id": 577,
+        "nombre": "Nilo",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Nilo, Cundinamarca"
+    },
+    {
+        "id": 578,
+        "nombre": "Nimaima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Nimaima, Cundinamarca"
+    },
+    {
+        "id": 271,
+        "nombre": "Nobsa",
+        "departamento": "Boyacá",
+        "etiqueta": "Nobsa, Boyacá"
+    },
+    {
+        "id": 579,
+        "nombre": "Nocaima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Nocaima, Cundinamarca"
+    },
+    {
+        "id": 350,
+        "nombre": "Norcasia",
+        "departamento": "Caldas",
+        "etiqueta": "Norcasia, Caldas"
+    },
+    {
+        "id": 184,
+        "nombre": "Norosí",
+        "departamento": "Bolívar",
+        "etiqueta": "Norosí, Bolívar"
+    },
+    {
+        "id": 482,
+        "nombre": "Nóvita",
+        "departamento": "Chocó",
+        "etiqueta": "Nóvita, Chocó"
+    },
+    {
+        "id": 721,
+        "nombre": "Nueva Granada",
+        "departamento": "Magdalena",
+        "etiqueta": "Nueva Granada, Magdalena"
+    },
+    {
+        "id": 272,
+        "nombre": "Nuevo Colón",
+        "departamento": "Boyacá",
+        "etiqueta": "Nuevo Colón, Boyacá"
+    },
+    {
+        "id": 395,
+        "nombre": "Nunchía",
+        "departamento": "Casanare",
+        "etiqueta": "Nunchía, Casanare"
+    },
+    {
+        "id": 483,
+        "nombre": "Nuquí",
+        "departamento": "Chocó",
+        "etiqueta": "Nuquí, Chocó"
+    },
+    {
+        "id": 1091,
+        "nombre": "Obando",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Obando, Valle del Cauca"
+    },
+    {
+        "id": 964,
+        "nombre": "Ocamonte",
+        "departamento": "Santander",
+        "etiqueta": "Ocamonte, Santander"
+    },
+    {
+        "id": 861,
+        "nombre": "Ocaña",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Ocaña, Norte de Santander"
+    },
+    {
+        "id": 965,
+        "nombre": "Oiba",
+        "departamento": "Santander",
+        "etiqueta": "Oiba, Santander"
+    },
+    {
+        "id": 273,
+        "nombre": "Oicatá",
+        "departamento": "Boyacá",
+        "etiqueta": "Oicatá, Boyacá"
+    },
+    {
+        "id": 804,
+        "nombre": "Olaya Herrera",
+        "departamento": "Nariño",
+        "etiqueta": "Olaya Herrera, Nariño"
+    },
+    {
+        "id": 82,
+        "nombre": "Olaya",
+        "departamento": "Antioquia",
+        "etiqueta": "Olaya, Antioquia"
+    },
+    {
+        "id": 966,
+        "nombre": "Onzaga",
+        "departamento": "Santander",
+        "etiqueta": "Onzaga, Santander"
+    },
+    {
+        "id": 676,
+        "nombre": "Oporapa",
+        "departamento": "Huila",
+        "etiqueta": "Oporapa, Huila"
+    },
+    {
+        "id": 874,
+        "nombre": "Orito",
+        "departamento": "Putumayo",
+        "etiqueta": "Orito, Putumayo"
+    },
+    {
+        "id": 398,
+        "nombre": "Orocué",
+        "departamento": "Casanare",
+        "etiqueta": "Orocué, Casanare"
+    },
+    {
+        "id": 1049,
+        "nombre": "Ortega",
+        "departamento": "Tolima",
+        "etiqueta": "Ortega, Tolima"
+    },
+    {
+        "id": 805,
+        "nombre": "Ospina",
+        "departamento": "Nariño",
+        "etiqueta": "Ospina, Nariño"
+    },
+    {
+        "id": 274,
+        "nombre": "Otanche",
+        "departamento": "Boyacá",
+        "etiqueta": "Otanche, Boyacá"
+    },
+    {
+        "id": 1013,
+        "nombre": "Ovejas",
+        "departamento": "Sucre",
+        "etiqueta": "Ovejas, Sucre"
+    },
+    {
+        "id": 275,
+        "nombre": "Pachavita",
+        "departamento": "Boyacá",
+        "etiqueta": "Pachavita, Boyacá"
+    },
+    {
+        "id": 581,
+        "nombre": "Pacho",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Pacho, Cundinamarca"
+    },
+    {
+        "id": 1120,
+        "nombre": "Pacoa",
+        "departamento": "Vaupés",
+        "etiqueta": "Pacoa, Vaupés"
+    },
+    {
+        "id": 351,
+        "nombre": "Pácora",
+        "departamento": "Caldas",
+        "etiqueta": "Pácora, Caldas"
+    },
+    {
+        "id": 421,
+        "nombre": "Padilla",
+        "departamento": "Cauca",
+        "etiqueta": "Padilla, Cauca"
+    },
+    {
+        "id": 276,
+        "nombre": "Páez",
+        "departamento": "Boyacá",
+        "etiqueta": "Páez, Boyacá"
+    },
+    {
+        "id": 440,
+        "nombre": "Páez",
+        "departamento": "Cauca",
+        "etiqueta": "Páez, Cauca"
+    },
+    {
+        "id": 677,
+        "nombre": "Paicol",
+        "departamento": "Huila",
+        "etiqueta": "Paicol, Huila"
+    },
+    {
+        "id": 456,
+        "nombre": "Pailitas",
+        "departamento": "Cesar",
+        "etiqueta": "Pailitas, Cesar"
+    },
+    {
+        "id": 582,
+        "nombre": "Paime",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Paime, Cundinamarca"
+    },
+    {
+        "id": 277,
+        "nombre": "Paipa",
+        "departamento": "Boyacá",
+        "etiqueta": "Paipa, Boyacá"
+    },
+    {
+        "id": 278,
+        "nombre": "Pajarito",
+        "departamento": "Boyacá",
+        "etiqueta": "Pajarito, Boyacá"
+    },
+    {
+        "id": 678,
+        "nombre": "Palermo",
+        "departamento": "Huila",
+        "etiqueta": "Palermo, Huila"
+    },
+    {
+        "id": 352,
+        "nombre": "Palestina",
+        "departamento": "Caldas",
+        "etiqueta": "Palestina, Caldas"
+    },
+    {
+        "id": 679,
+        "nombre": "Palestina",
+        "departamento": "Huila",
+        "etiqueta": "Palestina, Huila"
+    },
+    {
+        "id": 162,
+        "nombre": "Palmar de Varela",
+        "departamento": "Atlántico",
+        "etiqueta": "Palmar de Varela, Atlántico"
+    },
+    {
+        "id": 967,
+        "nombre": "Palmar",
+        "departamento": "Santander",
+        "etiqueta": "Palmar, Santander"
+    },
+    {
+        "id": 988,
+        "nombre": "Palmas del Socorro",
+        "departamento": "Santander",
+        "etiqueta": "Palmas del Socorro, Santander"
+    },
+    {
+        "id": 1100,
+        "nombre": "Palmira",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Palmira, Valle del Cauca"
+    },
+    {
+        "id": 1014,
+        "nombre": "Palmito",
+        "departamento": "Sucre",
+        "etiqueta": "Palmito, Sucre"
+    },
+    {
+        "id": 1050,
+        "nombre": "Palocabildo",
+        "departamento": "Tolima",
+        "etiqueta": "Palocabildo, Tolima"
+    },
+    {
+        "id": 868,
+        "nombre": "Pamplona",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Pamplona, Norte de Santander"
+    },
+    {
+        "id": 869,
+        "nombre": "Pamplonita",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Pamplonita, Norte de Santander"
+    },
+    {
+        "id": 651,
+        "nombre": "Pana Pana",
+        "departamento": "Guainía",
+        "etiqueta": "Pana Pana, Guainía"
+    },
+    {
+        "id": 583,
+        "nombre": "Pandi",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Pandi, Cundinamarca"
+    },
+    {
+        "id": 279,
+        "nombre": "Panqueba",
+        "departamento": "Boyacá",
+        "etiqueta": "Panqueba, Boyacá"
+    },
+    {
+        "id": 1118,
+        "nombre": "Papunahua",
+        "departamento": "Vaupés",
+        "etiqueta": "Papunahua, Vaupés"
+    },
+    {
+        "id": 968,
+        "nombre": "Páramo",
+        "departamento": "Santander",
+        "etiqueta": "Páramo, Santander"
+    },
+    {
+        "id": 584,
+        "nombre": "Paratebueno",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Paratebueno, Cundinamarca"
+    },
+    {
+        "id": 585,
+        "nombre": "Pasca",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Pasca, Cundinamarca"
+    },
+    {
+        "id": 769,
+        "nombre": "Pasto",
+        "departamento": "Nariño",
+        "etiqueta": "Pasto, Nariño"
+    },
+    {
+        "id": 422,
+        "nombre": "Patía",
+        "departamento": "Cauca",
+        "etiqueta": "Patía, Cauca"
+    },
+    {
+        "id": 280,
+        "nombre": "Pauna",
+        "departamento": "Boyacá",
+        "etiqueta": "Pauna, Boyacá"
+    },
+    {
+        "id": 281,
+        "nombre": "Paya",
+        "departamento": "Boyacá",
+        "etiqueta": "Paya, Boyacá"
+    },
+    {
+        "id": 394,
+        "nombre": "Paz de Ariporo",
+        "departamento": "Casanare",
+        "etiqueta": "Paz de Ariporo, Casanare"
+    },
+    {
+        "id": 327,
+        "nombre": "Paz de Río",
+        "departamento": "Boyacá",
+        "etiqueta": "Paz de Río, Boyacá"
+    },
+    {
+        "id": 722,
+        "nombre": "Pedraza",
+        "departamento": "Magdalena",
+        "etiqueta": "Pedraza, Magdalena"
+    },
+    {
+        "id": 457,
+        "nombre": "Pelaya",
+        "departamento": "Cesar",
+        "etiqueta": "Pelaya, Cesar"
+    },
+    {
+        "id": 353,
+        "nombre": "Pensilvania",
+        "departamento": "Caldas",
+        "etiqueta": "Pensilvania, Caldas"
+    },
+    {
+        "id": 83,
+        "nombre": "Peñol",
+        "departamento": "Antioquia",
+        "etiqueta": "Peñol, Antioquia"
+    },
+    {
+        "id": 84,
+        "nombre": "Peque",
+        "departamento": "Antioquia",
+        "etiqueta": "Peque, Antioquia"
+    },
+    {
+        "id": 897,
+        "nombre": "Pereira",
+        "departamento": "Risaralda",
+        "etiqueta": "Pereira, Risaralda"
+    },
+    {
+        "id": 282,
+        "nombre": "Pesca",
+        "departamento": "Boyacá",
+        "etiqueta": "Pesca, Boyacá"
+    },
+    {
+        "id": 423,
+        "nombre": "Piamonte",
+        "departamento": "Cauca",
+        "etiqueta": "Piamonte, Cauca"
+    },
+    {
+        "id": 969,
+        "nombre": "Piedecuesta",
+        "departamento": "Santander",
+        "etiqueta": "Piedecuesta, Santander"
+    },
+    {
+        "id": 1051,
+        "nombre": "Piedras",
+        "departamento": "Tolima",
+        "etiqueta": "Piedras, Tolima"
+    },
+    {
+        "id": 424,
+        "nombre": "Piendamó",
+        "departamento": "Cauca",
+        "etiqueta": "Piendamó, Cauca"
+    },
+    {
+        "id": 892,
+        "nombre": "Pijao",
+        "departamento": "Quindío",
+        "etiqueta": "Pijao, Quindío"
+    },
+    {
+        "id": 735,
+        "nombre": "Pijiño del Carmen",
+        "departamento": "Magdalena",
+        "etiqueta": "Pijiño del Carmen, Magdalena"
+    },
+    {
+        "id": 970,
+        "nombre": "Pinchote",
+        "departamento": "Santander",
+        "etiqueta": "Pinchote, Santander"
+    },
+    {
+        "id": 185,
+        "nombre": "Pinillos",
+        "departamento": "Bolívar",
+        "etiqueta": "Pinillos, Bolívar"
+    },
+    {
+        "id": 151,
+        "nombre": "Piojó",
+        "departamento": "Atlántico",
+        "etiqueta": "Piojó, Atlántico"
+    },
+    {
+        "id": 283,
+        "nombre": "Pisba",
+        "departamento": "Boyacá",
+        "etiqueta": "Pisba, Boyacá"
+    },
+    {
+        "id": 680,
+        "nombre": "Pital",
+        "departamento": "Huila",
+        "etiqueta": "Pital, Huila"
+    },
+    {
+        "id": 681,
+        "nombre": "Pitalito",
+        "departamento": "Huila",
+        "etiqueta": "Pitalito, Huila"
+    },
+    {
+        "id": 723,
+        "nombre": "Pivijay",
+        "departamento": "Magdalena",
+        "etiqueta": "Pivijay, Magdalena"
+    },
+    {
+        "id": 1052,
+        "nombre": "Planadas",
+        "departamento": "Tolima",
+        "etiqueta": "Planadas, Tolima"
+    },
+    {
+        "id": 510,
+        "nombre": "Planeta Rica",
+        "departamento": "Córdoba",
+        "etiqueta": "Planeta Rica, Córdoba"
+    },
+    {
+        "id": 724,
+        "nombre": "Plato",
+        "departamento": "Magdalena",
+        "etiqueta": "Plato, Magdalena"
+    },
+    {
+        "id": 807,
+        "nombre": "Policarpa",
+        "departamento": "Nariño",
+        "etiqueta": "Policarpa, Nariño"
+    },
+    {
+        "id": 152,
+        "nombre": "Polonuevo",
+        "departamento": "Atlántico",
+        "etiqueta": "Polonuevo, Atlántico"
+    },
+    {
+        "id": 166,
+        "nombre": "Ponedera",
+        "departamento": "Atlántico",
+        "etiqueta": "Ponedera, Atlántico"
+    },
+    {
+        "id": 399,
+        "nombre": "Popayán",
+        "departamento": "Cauca",
+        "etiqueta": "Popayán, Cauca"
+    },
+    {
+        "id": 386,
+        "nombre": "Pore",
+        "departamento": "Casanare",
+        "etiqueta": "Pore, Casanare"
+    },
+    {
+        "id": 808,
+        "nombre": "Potosí",
+        "departamento": "Nariño",
+        "etiqueta": "Potosí, Nariño"
+    },
+    {
+        "id": 1098,
+        "nombre": "Pradera",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Pradera, Valle del Cauca"
+    },
+    {
+        "id": 1053,
+        "nombre": "Prado",
+        "departamento": "Tolima",
+        "etiqueta": "Prado, Tolima"
+    },
+    {
+        "id": 809,
+        "nombre": "Providencia",
+        "departamento": "Nariño",
+        "etiqueta": "Providencia, Nariño"
+    },
+    {
+        "id": 911,
+        "nombre": "Providencia",
+        "departamento": "San Andrés y Providencia",
+        "etiqueta": "Providencia, San Andrés y Providencia"
+    },
+    {
+        "id": 458,
+        "nombre": "Pueblo Bello",
+        "departamento": "Cesar",
+        "etiqueta": "Pueblo Bello, Cesar"
+    },
+    {
+        "id": 511,
+        "nombre": "Pueblo Nuevo",
+        "departamento": "Córdoba",
+        "etiqueta": "Pueblo Nuevo, Córdoba"
+    },
+    {
+        "id": 906,
+        "nombre": "Pueblo Rico",
+        "departamento": "Risaralda",
+        "etiqueta": "Pueblo Rico, Risaralda"
+    },
+    {
+        "id": 737,
+        "nombre": "Pueblo Viejo",
+        "departamento": "Magdalena",
+        "etiqueta": "Pueblo Viejo, Magdalena"
+    },
+    {
+        "id": 85,
+        "nombre": "Pueblorrico",
+        "departamento": "Antioquia",
+        "etiqueta": "Pueblorrico, Antioquia"
+    },
+    {
+        "id": 971,
+        "nombre": "Puente Nacional",
+        "departamento": "Santander",
+        "etiqueta": "Puente Nacional, Santander"
+    },
+    {
+        "id": 810,
+        "nombre": "Puerres",
+        "departamento": "Nariño",
+        "etiqueta": "Puerres, Nariño"
+    },
+    {
+        "id": 10,
+        "nombre": "Puerto Alegría",
+        "departamento": "Amazonas",
+        "etiqueta": "Puerto Alegría, Amazonas"
+    },
+    {
+        "id": 6,
+        "nombre": "Puerto Arica",
+        "departamento": "Amazonas",
+        "etiqueta": "Puerto Arica, Amazonas"
+    },
+    {
+        "id": 883,
+        "nombre": "Puerto Asís",
+        "departamento": "Putumayo",
+        "etiqueta": "Puerto Asís, Putumayo"
+    },
+    {
+        "id": 86,
+        "nombre": "Puerto Berrío",
+        "departamento": "Antioquia",
+        "etiqueta": "Puerto Berrío, Antioquia"
+    },
+    {
+        "id": 284,
+        "nombre": "Puerto Boyacá",
+        "departamento": "Boyacá",
+        "etiqueta": "Puerto Boyacá, Boyacá"
+    },
+    {
+        "id": 875,
+        "nombre": "Puerto Caicedo",
+        "departamento": "Putumayo",
+        "etiqueta": "Puerto Caicedo, Putumayo"
+    },
+    {
+        "id": 1121,
+        "nombre": "Puerto Carreño",
+        "departamento": "Vichada",
+        "etiqueta": "Puerto Carreño, Vichada"
+    },
+    {
+        "id": 165,
+        "nombre": "Puerto Colombia",
+        "departamento": "Atlántico",
+        "etiqueta": "Puerto Colombia, Atlántico"
+    },
+    {
+        "id": 648,
+        "nombre": "Puerto Colombia",
+        "departamento": "Guainía",
+        "etiqueta": "Puerto Colombia, Guainía"
+    },
+    {
+        "id": 754,
+        "nombre": "Puerto Concordia",
+        "departamento": "Meta",
+        "etiqueta": "Puerto Concordia, Meta"
+    },
+    {
+        "id": 512,
+        "nombre": "Puerto Escondido",
+        "departamento": "Córdoba",
+        "etiqueta": "Puerto Escondido, Córdoba"
+    },
+    {
+        "id": 755,
+        "nombre": "Puerto Gaitán",
+        "departamento": "Meta",
+        "etiqueta": "Puerto Gaitán, Meta"
+    },
+    {
+        "id": 876,
+        "nombre": "Puerto Guzmán",
+        "departamento": "Putumayo",
+        "etiqueta": "Puerto Guzmán, Putumayo"
+    },
+    {
+        "id": 526,
+        "nombre": "Puerto Libertador",
+        "departamento": "Córdoba",
+        "etiqueta": "Puerto Libertador, Córdoba"
+    },
+    {
+        "id": 757,
+        "nombre": "Puerto Lleras",
+        "departamento": "Meta",
+        "etiqueta": "Puerto Lleras, Meta"
+    },
+    {
+        "id": 756,
+        "nombre": "Puerto López",
+        "departamento": "Meta",
+        "etiqueta": "Puerto López, Meta"
+    },
+    {
+        "id": 87,
+        "nombre": "Puerto Nare",
+        "departamento": "Antioquia",
+        "etiqueta": "Puerto Nare, Antioquia"
+    },
+    {
+        "id": 7,
+        "nombre": "Puerto Nariño",
+        "departamento": "Amazonas",
+        "etiqueta": "Puerto Nariño, Amazonas"
+    },
+    {
+        "id": 914,
+        "nombre": "Puerto Parra",
+        "departamento": "Santander",
+        "etiqueta": "Puerto Parra, Santander"
+    },
+    {
+        "id": 370,
+        "nombre": "Puerto Rico",
+        "departamento": "Caquetá",
+        "etiqueta": "Puerto Rico, Caquetá"
+    },
+    {
+        "id": 758,
+        "nombre": "Puerto Rico",
+        "departamento": "Meta",
+        "etiqueta": "Puerto Rico, Meta"
+    },
+    {
+        "id": 140,
+        "nombre": "Puerto Rondón",
+        "departamento": "Arauca",
+        "etiqueta": "Puerto Rondón, Arauca"
+    },
+    {
+        "id": 586,
+        "nombre": "Puerto Salgar",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Puerto Salgar, Cundinamarca"
+    },
+    {
+        "id": 8,
+        "nombre": "Puerto Santander",
+        "departamento": "Amazonas",
+        "etiqueta": "Puerto Santander, Amazonas"
+    },
+    {
+        "id": 839,
+        "nombre": "Puerto Santander",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Puerto Santander, Norte de Santander"
+    },
+    {
+        "id": 425,
+        "nombre": "Puerto Tejada",
+        "departamento": "Cauca",
+        "etiqueta": "Puerto Tejada, Cauca"
+    },
+    {
+        "id": 88,
+        "nombre": "Puerto Triunfo",
+        "departamento": "Antioquia",
+        "etiqueta": "Puerto Triunfo, Antioquia"
+    },
+    {
+        "id": 913,
+        "nombre": "Puerto Wilches",
+        "departamento": "Santander",
+        "etiqueta": "Puerto Wilches, Santander"
+    },
+    {
+        "id": 587,
+        "nombre": "Pulí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Pulí, Cundinamarca"
+    },
+    {
+        "id": 811,
+        "nombre": "Pupiales",
+        "departamento": "Nariño",
+        "etiqueta": "Pupiales, Nariño"
+    },
+    {
+        "id": 426,
+        "nombre": "Puracé",
+        "departamento": "Cauca",
+        "etiqueta": "Puracé, Cauca"
+    },
+    {
+        "id": 1054,
+        "nombre": "Purificación",
+        "departamento": "Tolima",
+        "etiqueta": "Purificación, Tolima"
+    },
+    {
+        "id": 513,
+        "nombre": "Purísima",
+        "departamento": "Córdoba",
+        "etiqueta": "Purísima, Córdoba"
+    },
+    {
+        "id": 588,
+        "nombre": "Quebradanegra",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Quebradanegra, Cundinamarca"
+    },
+    {
+        "id": 589,
+        "nombre": "Quetame",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Quetame, Cundinamarca"
+    },
+    {
+        "id": 467,
+        "nombre": "Quibdó",
+        "departamento": "Chocó",
+        "etiqueta": "Quibdó, Chocó"
+    },
+    {
+        "id": 893,
+        "nombre": "Quimbaya",
+        "departamento": "Quindío",
+        "etiqueta": "Quimbaya, Quindío"
+    },
+    {
+        "id": 907,
+        "nombre": "Quinchía",
+        "departamento": "Risaralda",
+        "etiqueta": "Quinchía, Risaralda"
+    },
+    {
+        "id": 285,
+        "nombre": "Quípama",
+        "departamento": "Boyacá",
+        "etiqueta": "Quípama, Boyacá"
+    },
+    {
+        "id": 590,
+        "nombre": "Quipile",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Quipile, Cundinamarca"
+    },
+    {
+        "id": 854,
+        "nombre": "Ragonvalia",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Ragonvalia, Norte de Santander"
+    },
+    {
+        "id": 286,
+        "nombre": "Ramiriquí",
+        "departamento": "Boyacá",
+        "etiqueta": "Ramiriquí, Boyacá"
+    },
+    {
+        "id": 287,
+        "nombre": "Ráquira",
+        "departamento": "Boyacá",
+        "etiqueta": "Ráquira, Boyacá"
+    },
+    {
+        "id": 387,
+        "nombre": "Recetor",
+        "departamento": "Casanare",
+        "etiqueta": "Recetor, Casanare"
+    },
+    {
+        "id": 186,
+        "nombre": "Regidor",
+        "departamento": "Bolívar",
+        "etiqueta": "Regidor, Bolívar"
+    },
+    {
+        "id": 89,
+        "nombre": "Remedios",
+        "departamento": "Antioquia",
+        "etiqueta": "Remedios, Antioquia"
+    },
+    {
+        "id": 725,
+        "nombre": "Remolino",
+        "departamento": "Magdalena",
+        "etiqueta": "Remolino, Magdalena"
+    },
+    {
+        "id": 164,
+        "nombre": "Repelón",
+        "departamento": "Atlántico",
+        "etiqueta": "Repelón, Atlántico"
+    },
+    {
+        "id": 759,
+        "nombre": "Restrepo",
+        "departamento": "Meta",
+        "etiqueta": "Restrepo, Meta"
+    },
+    {
+        "id": 1083,
+        "nombre": "Restrepo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Restrepo, Valle del Cauca"
+    },
+    {
+        "id": 90,
+        "nombre": "Retiro",
+        "departamento": "Antioquia",
+        "etiqueta": "Retiro, Antioquia"
+    },
+    {
+        "id": 592,
+        "nombre": "Ricaurte",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Ricaurte, Cundinamarca"
+    },
+    {
+        "id": 812,
+        "nombre": "Ricaurte",
+        "departamento": "Nariño",
+        "etiqueta": "Ricaurte, Nariño"
+    },
+    {
+        "id": 1055,
+        "nombre": "Rio Blanco",
+        "departamento": "Tolima",
+        "etiqueta": "Rio Blanco, Tolima"
+    },
+    {
+        "id": 464,
+        "nombre": "Río de Oro",
+        "departamento": "Cesar",
+        "etiqueta": "Río de Oro, Cesar"
+    },
+    {
+        "id": 484,
+        "nombre": "Río Iró",
+        "departamento": "Chocó",
+        "etiqueta": "Río Iró, Chocó"
+    },
+    {
+        "id": 485,
+        "nombre": "Río Quito",
+        "departamento": "Chocó",
+        "etiqueta": "Río Quito, Chocó"
+    },
+    {
+        "id": 187,
+        "nombre": "Río Viejo",
+        "departamento": "Bolívar",
+        "etiqueta": "Río Viejo, Bolívar"
+    },
+    {
+        "id": 1101,
+        "nombre": "Riofrío",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Riofrío, Valle del Cauca"
+    },
+    {
+        "id": 694,
+        "nombre": "Riohacha",
+        "departamento": "La Guajira",
+        "etiqueta": "Riohacha, La Guajira"
+    },
+    {
+        "id": 91,
+        "nombre": "Rionegro",
+        "departamento": "Antioquia",
+        "etiqueta": "Rionegro, Antioquia"
+    },
+    {
+        "id": 972,
+        "nombre": "Rionegro",
+        "departamento": "Santander",
+        "etiqueta": "Rionegro, Santander"
+    },
+    {
+        "id": 354,
+        "nombre": "Riosucio",
+        "departamento": "Caldas",
+        "etiqueta": "Riosucio, Caldas"
+    },
+    {
+        "id": 486,
+        "nombre": "Riosucio",
+        "departamento": "Chocó",
+        "etiqueta": "Riosucio, Chocó"
+    },
+    {
+        "id": 355,
+        "nombre": "Risaralda",
+        "departamento": "Caldas",
+        "etiqueta": "Risaralda, Caldas"
+    },
+    {
+        "id": 682,
+        "nombre": "Rivera",
+        "departamento": "Huila",
+        "etiqueta": "Rivera, Huila"
+    },
+    {
+        "id": 813,
+        "nombre": "Roberto Payán",
+        "departamento": "Nariño",
+        "etiqueta": "Roberto Payán, Nariño"
+    },
+    {
+        "id": 1074,
+        "nombre": "Roldanillo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Roldanillo, Valle del Cauca"
+    },
+    {
+        "id": 1056,
+        "nombre": "Roncesvalles",
+        "departamento": "Tolima",
+        "etiqueta": "Roncesvalles, Tolima"
+    },
+    {
+        "id": 288,
+        "nombre": "Rondón",
+        "departamento": "Boyacá",
+        "etiqueta": "Rondón, Boyacá"
+    },
+    {
+        "id": 427,
+        "nombre": "Rosas",
+        "departamento": "Cauca",
+        "etiqueta": "Rosas, Cauca"
+    },
+    {
+        "id": 1057,
+        "nombre": "Rovira",
+        "departamento": "Tolima",
+        "etiqueta": "Rovira, Tolima"
+    },
+    {
+        "id": 992,
+        "nombre": "Sabana de Torres",
+        "departamento": "Santander",
+        "etiqueta": "Sabana de Torres, Santander"
+    },
+    {
+        "id": 153,
+        "nombre": "Sabanagrande",
+        "departamento": "Atlántico",
+        "etiqueta": "Sabanagrande, Atlántico"
+    },
+    {
+        "id": 92,
+        "nombre": "Sabanalarga",
+        "departamento": "Antioquia",
+        "etiqueta": "Sabanalarga, Antioquia"
+    },
+    {
+        "id": 154,
+        "nombre": "Sabanalarga",
+        "departamento": "Atlántico",
+        "etiqueta": "Sabanalarga, Atlántico"
+    },
+    {
+        "id": 388,
+        "nombre": "Sabanalarga",
+        "departamento": "Casanare",
+        "etiqueta": "Sabanalarga, Casanare"
+    },
+    {
+        "id": 734,
+        "nombre": "Sabanas de San Ángel",
+        "departamento": "Magdalena",
+        "etiqueta": "Sabanas de San Ángel, Magdalena"
+    },
+    {
+        "id": 93,
+        "nombre": "Sabaneta",
+        "departamento": "Antioquia",
+        "etiqueta": "Sabaneta, Antioquia"
+    },
+    {
+        "id": 289,
+        "nombre": "Saboyá",
+        "departamento": "Boyacá",
+        "etiqueta": "Saboyá, Boyacá"
+    },
+    {
+        "id": 389,
+        "nombre": "Sácama",
+        "departamento": "Casanare",
+        "etiqueta": "Sácama, Casanare"
+    },
+    {
+        "id": 290,
+        "nombre": "Sáchica",
+        "departamento": "Boyacá",
+        "etiqueta": "Sáchica, Boyacá"
+    },
+    {
+        "id": 514,
+        "nombre": "Sahagún",
+        "departamento": "Córdoba",
+        "etiqueta": "Sahagún, Córdoba"
+    },
+    {
+        "id": 683,
+        "nombre": "Saladoblanco",
+        "departamento": "Huila",
+        "etiqueta": "Saladoblanco, Huila"
+    },
+    {
+        "id": 356,
+        "nombre": "Salamina",
+        "departamento": "Caldas",
+        "etiqueta": "Salamina, Caldas"
+    },
+    {
+        "id": 726,
+        "nombre": "Salamina",
+        "departamento": "Magdalena",
+        "etiqueta": "Salamina, Magdalena"
+    },
+    {
+        "id": 837,
+        "nombre": "Salazar",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Salazar, Norte de Santander"
+    },
+    {
+        "id": 1058,
+        "nombre": "Saldaña",
+        "departamento": "Tolima",
+        "etiqueta": "Saldaña, Tolima"
+    },
+    {
+        "id": 894,
+        "nombre": "Salento",
+        "departamento": "Quindío",
+        "etiqueta": "Salento, Quindío"
+    },
+    {
+        "id": 94,
+        "nombre": "Salgar",
+        "departamento": "Antioquia",
+        "etiqueta": "Salgar, Antioquia"
+    },
+    {
+        "id": 291,
+        "nombre": "Samacá",
+        "departamento": "Boyacá",
+        "etiqueta": "Samacá, Boyacá"
+    },
+    {
+        "id": 357,
+        "nombre": "Samaná",
+        "departamento": "Caldas",
+        "etiqueta": "Samaná, Caldas"
+    },
+    {
+        "id": 814,
+        "nombre": "Samaniego",
+        "departamento": "Nariño",
+        "etiqueta": "Samaniego, Nariño"
+    },
+    {
+        "id": 1024,
+        "nombre": "Sampués",
+        "departamento": "Sucre",
+        "etiqueta": "Sampués, Sucre"
+    },
+    {
+        "id": 693,
+        "nombre": "San Agustín",
+        "departamento": "Huila",
+        "etiqueta": "San Agustín, Huila"
+    },
+    {
+        "id": 460,
+        "nombre": "San Alberto",
+        "departamento": "Cesar",
+        "etiqueta": "San Alberto, Cesar"
+    },
+    {
+        "id": 127,
+        "nombre": "San Andrés de Cuerquia",
+        "departamento": "Antioquia",
+        "etiqueta": "San Andrés de Cuerquia, Antioquia"
+    },
+    {
+        "id": 828,
+        "nombre": "San Andrés de Tumaco",
+        "departamento": "Nariño",
+        "etiqueta": "San Andrés de Tumaco, Nariño"
+    },
+    {
+        "id": 515,
+        "nombre": "San Andrés Sotavento",
+        "departamento": "Córdoba",
+        "etiqueta": "San Andrés Sotavento, Córdoba"
+    },
+    {
+        "id": 912,
+        "nombre": "San Andrés",
+        "departamento": "San Andrés y Providencia",
+        "etiqueta": "San Andrés, San Andrés y Providencia"
+    },
+    {
+        "id": 973,
+        "nombre": "San Andrés",
+        "departamento": "Santander",
+        "etiqueta": "San Andrés, Santander"
+    },
+    {
+        "id": 516,
+        "nombre": "San Antero",
+        "departamento": "Córdoba",
+        "etiqueta": "San Antero, Córdoba"
+    },
+    {
+        "id": 628,
+        "nombre": "San Antonio del Tequendama",
+        "departamento": "Cundinamarca",
+        "etiqueta": "San Antonio del Tequendama, Cundinamarca"
+    },
+    {
+        "id": 1066,
+        "nombre": "San Antonio",
+        "departamento": "Tolima",
+        "etiqueta": "San Antonio, Tolima"
+    },
+    {
+        "id": 1015,
+        "nombre": "San Benito Abad",
+        "departamento": "Sucre",
+        "etiqueta": "San Benito Abad, Sucre"
+    },
+    {
+        "id": 995,
+        "nombre": "San Benito",
+        "departamento": "Santander",
+        "etiqueta": "San Benito, Santander"
+    },
+    {
+        "id": 497,
+        "nombre": "San Bernardo del Viento",
+        "departamento": "Córdoba",
+        "etiqueta": "San Bernardo del Viento, Córdoba"
+    },
+    {
+        "id": 593,
+        "nombre": "San Bernardo",
+        "departamento": "Cundinamarca",
+        "etiqueta": "San Bernardo, Cundinamarca"
+    },
+    {
+        "id": 816,
+        "nombre": "San Bernardo",
+        "departamento": "Nariño",
+        "etiqueta": "San Bernardo, Nariño"
+    },
+    {
+        "id": 851,
+        "nombre": "San Calixto",
+        "departamento": "Norte de Santander",
+        "etiqueta": "San Calixto, Norte de Santander"
+    },
+    {
+        "id": 765,
+        "nombre": "San Carlos de Guaroa",
+        "departamento": "Meta",
+        "etiqueta": "San Carlos de Guaroa, Meta"
+    },
+    {
+        "id": 132,
+        "nombre": "San Carlos",
+        "departamento": "Antioquia",
+        "etiqueta": "San Carlos, Antioquia"
+    },
+    {
+        "id": 523,
+        "nombre": "San Carlos",
+        "departamento": "Córdoba",
+        "etiqueta": "San Carlos, Córdoba"
+    },
+    {
+        "id": 594,
+        "nombre": "San Cayetano",
+        "departamento": "Cundinamarca",
+        "etiqueta": "San Cayetano, Cundinamarca"
+    },
+    {
+        "id": 850,
+        "nombre": "San Cayetano",
+        "departamento": "Norte de Santander",
+        "etiqueta": "San Cayetano, Norte de Santander"
+    },
+    {
+        "id": 212,
+        "nombre": "San Cristóbal",
+        "departamento": "Bolívar",
+        "etiqueta": "San Cristóbal, Bolívar"
+    },
+    {
+        "id": 461,
+        "nombre": "San Diego",
+        "departamento": "Cesar",
+        "etiqueta": "San Diego, Cesar"
+    },
+    {
+        "id": 292,
+        "nombre": "San Eduardo",
+        "departamento": "Boyacá",
+        "etiqueta": "San Eduardo, Boyacá"
+    },
+    {
+        "id": 188,
+        "nombre": "San Estanislao",
+        "departamento": "Bolívar",
+        "etiqueta": "San Estanislao, Bolívar"
+    },
+    {
+        "id": 647,
+        "nombre": "San Felipe",
+        "departamento": "Guainía",
+        "etiqueta": "San Felipe, Guainía"
+    },
+    {
+        "id": 189,
+        "nombre": "San Fernando",
+        "departamento": "Bolívar",
+        "etiqueta": "San Fernando, Bolívar"
+    },
+    {
+        "id": 95,
+        "nombre": "San Francisco",
+        "departamento": "Antioquia",
+        "etiqueta": "San Francisco, Antioquia"
+    },
+    {
+        "id": 595,
+        "nombre": "San Francisco",
+        "departamento": "Cundinamarca",
+        "etiqueta": "San Francisco, Cundinamarca"
+    },
+    {
+        "id": 879,
+        "nombre": "San Francisco",
+        "departamento": "Putumayo",
+        "etiqueta": "San Francisco, Putumayo"
+    },
+    {
+        "id": 974,
+        "nombre": "San Gil",
+        "departamento": "Santander",
+        "etiqueta": "San Gil, Santander"
+    },
+    {
+        "id": 206,
+        "nombre": "San Jacinto del Cauca",
+        "departamento": "Bolívar",
+        "etiqueta": "San Jacinto del Cauca, Bolívar"
+    },
+    {
+        "id": 208,
+        "nombre": "San Jacinto",
+        "departamento": "Bolívar",
+        "etiqueta": "San Jacinto, Bolívar"
+    },
+    {
+        "id": 96,
+        "nombre": "San Jerónimo",
+        "departamento": "Antioquia",
+        "etiqueta": "San Jerónimo, Antioquia"
+    },
+    {
+        "id": 975,
+        "nombre": "San Joaquín",
+        "departamento": "Santander",
+        "etiqueta": "San Joaquín, Santander"
+    },
+    {
+        "id": 129,
+        "nombre": "San José de La Montaña",
+        "departamento": "Antioquia",
+        "etiqueta": "San José de La Montaña, Antioquia"
+    },
+    {
+        "id": 990,
+        "nombre": "San José de Miranda",
+        "departamento": "Santander",
+        "etiqueta": "San José de Miranda, Santander"
+    },
+    {
+        "id": 331,
+        "nombre": "San José de Pare",
+        "departamento": "Boyacá",
+        "etiqueta": "San José de Pare, Boyacá"
+    },
+    {
+        "id": 521,
+        "nombre": "San José de Uré",
+        "departamento": "Córdoba",
+        "etiqueta": "San José de Uré, Córdoba"
+    },
+    {
+        "id": 374,
+        "nombre": "San José del Fragua",
+        "departamento": "Caquetá",
+        "etiqueta": "San José del Fragua, Caquetá"
+    },
+    {
+        "id": 654,
+        "nombre": "San José del Guaviare",
+        "departamento": "Guaviare",
+        "etiqueta": "San José del Guaviare, Guaviare"
+    },
+    {
+        "id": 492,
+        "nombre": "San José del Palmar",
+        "departamento": "Chocó",
+        "etiqueta": "San José del Palmar, Chocó"
+    },
+    {
+        "id": 358,
+        "nombre": "San José",
+        "departamento": "Caldas",
+        "etiqueta": "San José, Caldas"
+    },
+    {
+        "id": 766,
+        "nombre": "San Juan de Arama",
+        "departamento": "Meta",
+        "etiqueta": "San Juan de Arama, Meta"
+    },
+    {
+        "id": 1022,
+        "nombre": "San Juan de Betulia",
+        "departamento": "Sucre",
+        "etiqueta": "San Juan de Betulia, Sucre"
+    },
+    {
+        "id": 625,
+        "nombre": "San Juan de Río Seco",
+        "departamento": "Cundinamarca",
+        "etiqueta": "San Juan de Río Seco, Cundinamarca"
+    },
+    {
+        "id": 130,
+        "nombre": "San Juan de Urabá",
+        "departamento": "Antioquia",
+        "etiqueta": "San Juan de Urabá, Antioquia"
+    },
+    {
+        "id": 708,
+        "nombre": "San Juan del Cesar",
+        "departamento": "La Guajira",
+        "etiqueta": "San Juan del Cesar, La Guajira"
+    },
+    {
+        "id": 190,
+        "nombre": "San Juan Nepomuceno",
+        "departamento": "Bolívar",
+        "etiqueta": "San Juan Nepomuceno, Bolívar"
+    },
+    {
+        "id": 760,
+        "nombre": "San Juanito",
+        "departamento": "Meta",
+        "etiqueta": "San Juanito, Meta"
+    },
+    {
+        "id": 817,
+        "nombre": "San Lorenzo",
+        "departamento": "Nariño",
+        "etiqueta": "San Lorenzo, Nariño"
+    },
+    {
+        "id": 330,
+        "nombre": "San Luis de Gaceno",
+        "departamento": "Boyacá",
+        "etiqueta": "San Luis de Gaceno, Boyacá"
+    },
+    {
+        "id": 393,
+        "nombre": "San Luis de Palenque",
+        "departamento": "Casanare",
+        "etiqueta": "San Luis de Palenque, Casanare"
+    },
+    {
+        "id": 1021,
+        "nombre": "San Luis de Sincé",
+        "departamento": "Sucre",
+        "etiqueta": "San Luis de Sincé, Sucre"
+    },
+    {
+        "id": 97,
+        "nombre": "San Luis",
+        "departamento": "Antioquia",
+        "etiqueta": "San Luis, Antioquia"
+    },
+    {
+        "id": 1065,
+        "nombre": "San Luis",
+        "departamento": "Tolima",
+        "etiqueta": "San Luis, Tolima"
+    },
+    {
+        "id": 1016,
+        "nombre": "San Marcos",
+        "departamento": "Sucre",
+        "etiqueta": "San Marcos, Sucre"
+    },
+    {
+        "id": 204,
+        "nombre": "San Martín de Loba",
+        "departamento": "Bolívar",
+        "etiqueta": "San Martín de Loba, Bolívar"
+    },
+    {
+        "id": 462,
+        "nombre": "San Martín",
+        "departamento": "Cesar",
+        "etiqueta": "San Martín, Cesar"
+    },
+    {
+        "id": 761,
+        "nombre": "San Martín",
+        "departamento": "Meta",
+        "etiqueta": "San Martín, Meta"
+    },
+    {
+        "id": 293,
+        "nombre": "San Mateo",
+        "departamento": "Boyacá",
+        "etiqueta": "San Mateo, Boyacá"
+    },
+    {
+        "id": 332,
+        "nombre": "San Miguel de Sema",
+        "departamento": "Boyacá",
+        "etiqueta": "San Miguel de Sema, Boyacá"
+    },
+    {
+        "id": 880,
+        "nombre": "San Miguel",
+        "departamento": "Putumayo",
+        "etiqueta": "San Miguel, Putumayo"
+    },
+    {
+        "id": 976,
+        "nombre": "San Miguel",
+        "departamento": "Santander",
+        "etiqueta": "San Miguel, Santander"
+    },
+    {
+        "id": 1017,
+        "nombre": "San Onofre",
+        "departamento": "Sucre",
+        "etiqueta": "San Onofre, Sucre"
+    },
+    {
+        "id": 207,
+        "nombre": "San Pablo de Borbur",
+        "departamento": "Bolívar",
+        "etiqueta": "San Pablo de Borbur, Bolívar"
+    },
+    {
+        "id": 329,
+        "nombre": "San Pablo de Borbur",
+        "departamento": "Boyacá",
+        "etiqueta": "San Pablo de Borbur, Boyacá"
+    },
+    {
+        "id": 818,
+        "nombre": "San Pablo",
+        "departamento": "Nariño",
+        "etiqueta": "San Pablo, Nariño"
+    },
+    {
+        "id": 825,
+        "nombre": "San Pedro de Cartago",
+        "departamento": "Nariño",
+        "etiqueta": "San Pedro de Cartago, Nariño"
+    },
+    {
+        "id": 124,
+        "nombre": "San Pedro de Urabá",
+        "departamento": "Antioquia",
+        "etiqueta": "San Pedro de Urabá, Antioquia"
+    },
+    {
+        "id": 98,
+        "nombre": "San Pedro",
+        "departamento": "Antioquia",
+        "etiqueta": "San Pedro, Antioquia"
+    },
+    {
+        "id": 1018,
+        "nombre": "San Pedro",
+        "departamento": "Sucre",
+        "etiqueta": "San Pedro, Sucre"
+    },
+    {
+        "id": 1094,
+        "nombre": "San Pedro",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "San Pedro, Valle del Cauca"
+    },
+    {
+        "id": 517,
+        "nombre": "San Pelayo",
+        "departamento": "Córdoba",
+        "etiqueta": "San Pelayo, Córdoba"
+    },
+    {
+        "id": 99,
+        "nombre": "San Rafael",
+        "departamento": "Antioquia",
+        "etiqueta": "San Rafael, Antioquia"
+    },
+    {
+        "id": 100,
+        "nombre": "San Roque",
+        "departamento": "Antioquia",
+        "etiqueta": "San Roque, Antioquia"
+    },
+    {
+        "id": 733,
+        "nombre": "San Sebastián de Buenavista",
+        "departamento": "Magdalena",
+        "etiqueta": "San Sebastián de Buenavista, Magdalena"
+    },
+    {
+        "id": 439,
+        "nombre": "San Sebastián",
+        "departamento": "Cauca",
+        "etiqueta": "San Sebastián, Cauca"
+    },
+    {
+        "id": 989,
+        "nombre": "San Vicente de Chucurí",
+        "departamento": "Santander",
+        "etiqueta": "San Vicente de Chucurí, Santander"
+    },
+    {
+        "id": 379,
+        "nombre": "San Vicente del Caguán",
+        "departamento": "Caquetá",
+        "etiqueta": "San Vicente del Caguán, Caquetá"
+    },
+    {
+        "id": 101,
+        "nombre": "San Vicente",
+        "departamento": "Antioquia",
+        "etiqueta": "San Vicente, Antioquia"
+    },
+    {
+        "id": 727,
+        "nombre": "San Zenón",
+        "departamento": "Magdalena",
+        "etiqueta": "San Zenón, Magdalena"
+    },
+    {
+        "id": 815,
+        "nombre": "Sandoná",
+        "departamento": "Nariño",
+        "etiqueta": "Sandoná, Nariño"
+    },
+    {
+        "id": 728,
+        "nombre": "Santa Ana",
+        "departamento": "Magdalena",
+        "etiqueta": "Santa Ana, Magdalena"
+    },
+    {
+        "id": 736,
+        "nombre": "Santa Bárbara de Pinto",
+        "departamento": "Magdalena",
+        "etiqueta": "Santa Bárbara de Pinto, Magdalena"
+    },
+    {
+        "id": 102,
+        "nombre": "Santa Bárbara",
+        "departamento": "Antioquia",
+        "etiqueta": "Santa Bárbara, Antioquia"
+    },
+    {
+        "id": 819,
+        "nombre": "Santa Bárbara",
+        "departamento": "Nariño",
+        "etiqueta": "Santa Bárbara, Nariño"
+    },
+    {
+        "id": 977,
+        "nombre": "Santa Bárbara",
+        "departamento": "Santander",
+        "etiqueta": "Santa Bárbara, Santander"
+    },
+    {
+        "id": 191,
+        "nombre": "Santa Catalina",
+        "departamento": "Bolívar",
+        "etiqueta": "Santa Catalina, Bolívar"
+    },
+    {
+        "id": 991,
+        "nombre": "Santa Helena del Opón",
+        "departamento": "Santander",
+        "etiqueta": "Santa Helena del Opón, Santander"
+    },
+    {
+        "id": 1059,
+        "nombre": "Santa Isabel",
+        "departamento": "Tolima",
+        "etiqueta": "Santa Isabel, Tolima"
+    },
+    {
+        "id": 155,
+        "nombre": "Santa Lucía",
+        "departamento": "Atlántico",
+        "etiqueta": "Santa Lucía, Atlántico"
+    },
+    {
+        "id": 295,
+        "nombre": "Santa María",
+        "departamento": "Boyacá",
+        "etiqueta": "Santa María, Boyacá"
+    },
+    {
+        "id": 684,
+        "nombre": "Santa María",
+        "departamento": "Huila",
+        "etiqueta": "Santa María, Huila"
+    },
+    {
+        "id": 709,
+        "nombre": "Santa Marta",
+        "departamento": "Magdalena",
+        "etiqueta": "Santa Marta, Magdalena"
+    },
+    {
+        "id": 909,
+        "nombre": "Santa Rosa de Cabal",
+        "departamento": "Risaralda",
+        "etiqueta": "Santa Rosa de Cabal, Risaralda"
+    },
+    {
+        "id": 126,
+        "nombre": "Santa Rosa de Osos",
+        "departamento": "Antioquia",
+        "etiqueta": "Santa Rosa de Osos, Antioquia"
+    },
+    {
+        "id": 328,
+        "nombre": "Santa Rosa de Viterbo",
+        "departamento": "Boyacá",
+        "etiqueta": "Santa Rosa de Viterbo, Boyacá"
+    },
+    {
+        "id": 201,
+        "nombre": "Santa Rosa del Sur",
+        "departamento": "Bolívar",
+        "etiqueta": "Santa Rosa del Sur, Bolívar"
+    },
+    {
+        "id": 192,
+        "nombre": "Santa Rosa",
+        "departamento": "Bolívar",
+        "etiqueta": "Santa Rosa, Bolívar"
+    },
+    {
+        "id": 428,
+        "nombre": "Santa Rosa",
+        "departamento": "Cauca",
+        "etiqueta": "Santa Rosa, Cauca"
+    },
+    {
+        "id": 1123,
+        "nombre": "Santa Rosalía",
+        "departamento": "Vichada",
+        "etiqueta": "Santa Rosalía, Vichada"
+    },
+    {
+        "id": 296,
+        "nombre": "Santa Sofía",
+        "departamento": "Boyacá",
+        "etiqueta": "Santa Sofía, Boyacá"
+    },
+    {
+        "id": 768,
+        "nombre": "Santacruz",
+        "departamento": "Nariño",
+        "etiqueta": "Santacruz, Nariño"
+    },
+    {
+        "id": 125,
+        "nombre": "Santafé de Antioquia",
+        "departamento": "Antioquia",
+        "etiqueta": "Santafé de Antioquia, Antioquia"
+    },
+    {
+        "id": 294,
+        "nombre": "Santana",
+        "departamento": "Boyacá",
+        "etiqueta": "Santana, Boyacá"
+    },
+    {
+        "id": 438,
+        "nombre": "Santander de Quilichao",
+        "departamento": "Cauca",
+        "etiqueta": "Santander de Quilichao, Cauca"
+    },
+    {
+        "id": 1023,
+        "nombre": "Santiago de Tolú",
+        "departamento": "Sucre",
+        "etiqueta": "Santiago de Tolú, Sucre"
+    },
+    {
+        "id": 863,
+        "nombre": "Santiago",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Santiago, Norte de Santander"
+    },
+    {
+        "id": 881,
+        "nombre": "Santiago",
+        "departamento": "Putumayo",
+        "etiqueta": "Santiago, Putumayo"
+    },
+    {
+        "id": 103,
+        "nombre": "Santo Domingo",
+        "departamento": "Antioquia",
+        "etiqueta": "Santo Domingo, Antioquia"
+    },
+    {
+        "id": 156,
+        "nombre": "Santo Tomás",
+        "departamento": "Atlántico",
+        "etiqueta": "Santo Tomás, Atlántico"
+    },
+    {
+        "id": 908,
+        "nombre": "Santuario",
+        "departamento": "Risaralda",
+        "etiqueta": "Santuario, Risaralda"
+    },
+    {
+        "id": 820,
+        "nombre": "Sapuyes",
+        "departamento": "Nariño",
+        "etiqueta": "Sapuyes, Nariño"
+    },
+    {
+        "id": 141,
+        "nombre": "Saravena",
+        "departamento": "Arauca",
+        "etiqueta": "Saravena, Arauca"
+    },
+    {
+        "id": 858,
+        "nombre": "Sardinata",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Sardinata, Norte de Santander"
+    },
+    {
+        "id": 638,
+        "nombre": "Sasaima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Sasaima, Cundinamarca"
+    },
+    {
+        "id": 297,
+        "nombre": "Sativanorte",
+        "departamento": "Boyacá",
+        "etiqueta": "Sativanorte, Boyacá"
+    },
+    {
+        "id": 298,
+        "nombre": "Sativasur",
+        "departamento": "Boyacá",
+        "etiqueta": "Sativasur, Boyacá"
+    },
+    {
+        "id": 105,
+        "nombre": "Segovia",
+        "departamento": "Antioquia",
+        "etiqueta": "Segovia, Antioquia"
+    },
+    {
+        "id": 596,
+        "nombre": "Sesquilé",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Sesquilé, Cundinamarca"
+    },
+    {
+        "id": 1076,
+        "nombre": "Sevilla",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Sevilla, Valle del Cauca"
+    },
+    {
+        "id": 299,
+        "nombre": "Siachoque",
+        "departamento": "Boyacá",
+        "etiqueta": "Siachoque, Boyacá"
+    },
+    {
+        "id": 597,
+        "nombre": "Sibaté",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Sibaté, Cundinamarca"
+    },
+    {
+        "id": 878,
+        "nombre": "Sibundoy",
+        "departamento": "Putumayo",
+        "etiqueta": "Sibundoy, Putumayo"
+    },
+    {
+        "id": 832,
+        "nombre": "Silos",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Silos, Norte de Santander"
+    },
+    {
+        "id": 598,
+        "nombre": "Silvania",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Silvania, Cundinamarca"
+    },
+    {
+        "id": 429,
+        "nombre": "Silvia",
+        "departamento": "Cauca",
+        "etiqueta": "Silvia, Cauca"
+    },
+    {
+        "id": 978,
+        "nombre": "Simacota",
+        "departamento": "Santander",
+        "etiqueta": "Simacota, Santander"
+    },
+    {
+        "id": 599,
+        "nombre": "Simijaca",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Simijaca, Cundinamarca"
+    },
+    {
+        "id": 193,
+        "nombre": "Simití",
+        "departamento": "Bolívar",
+        "etiqueta": "Simití, Bolívar"
+    },
+    {
+        "id": 1000,
+        "nombre": "Sincelejo",
+        "departamento": "Sucre",
+        "etiqueta": "Sincelejo, Sucre"
+    },
+    {
+        "id": 487,
+        "nombre": "Sipí",
+        "departamento": "Chocó",
+        "etiqueta": "Sipí, Chocó"
+    },
+    {
+        "id": 729,
+        "nombre": "Sitionuevo",
+        "departamento": "Magdalena",
+        "etiqueta": "Sitionuevo, Magdalena"
+    },
+    {
+        "id": 600,
+        "nombre": "Soacha",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Soacha, Cundinamarca"
+    },
+    {
+        "id": 300,
+        "nombre": "Soatá",
+        "departamento": "Boyacá",
+        "etiqueta": "Soatá, Boyacá"
+    },
+    {
+        "id": 302,
+        "nombre": "Socha",
+        "departamento": "Boyacá",
+        "etiqueta": "Socha, Boyacá"
+    },
+    {
+        "id": 979,
+        "nombre": "Socorro",
+        "departamento": "Santander",
+        "etiqueta": "Socorro, Santander"
+    },
+    {
+        "id": 301,
+        "nombre": "Socotá",
+        "departamento": "Boyacá",
+        "etiqueta": "Socotá, Boyacá"
+    },
+    {
+        "id": 303,
+        "nombre": "Sogamoso",
+        "departamento": "Boyacá",
+        "etiqueta": "Sogamoso, Boyacá"
+    },
+    {
+        "id": 371,
+        "nombre": "Solano",
+        "departamento": "Caquetá",
+        "etiqueta": "Solano, Caquetá"
+    },
+    {
+        "id": 157,
+        "nombre": "Soledad",
+        "departamento": "Atlántico",
+        "etiqueta": "Soledad, Atlántico"
+    },
+    {
+        "id": 372,
+        "nombre": "Solita",
+        "departamento": "Caquetá",
+        "etiqueta": "Solita, Caquetá"
+    },
+    {
+        "id": 304,
+        "nombre": "Somondoco",
+        "departamento": "Boyacá",
+        "etiqueta": "Somondoco, Boyacá"
+    },
+    {
+        "id": 136,
+        "nombre": "Sonsón",
+        "departamento": "Antioquia",
+        "etiqueta": "Sonsón, Antioquia"
+    },
+    {
+        "id": 106,
+        "nombre": "Sopetrán",
+        "departamento": "Antioquia",
+        "etiqueta": "Sopetrán, Antioquia"
+    },
+    {
+        "id": 194,
+        "nombre": "Soplaviento",
+        "departamento": "Bolívar",
+        "etiqueta": "Soplaviento, Bolívar"
+    },
+    {
+        "id": 636,
+        "nombre": "Sopó",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Sopó, Cundinamarca"
+    },
+    {
+        "id": 305,
+        "nombre": "Sora",
+        "departamento": "Boyacá",
+        "etiqueta": "Sora, Boyacá"
+    },
+    {
+        "id": 307,
+        "nombre": "Soracá",
+        "departamento": "Boyacá",
+        "etiqueta": "Soracá, Boyacá"
+    },
+    {
+        "id": 306,
+        "nombre": "Sotaquirá",
+        "departamento": "Boyacá",
+        "etiqueta": "Sotaquirá, Boyacá"
+    },
+    {
+        "id": 430,
+        "nombre": "Sotará",
+        "departamento": "Cauca",
+        "etiqueta": "Sotará, Cauca"
+    },
+    {
+        "id": 980,
+        "nombre": "Suaita",
+        "departamento": "Santander",
+        "etiqueta": "Suaita, Santander"
+    },
+    {
+        "id": 158,
+        "nombre": "Suán",
+        "departamento": "Atlántico",
+        "etiqueta": "Suán, Atlántico"
+    },
+    {
+        "id": 431,
+        "nombre": "Suárez",
+        "departamento": "Cauca",
+        "etiqueta": "Suárez, Cauca"
+    },
+    {
+        "id": 1072,
+        "nombre": "Suárez",
+        "departamento": "Tolima",
+        "etiqueta": "Suárez, Tolima"
+    },
+    {
+        "id": 685,
+        "nombre": "Suaza",
+        "departamento": "Huila",
+        "etiqueta": "Suaza, Huila"
+    },
+    {
+        "id": 601,
+        "nombre": "Subachoque",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Subachoque, Cundinamarca"
+    },
+    {
+        "id": 432,
+        "nombre": "Sucre",
+        "departamento": "Cauca",
+        "etiqueta": "Sucre, Cauca"
+    },
+    {
+        "id": 981,
+        "nombre": "Sucre",
+        "departamento": "Santander",
+        "etiqueta": "Sucre, Santander"
+    },
+    {
+        "id": 1019,
+        "nombre": "Sucre",
+        "departamento": "Sucre",
+        "etiqueta": "Sucre, Sucre"
+    },
+    {
+        "id": 602,
+        "nombre": "Suesca",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Suesca, Cundinamarca"
+    },
+    {
+        "id": 603,
+        "nombre": "Supatá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Supatá, Cundinamarca"
+    },
+    {
+        "id": 359,
+        "nombre": "Supía",
+        "departamento": "Caldas",
+        "etiqueta": "Supía, Caldas"
+    },
+    {
+        "id": 982,
+        "nombre": "Suratá",
+        "departamento": "Santander",
+        "etiqueta": "Suratá, Santander"
+    },
+    {
+        "id": 604,
+        "nombre": "Susa",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Susa, Cundinamarca"
+    },
+    {
+        "id": 308,
+        "nombre": "Susacón",
+        "departamento": "Boyacá",
+        "etiqueta": "Susacón, Boyacá"
+    },
+    {
+        "id": 309,
+        "nombre": "Sutamarchán",
+        "departamento": "Boyacá",
+        "etiqueta": "Sutamarchán, Boyacá"
+    },
+    {
+        "id": 605,
+        "nombre": "Sutatausa",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Sutatausa, Cundinamarca"
+    },
+    {
+        "id": 310,
+        "nombre": "Sutatenza",
+        "departamento": "Boyacá",
+        "etiqueta": "Sutatenza, Boyacá"
+    },
+    {
+        "id": 606,
+        "nombre": "Tabio",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tabio, Cundinamarca"
+    },
+    {
+        "id": 495,
+        "nombre": "Tadó",
+        "departamento": "Chocó",
+        "etiqueta": "Tadó, Chocó"
+    },
+    {
+        "id": 195,
+        "nombre": "Talaigua Nuevo",
+        "departamento": "Bolívar",
+        "etiqueta": "Talaigua Nuevo, Bolívar"
+    },
+    {
+        "id": 463,
+        "nombre": "Tamalameque",
+        "departamento": "Cesar",
+        "etiqueta": "Tamalameque, Cesar"
+    },
+    {
+        "id": 397,
+        "nombre": "Támara",
+        "departamento": "Casanare",
+        "etiqueta": "Támara, Casanare"
+    },
+    {
+        "id": 142,
+        "nombre": "Tame",
+        "departamento": "Arauca",
+        "etiqueta": "Tame, Arauca"
+    },
+    {
+        "id": 107,
+        "nombre": "Támesis",
+        "departamento": "Antioquia",
+        "etiqueta": "Támesis, Antioquia"
+    },
+    {
+        "id": 821,
+        "nombre": "Taminango",
+        "departamento": "Nariño",
+        "etiqueta": "Taminango, Nariño"
+    },
+    {
+        "id": 822,
+        "nombre": "Tangua",
+        "departamento": "Nariño",
+        "etiqueta": "Tangua, Nariño"
+    },
+    {
+        "id": 1117,
+        "nombre": "Taraira",
+        "departamento": "Vaupés",
+        "etiqueta": "Taraira, Vaupés"
+    },
+    {
+        "id": 9,
+        "nombre": "Tarapacá",
+        "departamento": "Amazonas",
+        "etiqueta": "Tarapacá, Amazonas"
+    },
+    {
+        "id": 108,
+        "nombre": "Tarazá",
+        "departamento": "Antioquia",
+        "etiqueta": "Tarazá, Antioquia"
+    },
+    {
+        "id": 686,
+        "nombre": "Tarqui",
+        "departamento": "Huila",
+        "etiqueta": "Tarqui, Huila"
+    },
+    {
+        "id": 109,
+        "nombre": "Tarso",
+        "departamento": "Antioquia",
+        "etiqueta": "Tarso, Antioquia"
+    },
+    {
+        "id": 311,
+        "nombre": "Tasco",
+        "departamento": "Boyacá",
+        "etiqueta": "Tasco, Boyacá"
+    },
+    {
+        "id": 390,
+        "nombre": "Tauramena",
+        "departamento": "Casanare",
+        "etiqueta": "Tauramena, Casanare"
+    },
+    {
+        "id": 607,
+        "nombre": "Tausa",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tausa, Cundinamarca"
+    },
+    {
+        "id": 688,
+        "nombre": "Tello",
+        "departamento": "Huila",
+        "etiqueta": "Tello, Huila"
+    },
+    {
+        "id": 608,
+        "nombre": "Tena",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tena, Cundinamarca"
+    },
+    {
+        "id": 730,
+        "nombre": "Tenerife",
+        "departamento": "Magdalena",
+        "etiqueta": "Tenerife, Magdalena"
+    },
+    {
+        "id": 609,
+        "nombre": "Tenjo",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tenjo, Cundinamarca"
+    },
+    {
+        "id": 312,
+        "nombre": "Tenza",
+        "departamento": "Boyacá",
+        "etiqueta": "Tenza, Boyacá"
+    },
+    {
+        "id": 842,
+        "nombre": "Teorama",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Teorama, Norte de Santander"
+    },
+    {
+        "id": 689,
+        "nombre": "Teruel",
+        "departamento": "Huila",
+        "etiqueta": "Teruel, Huila"
+    },
+    {
+        "id": 687,
+        "nombre": "Tesalia",
+        "departamento": "Huila",
+        "etiqueta": "Tesalia, Huila"
+    },
+    {
+        "id": 610,
+        "nombre": "Tibacuy",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tibacuy, Cundinamarca"
+    },
+    {
+        "id": 313,
+        "nombre": "Tibaná",
+        "departamento": "Boyacá",
+        "etiqueta": "Tibaná, Boyacá"
+    },
+    {
+        "id": 334,
+        "nombre": "Tibasosa",
+        "departamento": "Boyacá",
+        "etiqueta": "Tibasosa, Boyacá"
+    },
+    {
+        "id": 611,
+        "nombre": "Tibirita",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tibirita, Cundinamarca"
+    },
+    {
+        "id": 849,
+        "nombre": "Tibú",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Tibú, Norte de Santander"
+    },
+    {
+        "id": 518,
+        "nombre": "Tierralta",
+        "departamento": "Córdoba",
+        "etiqueta": "Tierralta, Córdoba"
+    },
+    {
+        "id": 690,
+        "nombre": "Timaná",
+        "departamento": "Huila",
+        "etiqueta": "Timaná, Huila"
+    },
+    {
+        "id": 433,
+        "nombre": "Timbío",
+        "departamento": "Cauca",
+        "etiqueta": "Timbío, Cauca"
+    },
+    {
+        "id": 434,
+        "nombre": "Timbiquí",
+        "departamento": "Cauca",
+        "etiqueta": "Timbiquí, Cauca"
+    },
+    {
+        "id": 314,
+        "nombre": "Tinjacá",
+        "departamento": "Boyacá",
+        "etiqueta": "Tinjacá, Boyacá"
+    },
+    {
+        "id": 315,
+        "nombre": "Tipacoque",
+        "departamento": "Boyacá",
+        "etiqueta": "Tipacoque, Boyacá"
+    },
+    {
+        "id": 196,
+        "nombre": "Tiquisio",
+        "departamento": "Bolívar",
+        "etiqueta": "Tiquisio, Bolívar"
+    },
+    {
+        "id": 110,
+        "nombre": "Titiribí",
+        "departamento": "Antioquia",
+        "etiqueta": "Titiribí, Antioquia"
+    },
+    {
+        "id": 316,
+        "nombre": "Toca",
+        "departamento": "Boyacá",
+        "etiqueta": "Toca, Boyacá"
+    },
+    {
+        "id": 612,
+        "nombre": "Tocaima",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tocaima, Cundinamarca"
+    },
+    {
+        "id": 613,
+        "nombre": "Tocancipá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Tocancipá, Cundinamarca"
+    },
+    {
+        "id": 325,
+        "nombre": "Togüí",
+        "departamento": "Boyacá",
+        "etiqueta": "Togüí, Boyacá"
+    },
+    {
+        "id": 111,
+        "nombre": "Toledo",
+        "departamento": "Antioquia",
+        "etiqueta": "Toledo, Antioquia"
+    },
+    {
+        "id": 834,
+        "nombre": "Toledo",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Toledo, Norte de Santander"
+    },
+    {
+        "id": 1020,
+        "nombre": "Tolú Viejo",
+        "departamento": "Sucre",
+        "etiqueta": "Tolú Viejo, Sucre"
+    },
+    {
+        "id": 983,
+        "nombre": "Tona",
+        "departamento": "Santander",
+        "etiqueta": "Tona, Santander"
+    },
+    {
+        "id": 317,
+        "nombre": "Tópaga",
+        "departamento": "Boyacá",
+        "etiqueta": "Tópaga, Boyacá"
+    },
+    {
+        "id": 614,
+        "nombre": "Topaipí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Topaipí, Cundinamarca"
+    },
+    {
+        "id": 435,
+        "nombre": "Toribío",
+        "departamento": "Cauca",
+        "etiqueta": "Toribío, Cauca"
+    },
+    {
+        "id": 1105,
+        "nombre": "Toro",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Toro, Valle del Cauca"
+    },
+    {
+        "id": 318,
+        "nombre": "Tota",
+        "departamento": "Boyacá",
+        "etiqueta": "Tota, Boyacá"
+    },
+    {
+        "id": 436,
+        "nombre": "Totoró",
+        "departamento": "Cauca",
+        "etiqueta": "Totoró, Cauca"
+    },
+    {
+        "id": 391,
+        "nombre": "Trinidad",
+        "departamento": "Casanare",
+        "etiqueta": "Trinidad, Casanare"
+    },
+    {
+        "id": 1109,
+        "nombre": "Trujillo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Trujillo, Valle del Cauca"
+    },
+    {
+        "id": 159,
+        "nombre": "Tubará",
+        "departamento": "Atlántico",
+        "etiqueta": "Tubará, Atlántico"
+    },
+    {
+        "id": 519,
+        "nombre": "Tuchín",
+        "departamento": "Córdoba",
+        "etiqueta": "Tuchín, Córdoba"
+    },
+    {
+        "id": 1111,
+        "nombre": "Tuluá",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Tuluá, Valle del Cauca"
+    },
+    {
+        "id": 217,
+        "nombre": "Tunja",
+        "departamento": "Boyacá",
+        "etiqueta": "Tunja, Boyacá"
+    },
+    {
+        "id": 214,
+        "nombre": "Tununguá",
+        "departamento": "Boyacá",
+        "etiqueta": "Tununguá, Boyacá"
+    },
+    {
+        "id": 823,
+        "nombre": "Túquerres",
+        "departamento": "Nariño",
+        "etiqueta": "Túquerres, Nariño"
+    },
+    {
+        "id": 197,
+        "nombre": "Turbaco",
+        "departamento": "Bolívar",
+        "etiqueta": "Turbaco, Bolívar"
+    },
+    {
+        "id": 198,
+        "nombre": "Turbaná",
+        "departamento": "Bolívar",
+        "etiqueta": "Turbaná, Bolívar"
+    },
+    {
+        "id": 112,
+        "nombre": "Turbo",
+        "departamento": "Antioquia",
+        "etiqueta": "Turbo, Antioquia"
+    },
+    {
+        "id": 319,
+        "nombre": "Turmequé",
+        "departamento": "Boyacá",
+        "etiqueta": "Turmequé, Boyacá"
+    },
+    {
+        "id": 333,
+        "nombre": "Tuta",
+        "departamento": "Boyacá",
+        "etiqueta": "Tuta, Boyacá"
+    },
+    {
+        "id": 320,
+        "nombre": "Tutazá",
+        "departamento": "Boyacá",
+        "etiqueta": "Tutazá, Boyacá"
+    },
+    {
+        "id": 615,
+        "nombre": "Ubalá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Ubalá, Cundinamarca"
+    },
+    {
+        "id": 616,
+        "nombre": "Ubaque",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Ubaque, Cundinamarca"
+    },
+    {
+        "id": 1108,
+        "nombre": "Ulloa",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Ulloa, Valle del Cauca"
+    },
+    {
+        "id": 321,
+        "nombre": "Úmbita",
+        "departamento": "Boyacá",
+        "etiqueta": "Úmbita, Boyacá"
+    },
+    {
+        "id": 617,
+        "nombre": "Une",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Une, Cundinamarca"
+    },
+    {
+        "id": 488,
+        "nombre": "Unguía",
+        "departamento": "Chocó",
+        "etiqueta": "Unguía, Chocó"
+    },
+    {
+        "id": 496,
+        "nombre": "Unión Panamericana",
+        "departamento": "Chocó",
+        "etiqueta": "Unión Panamericana, Chocó"
+    },
+    {
+        "id": 113,
+        "nombre": "Uramita",
+        "departamento": "Antioquia",
+        "etiqueta": "Uramita, Antioquia"
+    },
+    {
+        "id": 739,
+        "nombre": "Uribe",
+        "departamento": "Meta",
+        "etiqueta": "Uribe, Meta"
+    },
+    {
+        "id": 704,
+        "nombre": "Uribia",
+        "departamento": "La Guajira",
+        "etiqueta": "Uribia, La Guajira"
+    },
+    {
+        "id": 114,
+        "nombre": "Urrao",
+        "departamento": "Antioquia",
+        "etiqueta": "Urrao, Antioquia"
+    },
+    {
+        "id": 705,
+        "nombre": "Urumita",
+        "departamento": "La Guajira",
+        "etiqueta": "Urumita, La Guajira"
+    },
+    {
+        "id": 160,
+        "nombre": "Usiacurí",
+        "departamento": "Atlántico",
+        "etiqueta": "Usiacurí, Atlántico"
+    },
+    {
+        "id": 618,
+        "nombre": "Útica",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Útica, Cundinamarca"
+    },
+    {
+        "id": 115,
+        "nombre": "Valdivia",
+        "departamento": "Antioquia",
+        "etiqueta": "Valdivia, Antioquia"
+    },
+    {
+        "id": 520,
+        "nombre": "Valencia",
+        "departamento": "Córdoba",
+        "etiqueta": "Valencia, Córdoba"
+    },
+    {
+        "id": 882,
+        "nombre": "Valle de Guamez",
+        "departamento": "Putumayo",
+        "etiqueta": "Valle de Guamez, Putumayo"
+    },
+    {
+        "id": 994,
+        "nombre": "Valle de San José",
+        "departamento": "Santander",
+        "etiqueta": "Valle de San José, Santander"
+    },
+    {
+        "id": 1063,
+        "nombre": "Valle de San Juan",
+        "departamento": "Tolima",
+        "etiqueta": "Valle de San Juan, Tolima"
+    },
+    {
+        "id": 441,
+        "nombre": "Valledupar",
+        "departamento": "Cesar",
+        "etiqueta": "Valledupar, Cesar"
+    },
+    {
+        "id": 116,
+        "nombre": "Valparaíso",
+        "departamento": "Antioquia",
+        "etiqueta": "Valparaíso, Antioquia"
+    },
+    {
+        "id": 373,
+        "nombre": "Valparaíso",
+        "departamento": "Caquetá",
+        "etiqueta": "Valparaíso, Caquetá"
+    },
+    {
+        "id": 117,
+        "nombre": "Vegachí",
+        "departamento": "Antioquia",
+        "etiqueta": "Vegachí, Antioquia"
+    },
+    {
+        "id": 984,
+        "nombre": "Vélez",
+        "departamento": "Santander",
+        "etiqueta": "Vélez, Santander"
+    },
+    {
+        "id": 1060,
+        "nombre": "Venadillo",
+        "departamento": "Tolima",
+        "etiqueta": "Venadillo, Tolima"
+    },
+    {
+        "id": 118,
+        "nombre": "Venecia",
+        "departamento": "Antioquia",
+        "etiqueta": "Venecia, Antioquia"
+    },
+    {
+        "id": 580,
+        "nombre": "Venecia",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Venecia, Cundinamarca"
+    },
+    {
+        "id": 322,
+        "nombre": "Ventaquemada",
+        "departamento": "Boyacá",
+        "etiqueta": "Ventaquemada, Boyacá"
+    },
+    {
+        "id": 631,
+        "nombre": "Vergara",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Vergara, Cundinamarca"
+    },
+    {
+        "id": 1103,
+        "nombre": "Versalles",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Versalles, Valle del Cauca"
+    },
+    {
+        "id": 985,
+        "nombre": "Vetas",
+        "departamento": "Santander",
+        "etiqueta": "Vetas, Santander"
+    },
+    {
+        "id": 619,
+        "nombre": "Vianí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Vianí, Cundinamarca"
+    },
+    {
+        "id": 360,
+        "nombre": "Victoria",
+        "departamento": "Caldas",
+        "etiqueta": "Victoria, Caldas"
+    },
+    {
+        "id": 128,
+        "nombre": "Vigía del Fuerte",
+        "departamento": "Antioquia",
+        "etiqueta": "Vigía del Fuerte, Antioquia"
+    },
+    {
+        "id": 1110,
+        "nombre": "Vijes",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Vijes, Valle del Cauca"
+    },
+    {
+        "id": 866,
+        "nombre": "Villa Caro",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Villa Caro, Norte de Santander"
+    },
+    {
+        "id": 326,
+        "nombre": "Villa de Leyva",
+        "departamento": "Boyacá",
+        "etiqueta": "Villa de Leyva, Boyacá"
+    },
+    {
+        "id": 626,
+        "nombre": "Villa de San Diego de Ubate",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Villa de San Diego de Ubate, Cundinamarca"
+    },
+    {
+        "id": 856,
+        "nombre": "Villa del Rosario",
+        "departamento": "Norte de Santander",
+        "etiqueta": "Villa del Rosario, Norte de Santander"
+    },
+    {
+        "id": 437,
+        "nombre": "Villa Rica",
+        "departamento": "Cauca",
+        "etiqueta": "Villa Rica, Cauca"
+    },
+    {
+        "id": 884,
+        "nombre": "Villagarzón",
+        "departamento": "Putumayo",
+        "etiqueta": "Villagarzón, Putumayo"
+    },
+    {
+        "id": 620,
+        "nombre": "Villagómez",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Villagómez, Cundinamarca"
+    },
+    {
+        "id": 1061,
+        "nombre": "Villahermosa",
+        "departamento": "Tolima",
+        "etiqueta": "Villahermosa, Tolima"
+    },
+    {
+        "id": 361,
+        "nombre": "Villamaría",
+        "departamento": "Caldas",
+        "etiqueta": "Villamaría, Caldas"
+    },
+    {
+        "id": 199,
+        "nombre": "Villanueva",
+        "departamento": "Bolívar",
+        "etiqueta": "Villanueva, Bolívar"
+    },
+    {
+        "id": 392,
+        "nombre": "Villanueva",
+        "departamento": "Casanare",
+        "etiqueta": "Villanueva, Casanare"
+    },
+    {
+        "id": 706,
+        "nombre": "Villanueva",
+        "departamento": "La Guajira",
+        "etiqueta": "Villanueva, La Guajira"
+    },
+    {
+        "id": 986,
+        "nombre": "Villanueva",
+        "departamento": "Santander",
+        "etiqueta": "Villanueva, Santander"
+    },
+    {
+        "id": 621,
+        "nombre": "Villapinzón",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Villapinzón, Cundinamarca"
+    },
+    {
+        "id": 1062,
+        "nombre": "Villarrica",
+        "departamento": "Tolima",
+        "etiqueta": "Villarrica, Tolima"
+    },
+    {
+        "id": 740,
+        "nombre": "Villavicencio",
+        "departamento": "Meta",
+        "etiqueta": "Villavicencio, Meta"
+    },
+    {
+        "id": 691,
+        "nombre": "Villavieja",
+        "departamento": "Huila",
+        "etiqueta": "Villavieja, Huila"
+    },
+    {
+        "id": 622,
+        "nombre": "Villeta",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Villeta, Cundinamarca"
+    },
+    {
+        "id": 623,
+        "nombre": "Viotá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Viotá, Cundinamarca"
+    },
+    {
+        "id": 323,
+        "nombre": "Viracachá",
+        "departamento": "Boyacá",
+        "etiqueta": "Viracachá, Boyacá"
+    },
+    {
+        "id": 762,
+        "nombre": "Vista Hermosa",
+        "departamento": "Meta",
+        "etiqueta": "Vista Hermosa, Meta"
+    },
+    {
+        "id": 362,
+        "nombre": "Viterbo",
+        "departamento": "Caldas",
+        "etiqueta": "Viterbo, Caldas"
+    },
+    {
+        "id": 639,
+        "nombre": "Yacopí",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Yacopí, Cundinamarca"
+    },
+    {
+        "id": 824,
+        "nombre": "Yacuanquer",
+        "departamento": "Nariño",
+        "etiqueta": "Yacuanquer, Nariño"
+    },
+    {
+        "id": 692,
+        "nombre": "Yaguará",
+        "departamento": "Huila",
+        "etiqueta": "Yaguará, Huila"
+    },
+    {
+        "id": 119,
+        "nombre": "Yalí",
+        "departamento": "Antioquia",
+        "etiqueta": "Yalí, Antioquia"
+    },
+    {
+        "id": 120,
+        "nombre": "Yarumal",
+        "departamento": "Antioquia",
+        "etiqueta": "Yarumal, Antioquia"
+    },
+    {
+        "id": 1119,
+        "nombre": "Yavaraté",
+        "departamento": "Vaupés",
+        "etiqueta": "Yavaraté, Vaupés"
+    },
+    {
+        "id": 121,
+        "nombre": "Yolombó",
+        "departamento": "Antioquia",
+        "etiqueta": "Yolombó, Antioquia"
+    },
+    {
+        "id": 122,
+        "nombre": "Yondó",
+        "departamento": "Antioquia",
+        "etiqueta": "Yondó, Antioquia"
+    },
+    {
+        "id": 380,
+        "nombre": "Yopal",
+        "departamento": "Casanare",
+        "etiqueta": "Yopal, Casanare"
+    },
+    {
+        "id": 1099,
+        "nombre": "Yotoco",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Yotoco, Valle del Cauca"
+    },
+    {
+        "id": 1090,
+        "nombre": "Yumbo",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Yumbo, Valle del Cauca"
+    },
+    {
+        "id": 213,
+        "nombre": "Zambrano",
+        "departamento": "Bolívar",
+        "etiqueta": "Zambrano, Bolívar"
+    },
+    {
+        "id": 987,
+        "nombre": "Zapatoca",
+        "departamento": "Santander",
+        "etiqueta": "Zapatoca, Santander"
+    },
+    {
+        "id": 731,
+        "nombre": "Zapayán",
+        "departamento": "Magdalena",
+        "etiqueta": "Zapayán, Magdalena"
+    },
+    {
+        "id": 123,
+        "nombre": "Zaragoza",
+        "departamento": "Antioquia",
+        "etiqueta": "Zaragoza, Antioquia"
+    },
+    {
+        "id": 1077,
+        "nombre": "Zarzal",
+        "departamento": "Valle del Cauca",
+        "etiqueta": "Zarzal, Valle del Cauca"
+    },
+    {
+        "id": 324,
+        "nombre": "Zetaquira",
+        "departamento": "Boyacá",
+        "etiqueta": "Zetaquira, Boyacá"
+    },
+    {
+        "id": 624,
+        "nombre": "Zipacón",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Zipacón, Cundinamarca"
+    },
+    {
+        "id": 641,
+        "nombre": "Zipaquirá",
+        "departamento": "Cundinamarca",
+        "etiqueta": "Zipaquirá, Cundinamarca"
+    },
+    {
+        "id": 732,
+        "nombre": "Zona Bananera",
+        "departamento": "Magdalena",
+        "etiqueta": "Zona Bananera, Magdalena"
+    }
+]

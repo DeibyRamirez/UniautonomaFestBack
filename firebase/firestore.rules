@@ -2,6 +2,83 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function esTextoNombre(val) {
+      return val is string
+        && val.size() >= 1
+        && val.size() <= 80
+        && val.matches('^[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+$');
+    }
+
+    function esTextoNombreOpcional(val) {
+      return val == null
+        || (val is string && val.size() == 0)
+        || esTextoNombre(val);
+    }
+
+    function esNumeroDocumento(val) {
+      return val is string
+        && val.size() >= 1
+        && val.size() <= 20
+        && val.matches('^[0-9]+$');
+    }
+
+    function esCodigoEstudiante(val) {
+      return val == null
+        || (val is string && val.size() == 0)
+        || (val is string && val.size() >= 1 && val.size() <= 20 && val.matches('^[0-9]+$'));
+    }
+
+    function esTipoDocumento(val) {
+      return val is string && val in ['CC', 'CE', 'TI', 'PAS', 'NIT'];
+    }
+
+    function esTallaCamiseta(val) {
+      return val is string && val in ['S', 'M', 'L', 'XL'];
+    }
+
+    function esTipoKit(val) {
+      return val is string && val in ['uniautonomo', 'general'];
+    }
+
+    function esEstadoPago(val) {
+      return val is string && val in ['PENDING', 'APPROVED', 'REJECTED'];
+    }
+
+    function personalInfoKitValida(info) {
+      return info is map
+        && info.keys().hasAll([
+          'firstName',
+          'firstSurname',
+          'email',
+          'documentType',
+          'documentNumber',
+          'residenceCity',
+          'address',
+          'shirtSize',
+        ])
+        && esTextoNombre(info.firstName)
+        && (!('secondName' in info) || esTextoNombreOpcional(info.secondName))
+        && esTextoNombre(info.firstSurname)
+        && (!('secondSurname' in info) || esTextoNombreOpcional(info.secondSurname))
+        && esTipoDocumento(info.documentType)
+        && esNumeroDocumento(info.documentNumber)
+        && info.residenceCity is string
+        && info.residenceCity.size() >= 1
+        && info.residenceCity.size() <= 120
+        && info.address is string
+        && info.address.size() >= 1
+        && info.address.size() <= 200
+        && info.email is string
+        && info.email.size() >= 5
+        && info.email.size() <= 254
+        && (!('studentCode' in info) || esCodigoEstudiante(info.studentCode))
+        && esTallaCamiseta(info.shirtSize);
+    }
+
+    // Escrituras solo vía Admin SDK (backend). Clientes no acceden directamente.
+    // personalInfo kit: nombres (texto), documentType, documentNumber (numérico),
+    // residenceCity, address, email, studentCode (numérico), shirtSize.
     match /payments/{documento} {
       allow read, write: if false;
     }

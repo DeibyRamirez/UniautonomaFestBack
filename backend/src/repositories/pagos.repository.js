@@ -175,6 +175,7 @@ function sanitizarTermino(busqueda) {
 
 function detectarEstrategiaBusqueda(termino) {
   if (termino.includes('@')) return 'email';
+  if (/^unifest26-pay-/i.test(termino)) return 'reference';
   if (/^uaf26-pay-/i.test(termino)) return 'reference';
   if (/^uaf26-/i.test(termino)) return 'claimCode';
   if (/^\d+$/.test(termino)) return 'studentCode';

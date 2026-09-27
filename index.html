@@ -603,19 +603,44 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
       <form id="formulario-compra-kit" class="form-compra-grid">
         <div>
           <label for="compra-firstName">Primer nombre *</label>
-          <input id="compra-firstName" name="firstName" autocomplete="given-name" required>
+          <input id="compra-firstName" name="firstName" type="text" autocomplete="given-name" required>
         </div>
         <div>
           <label for="compra-secondName">Segundo nombre</label>
-          <input id="compra-secondName" name="secondName" autocomplete="additional-name">
+          <input id="compra-secondName" name="secondName" type="text" autocomplete="additional-name">
         </div>
         <div>
           <label for="compra-firstSurname">Primer apellido *</label>
-          <input id="compra-firstSurname" name="firstSurname" autocomplete="family-name" required>
+          <input id="compra-firstSurname" name="firstSurname" type="text" autocomplete="family-name" required>
         </div>
         <div>
           <label for="compra-secondSurname">Segundo apellido</label>
-          <input id="compra-secondSurname" name="secondSurname">
+          <input id="compra-secondSurname" name="secondSurname" type="text">
+        </div>
+        <div>
+          <label for="compra-documentType">Tipo de documento *</label>
+          <select id="compra-documentType" name="documentType" required>
+            <option value="">Seleccionar</option>
+            <option value="CC">Cédula de ciudadanía</option>
+            <option value="CE">Cédula de extranjería</option>
+            <option value="TI">Tarjeta de identidad</option>
+            <option value="PAS">Pasaporte</option>
+            <option value="NIT">NIT</option>
+          </select>
+        </div>
+        <div>
+          <label for="compra-documentNumber">Número de documento *</label>
+          <input id="compra-documentNumber" name="documentNumber" inputmode="numeric" required>
+        </div>
+        <div>
+          <label for="compra-residenceCity">Ciudad de residencia *</label>
+          <select id="compra-residenceCity" name="residenceCity" required disabled>
+            <option value="">Cargando ciudades…</option>
+          </select>
+        </div>
+        <div class="ancho-completo">
+          <label for="compra-address">Dirección *</label>
+          <input id="compra-address" name="address" autocomplete="street-address" required>
         </div>
         <div class="ancho-completo">
           <label for="compra-email">Correo electrónico *</label>
@@ -804,6 +829,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin="" defer></script>
 <script src="js/mapa-carrera-5k.js" defer></script>
 <script src="js/precios-kit.js" defer></script>
+<script src="js/restricciones-formulario.js" defer></script>
 <script src="js/modal-compra.js" defer></script>
 </body>
 </html>

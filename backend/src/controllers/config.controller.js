@@ -1,5 +1,6 @@
 const { variablesEntorno } = require('../config/variablesEntorno');
 const configuracionWompi = require('../config/wompi');
+const { listarCiudades } = require('../services/ciudadesColombia.service');
 
 function getConfigPublica(req, res) {
   return res.json({
@@ -15,4 +16,8 @@ function getConfigPublica(req, res) {
   });
 }
 
-module.exports = { getConfigPublica };
+function getCiudades(req, res) {
+  return res.json({ ciudades: listarCiudades() });
+}
+
+module.exports = { getConfigPublica, getCiudades };

@@ -1,6 +1,6 @@
 /**
  * Reintenta el correo de código de reclamo para un pago ya APPROVED.
- * Uso: npm run reenviar-correo -- UAF26-PAY-9CB4D23AC1
+ * Uso: npm run reenviar-correo -- Unifest26-PAY-9CB4D23AC1
  */
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 
@@ -10,7 +10,7 @@ const { intentarEnviarCorreoReclamo } = require('../src/services/correoReclamo.s
 async function main() {
   const referencia = process.argv[2];
   if (!referencia) {
-    console.error('Uso: npm run reenviar-correo -- UAF26-PAY-XXXXXXXX');
+    console.error('Uso: npm run reenviar-correo -- Unifest26-PAY-XXXXXXXX');
     process.exit(1);
   }
 
