@@ -35,8 +35,8 @@
 
   var CAMPOS = {
     Hackton: [
-      { nombre: 'nombres', etiqueta: 'Nombres *', tipo: 'text', requerido: true, autocomplete: 'given-name' },
-      { nombre: 'apellidos', etiqueta: 'Apellidos *', tipo: 'text', requerido: true, autocomplete: 'family-name' },
+      { nombre: 'nombres', etiqueta: 'Nombres *', tipo: 'text', requerido: true, autocomplete: 'given-name', soloTexto: true },
+      { nombre: 'apellidos', etiqueta: 'Apellidos *', tipo: 'text', requerido: true, autocomplete: 'family-name', soloTexto: true },
       {
         nombre: 'correoElectronico',
         etiqueta: 'Correo electrónico *',
@@ -58,12 +58,12 @@
         etiqueta: 'Código estudiantil',
         tipo: 'text',
         anchoCompleto: true,
-        inputmode: 'numeric',
+        soloNumeros: true,
       },
     ],
     FeriaEmprendimiento: [
-      { nombre: 'nombre', etiqueta: 'Nombre *', tipo: 'text', requerido: true, autocomplete: 'given-name' },
-      { nombre: 'apellido', etiqueta: 'Apellido *', tipo: 'text', requerido: true, autocomplete: 'family-name' },
+      { nombre: 'nombre', etiqueta: 'Nombre *', tipo: 'text', requerido: true, autocomplete: 'given-name', soloTexto: true },
+      { nombre: 'apellido', etiqueta: 'Apellido *', tipo: 'text', requerido: true, autocomplete: 'family-name', soloTexto: true },
       {
         nombre: 'tipoDocumento',
         etiqueta: 'Documento *',
@@ -83,7 +83,7 @@
         etiqueta: 'Número de documento *',
         tipo: 'text',
         requerido: true,
-        inputmode: 'numeric',
+        soloNumeros: true,
       },
       { nombre: 'telefono', etiqueta: 'Teléfono *', tipo: 'tel', requerido: true, autocomplete: 'tel' },
       {
@@ -171,6 +171,13 @@
     control.name = definicion.nombre;
     if (definicion.requerido) {
       control.required = true;
+    }
+
+    if (definicion.soloTexto && window.RestriccionesFormulario) {
+      window.RestriccionesFormulario.enlazarSoloTexto(control);
+    }
+    if (definicion.soloNumeros && window.RestriccionesFormulario) {
+      window.RestriccionesFormulario.enlazarSoloNumeros(control);
     }
 
     contenedor.appendChild(etiquetaCampo);

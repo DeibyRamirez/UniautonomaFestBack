@@ -5,6 +5,7 @@ import {
   restablecerVisibilidadContrasena,
 } from './alternar-visibilidad-contrasena.js';
 
+const vistaPanel = document.getElementById('vista-panel');
 const errorPanel = document.getElementById('error-panel');
 const cuerpoTabla = document.getElementById('cuerpo-tabla');
 const cuerpoTablaAdmins = document.getElementById('cuerpo-tabla-admins');
@@ -125,6 +126,12 @@ function etiquetaKit(tipo) {
   return tipo === 'uniautonomo' ? 'Sangre Azul' : 'Corredor';
 }
 
+function formatearTarifa(registro) {
+  const centavos = registro.amount ?? (registro.kitType === 'uniautonomo' ? 7500000 : 8000000);
+  const pesos = centavos / 100;
+  return pesos.toLocaleString('es-CO');
+}
+
 function etiquetaRolAdmin(rol) {
   return rol === 'SUPER_ADMIN' ? 'Super administrador' : 'Administrador';
 }
@@ -164,13 +171,16 @@ function renderizarTabla(registros) {
 
   if (registros.length === 0) {
     cuerpoTabla.innerHTML =
-      '<tr><td colspan="10">No hay registros con los filtros actuales.</td></tr>';
+      '<tr><td colspan="14">No hay registros con los filtros actuales.</td></tr>';
     return;
   }
 
   for (const registro of registros) {
     const fila = document.createElement('tr');
     const info = registro.personalInfo || {};
+    const documento = info.documentType
+      ? `${info.documentType} ${info.documentNumber || ''}`.trim()
+      : info.documentNumber || '—';
     const puedeEntregar =
       registro.status === 'APPROVED' && !registro.kitClaimed;
 
@@ -182,10 +192,14 @@ function renderizarTabla(registros) {
 
     fila.innerHTML = `
       <td>${nombreCompleto(info)}</td>
+      <td>${documento}</td>
+      <td>${info.residenceCity || '—'}</td>
+      <td>${info.address || '—'}</td>
       <td>${info.email || '—'}</td>
       <td>${info.studentCode || '—'}</td>
       <td>${info.shirtSize || '—'}</td>
       <td>${etiquetaKit(registro.kitType)}</td>
+      <td>${formatearTarifa(registro)}</td>
       <td>${registro.uniqueClaimCode || '—'}</td>
       <td class="${claseEstado(registro.status)}">${registro.status}</td>
       <td>${estadoCorreo}</td>
@@ -546,10 +560,15 @@ async function exportarExcel() {
         'Segundo nombre': info.secondName || '',
         'Primer apellido': info.firstSurname || '',
         'Segundo apellido': info.secondSurname || '',
+        TipoDocumento: info.documentType || '',
+        NumeroDocumento: info.documentNumber || '',
+        CiudadResidencia: info.residenceCity || '',
+        Direccion: info.address || '',
         Correo: info.email,
         CodigoEstudiante: info.studentCode,
         Talla: info.shirtSize,
         TipoKit: etiquetaKit(r.kitType),
+        Tarifa: formatearTarifa(r),
         CorreoEnviado: r.emailEnviadoEn || '',
         ErrorCorreo: r.emailError || '',
         CodigoReclamo: r.uniqueClaimCode,
@@ -575,6 +594,7 @@ async function iniciarPanel(usuario) {
   tokenActual = await usuario.getIdToken();
   correoAdmin.textContent = usuario.email;
   mostrarError(errorPanel, '');
+  if (vistaPanel) vistaPanel.hidden = false;
   activarPestana('financiera');
   await Promise.all([cargarPerfilAdmin(), obtenerRegistros({ reiniciar: true })]);
 }

@@ -1,4 +1,8 @@
 const { SUBCOLECCIONES } = require('../repositories/eventos.repository');
+const {
+  validarTextoNombre,
+  validarSoloNumeros,
+} = require('../utilidades/validacionCamposFormulario');
 
 const TIPOS_EVENTO = Object.keys(SUBCOLECCIONES);
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS', 'NIT'];
@@ -28,8 +32,22 @@ function validarDatosHackton(cuerpo) {
   if (!apellidos) return 'Los apellidos son obligatorios';
   if (!programa) return 'El programa es obligatorio';
 
-  const { error, correo } = validarCorreo(cuerpo?.correoElectronico);
+  let error = validarTextoNombre(nombres, { etiqueta: 'Nombres' });
   if (error) return error;
+  error = validarTextoNombre(apellidos, { etiqueta: 'Apellidos' });
+  if (error) return error;
+
+  if (codigoEstudiantil) {
+    error = validarSoloNumeros(codigoEstudiantil, {
+      obligatorio: true,
+      etiqueta: 'Código estudiantil',
+      max: 20,
+    });
+    if (error) return error;
+  }
+
+  const { error: errorCorreo, correo } = validarCorreo(cuerpo?.correoElectronico);
+  if (errorCorreo) return errorCorreo;
 
   return {
     nombres,
@@ -50,14 +68,22 @@ function validarDatosFeria(cuerpo) {
 
   if (!nombre) return 'El nombre es obligatorio';
   if (!apellido) return 'El apellido es obligatorio';
+
+  let error = validarTextoNombre(nombre, { etiqueta: 'Nombre' });
+  if (error) return error;
+  error = validarTextoNombre(apellido, { etiqueta: 'Apellido' });
+  if (error) return error;
+
   if (!tipoDocumento || !TIPOS_DOCUMENTO.includes(tipoDocumento)) {
     return 'Selecciona un tipo de documento válido';
   }
   if (!numeroDocumento) return 'El número de documento es obligatorio';
+  error = validarSoloNumeros(numeroDocumento, { etiqueta: 'Número de documento' });
+  if (error) return error;
   if (!telefono) return 'El teléfono es obligatorio';
 
-  const { error, correo } = validarCorreo(cuerpo?.correoElectronico);
-  if (error) return error;
+  const { error: errorCorreo, correo } = validarCorreo(cuerpo?.correoElectronico);
+  if (errorCorreo) return errorCorreo;
 
   return {
     nombre,

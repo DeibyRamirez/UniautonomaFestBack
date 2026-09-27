@@ -25,5 +25,5 @@ export async function obtenerAuth() {
   return instanciaAuth;
 }
 
-export const RUTA_LOGIN = '/admin/login.html';
-export const RUTA_PANEL = '/admin/';
+export const RUTA_LOGIN = '/admin/';
+export const RUTA_PANEL = '/admin/panel.html';

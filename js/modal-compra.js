@@ -20,6 +20,7 @@
   const errorEl = document.getElementById('modal-compra-error');
   const campoCodigo = document.getElementById('campo-codigo-estudiante-compra');
   const inputCodigo = document.getElementById('compra-studentCode');
+  const selectResidenceCity = document.getElementById('compra-residenceCity');
   const codigoMostrar = document.getElementById('codigo-reclamo-mostrar');
   const textoConfirmacion = document.getElementById('texto-confirmacion');
   const textoConfirmacionExtra = document.getElementById('texto-confirmacion-extra');
@@ -31,6 +32,8 @@
   let datosPersonales = null;
   let referenciaActual = null;
   let intervaloPolling = null;
+  let ciudadesResidencia = null;
+  let promesaCiudadesResidencia = null;
   function bloquearScrollLanding() {
     document.documentElement.classList.add('compra-scroll-lock');
   }
@@ -67,6 +70,61 @@
     errorEl.hidden = !texto;
   }
 
+  function poblarSelectorCiudades(ciudades) {
+    if (!selectResidenceCity) return;
+
+    var fragmento = document.createDocumentFragment();
+    var opcionVacia = document.createElement('option');
+    opcionVacia.value = '';
+    opcionVacia.textContent = 'Seleccionar';
+    fragmento.appendChild(opcionVacia);
+
+    ciudades.forEach(function (ciudad) {
+      var opcion = document.createElement('option');
+      opcion.value = ciudad.etiqueta;
+      opcion.textContent = ciudad.etiqueta;
+      fragmento.appendChild(opcion);
+    });
+
+    selectResidenceCity.replaceChildren(fragmento);
+    selectResidenceCity.disabled = false;
+  }
+
+  function cargarCiudadesResidencia() {
+    if (ciudadesResidencia) {
+      return Promise.resolve(ciudadesResidencia);
+    }
+    if (promesaCiudadesResidencia) return promesaCiudadesResidencia;
+
+    promesaCiudadesResidencia = fetch('/api/config/ciudades')
+      .then(function (respuesta) {
+        if (!respuesta.ok) throw new Error('No se pudieron cargar las ciudades.');
+        return respuesta.json();
+      })
+      .then(function (datos) {
+        ciudadesResidencia = Array.isArray(datos.ciudades) ? datos.ciudades : [];
+        if (!ciudadesResidencia.length) {
+          throw new Error('No hay ciudades disponibles.');
+        }
+        poblarSelectorCiudades(ciudadesResidencia);
+        return ciudadesResidencia;
+      })
+      .catch(function (error) {
+        promesaCiudadesResidencia = null;
+        if (selectResidenceCity) {
+          selectResidenceCity.replaceChildren();
+          var opcionError = document.createElement('option');
+          opcionError.value = '';
+          opcionError.textContent = 'No se pudieron cargar las ciudades';
+          selectResidenceCity.appendChild(opcionError);
+          selectResidenceCity.disabled = true;
+        }
+        throw error;
+      });
+
+    return promesaCiudadesResidencia;
+  }
+
   function marcarPaso(numero) {
     indicadoresPaso.forEach(function (el) {
       el.classList.toggle('activo', el.getAttribute('data-indicador-paso') === String(numero));
@@ -97,6 +155,10 @@
       campoCodigo.hidden = false;
       inputCodigo.setAttribute('required', 'required');
     }
+
+    cargarCiudadesResidencia().catch(function (error) {
+      mostrarError(error.message);
+    });
 
     formulario.reset();
     datosCheckout = null;
@@ -147,6 +209,10 @@
         secondName: formulario.secondName.value.trim(),
         firstSurname: formulario.firstSurname.value.trim(),
         secondSurname: formulario.secondSurname.value.trim(),
+        documentType: formulario.documentType.value,
+        documentNumber: formulario.documentNumber.value.trim(),
+        residenceCity: formulario.residenceCity.value.trim(),
+        address: formulario.address.value.trim(),
         email: formulario.email.value.trim(),
         studentCode: formulario.studentCode.value.trim(),
         shirtSize: formulario.shirtSize.value,
@@ -425,13 +491,27 @@
     }
   });
 
+  function enlazarRestriccionesFormulario() {
+    if (!window.RestriccionesFormulario) return;
+    var rf = window.RestriccionesFormulario;
+    rf.enlazarSoloTexto(formulario.firstName);
+    rf.enlazarSoloTexto(formulario.secondName);
+    rf.enlazarSoloTexto(formulario.firstSurname);
+    rf.enlazarSoloTexto(formulario.secondSurname);
+    rf.enlazarSoloNumeros(formulario.documentNumber);
+    rf.enlazarSoloNumeros(formulario.studentCode);
+  }
+
+  enlazarRestriccionesFormulario();
+
   document.querySelectorAll('[data-abrir-compra]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var kit = btn.getAttribute('data-abrir-compra');
       var listo = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
-      listo.then(function () {
-        abrirModal(kit);
-      });
+      Promise.all([listo, cargarCiudadesResidencia().catch(function () { return null; })])
+        .then(function () {
+          abrirModal(kit);
+        });
     });
   });
 
@@ -439,9 +519,10 @@
   var comprar = params.get('comprar') || params.get('kit');
   if (comprar) {
     var listoCompra = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
-    listoCompra.then(function () {
-      abrirModal(comprar);
-    });
+    Promise.all([listoCompra, cargarCiudadesResidencia().catch(function () { return null; })])
+      .then(function () {
+        abrirModal(comprar);
+      });
     if (window.history.replaceState) {
       var url = new URL(window.location.href);
       url.searchParams.delete('comprar');
@@ -449,4 +530,8 @@
       window.history.replaceState({}, '', url.pathname + url.hash);
     }
   }
+
+  cargarCiudadesResidencia().catch(function () {
+    /* El error se mostrará al abrir el modal. */
+  });
 })();

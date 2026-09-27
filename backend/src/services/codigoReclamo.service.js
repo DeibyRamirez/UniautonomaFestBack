@@ -2,7 +2,7 @@ const crypto = require('crypto');
 
 function generarReferenciaPago() {
   const sufijo = crypto.randomBytes(5).toString('hex').toUpperCase();
-  return `UAF26-PAY-${sufijo}`;
+  return `Unifest26-PAY-${sufijo}`;
 }
 
 function generarCodigoReclamo() {
