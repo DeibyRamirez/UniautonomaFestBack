@@ -42,6 +42,7 @@ function mensajeErrorInicioSesion(error) {
 }
 
 function mostrarExitoYRedirigir(correo) {
+  fetch('/api/admin/warmup').catch(() => {});
   formularioLogin.hidden = true;
   estadoLoginExitoso.hidden = false;
   textoLoginExitosoCorreo.textContent = `Sesión: ${correo}`;

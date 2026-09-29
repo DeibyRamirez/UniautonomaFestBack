@@ -7,6 +7,9 @@ const {
 const { traducirErrorResend } = require('../utilidades/traducirErrorResend');
 const eventosRepository = require('../repositories/eventos.repository');
 
+const TIMEOUT_CORREO_MS = 8000;
+const TIEMPO_AGOTADO = Symbol('tiempoAgotado');
+
 function escaparHtml(texto) {
   return String(texto)
     .replace(/&/g, '&amp;')
@@ -136,13 +139,26 @@ async function intentarEnviarCorreoInscripcionEvento(inscripcion) {
   const correo = inscripcion.correoElectronico;
   const nombre = nombreParaCorreo(tipoEvento, inscripcion) || 'participante';
 
+  let temporizador;
+  const limiteTiempo = new Promise((resolver) => {
+    temporizador = setTimeout(() => resolver(TIEMPO_AGOTADO), TIMEOUT_CORREO_MS);
+  });
+
   try {
-    const resultado = await enviarCorreoConfirmacionEvento({
+    const envio = enviarCorreoConfirmacionEvento({
       destinatario: correo,
       nombreDestinatario: nombre,
       tipoEvento,
       idInscripcion: id,
     });
+
+    const resultado = await Promise.race([envio, limiteTiempo]);
+
+    if (resultado === TIEMPO_AGOTADO) {
+      console.warn('[correo evento] Resend no respondió a tiempo para', correo);
+      envio.catch(() => {});
+      return { enviado: false, motivo: 'timeout' };
+    }
 
     if (resultado?.omitido) {
       await eventosRepository.registrarErrorCorreo(
@@ -160,6 +176,8 @@ async function intentarEnviarCorreoInscripcionEvento(inscripcion) {
     console.error('[correo evento] error al enviar a', correo, mensaje);
     await eventosRepository.registrarErrorCorreo(tipoEvento, id, mensaje);
     return { enviado: false, motivo: mensaje };
+  } finally {
+    clearTimeout(temporizador);
   }
 }
 

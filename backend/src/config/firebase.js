@@ -66,8 +66,25 @@ function obtenerAuth() {
   return obtenerFirebaseAdmin().auth();
 }
 
+function precalentarFirebase() {
+  try {
+    const db = obtenerFirestore();
+    return db;
+  } catch (error) {
+    console.warn('[firebase] precalentamiento omitido:', error.message);
+    return null;
+  }
+}
+
+try {
+  precalentarFirebase();
+} catch {
+  // El arranque no debe fallar si Firebase aún no está configurado.
+}
+
 module.exports = {
   obtenerFirebaseAdmin,
   obtenerFirestore,
   obtenerAuth,
+  precalentarFirebase,
 };

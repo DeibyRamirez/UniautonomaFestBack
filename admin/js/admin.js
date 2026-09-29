@@ -38,6 +38,36 @@ const dialogoEntregaDetalle = document.getElementById('dialogo-entrega-detalle')
 
 const FILAS_POR_PAGINA = 15;
 
+let promesaXlsx = null;
+
+function precalentarPanelAdmin() {
+  fetch('/api/admin/warmup').catch(() => {});
+}
+
+function cargarLibreriaXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (promesaXlsx) return promesaXlsx;
+
+  promesaXlsx = new Promise((resolver, rechazar) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+    script.async = true;
+    script.onload = () => resolver(window.XLSX);
+    script.onerror = () => {
+      promesaXlsx = null;
+      rechazar(new Error('No se pudo cargar la librería de Excel.'));
+    };
+    document.head.appendChild(script);
+  });
+
+  return promesaXlsx;
+}
+
+function mostrarCargandoTabla() {
+  cuerpoTabla.innerHTML =
+    '<tr><td colspan="15">Cargando registros…</td></tr>';
+}
+
 let auth = null;
 let tokenActual = null;
 let esSuperAdmin = false;
@@ -65,20 +95,62 @@ function claveCacheEventos() {
   return `${claveFiltrosEventos()}|p${paginaIndiceEventos}`;
 }
 
+const RETRASOS_REINTENTO_RED_MS = [1500, 3000];
+const MENSAJE_SIN_CONEXION =
+  'No se pudo conectar con el servidor. Revisa tu conexión y pulsa Actualizar.';
+
+function esErrorRed(error) {
+  if (!error) return false;
+  if (error.name === 'TypeError') return true;
+  return /NetworkError|Failed to fetch|Load failed|fetch resource/i.test(error.message || '');
+}
+
+function esperar(ms) {
+  return new Promise((resolver) => setTimeout(resolver, ms));
+}
+
+// Solo se reintentan GET: repetir un POST/PATCH podría reenviar un correo o duplicar una acción.
+async function fetchConReintentoRed(url, opciones) {
+  const metodo = String(opciones.method || 'GET').toUpperCase();
+  const reintentos = metodo === 'GET' ? RETRASOS_REINTENTO_RED_MS : [];
+
+  for (let intento = 0; ; intento += 1) {
+    try {
+      return await fetch(url, opciones);
+    } catch (error) {
+      if (!esErrorRed(error)) throw error;
+      if (intento >= reintentos.length) throw new Error(MENSAJE_SIN_CONEXION);
+      await esperar(reintentos[intento]);
+    }
+  }
+}
+
 async function fetchAdmin(url, opciones = {}) {
   const encabezados = {
     ...(opciones.headers || {}),
     Authorization: `Bearer ${tokenActual}`,
   };
-  let respuesta = await fetch(url, { ...opciones, headers: encabezados });
+  let respuesta = await fetchConReintentoRed(url, { ...opciones, headers: encabezados });
 
   if (respuesta.status === 401 && auth?.currentUser) {
     tokenActual = await auth.currentUser.getIdToken(true);
     encabezados.Authorization = `Bearer ${tokenActual}`;
-    respuesta = await fetch(url, { ...opciones, headers: encabezados });
+    respuesta = await fetchConReintentoRed(url, { ...opciones, headers: encabezados });
   }
 
   return respuesta;
+}
+
+async function leerJson(respuesta) {
+  try {
+    return await respuesta.json();
+  } catch {
+    return { mensaje: `El servidor respondió con un error (HTTP ${respuesta.status}).` };
+  }
+}
+
+function mostrarMensajeTabla(texto) {
+  cuerpoTabla.innerHTML = `<tr><td colspan="15">${escaparHtml(texto)}</td></tr>`;
 }
 
 function irALogin() {
@@ -116,14 +188,45 @@ function activarPestana(nombre) {
   }
 }
 
+function escaparHtml(valor) {
+  return String(valor ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function celda(valor) {
+  const texto = valor === undefined || valor === null || valor === '' ? '—' : valor;
+  return `<td>${escaparHtml(texto)}</td>`;
+}
+
+function kitIncluyeNumero(registro) {
+  if (registro.kitType === 'uniautonomo') return true;
+  return (
+    registro.kitType === 'personalizado' &&
+    Array.isArray(registro.kitComponents) &&
+    registro.kitComponents.includes('carrera')
+  );
+}
+
 function nombreCompleto(info) {
   return [info?.firstName, info?.secondName, info?.firstSurname, info?.secondSurname]
     .filter(Boolean)
     .join(' ');
 }
 
-function etiquetaKit(tipo) {
-  return tipo === 'uniautonomo' ? 'Sangre Azul' : 'Corredor';
+function etiquetaKit(tipo, kitComponents) {
+  if (tipo === 'uniautonomo') return 'Sangre Azul';
+  if (tipo === 'personalizado') {
+    if (Array.isArray(kitComponents) && kitComponents.length) {
+      return 'Personalizado (' + kitComponents.join(', ') + ')';
+    }
+    return 'Personalizado';
+  }
+  if (tipo === 'corredor_externo') return 'Corredor externo';
+  return 'Corredor';
 }
 
 function formatearTarifa(registro) {
@@ -171,7 +274,7 @@ function renderizarTabla(registros) {
 
   if (registros.length === 0) {
     cuerpoTabla.innerHTML =
-      '<tr><td colspan="14">No hay registros con los filtros actuales.</td></tr>';
+      '<tr><td colspan="15">No hay registros con los filtros actuales.</td></tr>';
     return;
   }
 
@@ -190,20 +293,27 @@ function renderizarTabla(registros) {
         ? `Error: ${registro.emailError}`
         : '—';
 
+    const textoNumero = registro.numeroCorredor
+      || (registro.numeroCorredorError ? `Error: ${registro.numeroCorredorError}` : '—');
+    const textoEstado = registro.alertaPago
+      ? `${registro.status} (alerta: ${registro.alertaPago})`
+      : registro.status;
+
     fila.innerHTML = `
-      <td>${nombreCompleto(info)}</td>
-      <td>${documento}</td>
-      <td>${info.residenceCity || '—'}</td>
-      <td>${info.address || '—'}</td>
-      <td>${info.email || '—'}</td>
-      <td>${info.studentCode || '—'}</td>
-      <td>${info.shirtSize || '—'}</td>
-      <td>${etiquetaKit(registro.kitType)}</td>
-      <td>${formatearTarifa(registro)}</td>
-      <td>${registro.uniqueClaimCode || '—'}</td>
-      <td class="${claseEstado(registro.status)}">${registro.status}</td>
-      <td>${estadoCorreo}</td>
-      <td>${registro.kitClaimed ? 'Entregado' : 'Pendiente'}</td>
+      ${celda(nombreCompleto(info))}
+      ${celda(documento)}
+      ${celda(info.residenceCity)}
+      ${celda(info.address)}
+      ${celda(info.email)}
+      ${celda(info.studentCode)}
+      ${celda(info.shirtSize)}
+      ${celda(textoNumero)}
+      ${celda(etiquetaKit(registro.kitType, registro.kitComponents))}
+      ${celda(formatearTarifa(registro))}
+      ${celda(registro.uniqueClaimCode)}
+      <td class="${claseEstado(registro.status)}">${escaparHtml(textoEstado)}</td>
+      ${celda(estadoCorreo)}
+      ${celda(registro.kitClaimed ? 'Entregado' : 'Pendiente')}
       <td></td>
     `;
 
@@ -215,6 +325,26 @@ function renderizarTabla(registros) {
     boton.disabled = !puedeEntregar;
     boton.addEventListener('click', () => marcarEntregado(registro, boton));
     celdaAccion.appendChild(boton);
+
+    if (registro.status === 'APPROVED' && registro.uniqueClaimCode) {
+      const botonCorreo = document.createElement('button');
+      botonCorreo.type = 'button';
+      botonCorreo.className = 'boton-entregar';
+      botonCorreo.style.marginTop = '6px';
+      botonCorreo.textContent = registro.emailEnviadoEn ? 'Reenviar correo' : 'Enviar correo';
+      botonCorreo.addEventListener('click', () => reenviarCorreo(registro, botonCorreo));
+      celdaAccion.appendChild(botonCorreo);
+    }
+
+    if (registro.status === 'APPROVED' && !registro.numeroCorredor && kitIncluyeNumero(registro)) {
+      const botonNumero = document.createElement('button');
+      botonNumero.type = 'button';
+      botonNumero.className = 'boton-entregar';
+      botonNumero.style.marginTop = '6px';
+      botonNumero.textContent = 'Asignar número';
+      botonNumero.addEventListener('click', () => asignarNumeroCorredor(registro, botonNumero));
+      celdaAccion.appendChild(botonNumero);
+    }
 
     cuerpoTabla.appendChild(fila);
   }
@@ -231,9 +361,9 @@ function renderizarTablaAdmins(registros) {
   for (const admin of registros) {
     const fila = document.createElement('tr');
     fila.innerHTML = `
-      <td>${admin.email || '—'}</td>
-      <td>${etiquetaRolAdmin(admin.role)}</td>
-      <td>${formatearFecha(admin.createdAt)}</td>
+      ${celda(admin.email)}
+      ${celda(etiquetaRolAdmin(admin.role))}
+      ${celda(formatearFecha(admin.createdAt))}
     `;
     cuerpoTablaAdmins.appendChild(fila);
   }
@@ -249,6 +379,46 @@ async function cargarPerfilAdmin() {
   pestanaAdministradores.hidden = !esSuperAdmin;
 }
 
+function aplicarResultadoRegistros(datos) {
+  registrosCache = datos.datos || [];
+  hayMasPaginas = Boolean(datos.paginacion?.hayMas);
+
+  if (datos.paginacion?.cursorSiguiente) {
+    cursoresInicioPagina[paginaIndice + 1] = datos.paginacion.cursorSiguiente;
+  } else {
+    cursoresInicioPagina = cursoresInicioPagina.slice(0, paginaIndice + 1);
+  }
+
+  renderizarTabla(registrosCache);
+  actualizarControlesPaginacion();
+}
+
+async function cargarBootstrapAdmin() {
+  mostrarCargandoTabla();
+  reiniciarPaginacion();
+
+  const params = new URLSearchParams();
+  params.set('limit', String(FILAS_POR_PAGINA));
+  if (filtroEstado.value) params.set('status', filtroEstado.value);
+  if (filtroBusqueda.value.trim()) params.set('search', filtroBusqueda.value.trim());
+
+  let datos;
+  try {
+    const respuesta = await fetchAdmin(`/api/admin/bootstrap?${params}`);
+    datos = await leerJson(respuesta);
+    if (!respuesta.ok) {
+      throw new Error(datos.mensaje || 'No se pudo cargar el panel');
+    }
+  } catch (error) {
+    mostrarMensajeTabla('No se pudieron cargar los registros.');
+    throw error;
+  }
+
+  esSuperAdmin = Boolean(datos.perfil?.esSuperAdmin);
+  pestanaAdministradores.hidden = !esSuperAdmin;
+  aplicarResultadoRegistros(datos);
+}
+
 async function cargarListadoAdmins() {
   const respuesta = await fetchAdmin('/api/admin/admins');
   const datos = await respuesta.json();
@@ -262,7 +432,7 @@ function solicitarConfirmacionEntrega(registro) {
   const info = registro.personalInfo || {};
   dialogoEntregaDetalle.textContent = `${nombreCompleto(info)} · código ${
     registro.uniqueClaimCode || '—'
-  } · ${etiquetaKit(registro.kitType)}`;
+  } · ${etiquetaKit(registro.kitType, registro.kitComponents)}`;
   dialogoConfirmarEntrega.returnValue = 'no';
   dialogoConfirmarEntrega.showModal();
   return new Promise((resolver) => {
@@ -279,6 +449,7 @@ function solicitarConfirmacionEntrega(registro) {
 async function obtenerRegistros(opciones = {}) {
   const { reiniciar = false } = opciones;
   if (reiniciar) reiniciarPaginacion();
+  mostrarCargandoTabla();
 
   const params = new URLSearchParams();
   params.set('limit', String(FILAS_POR_PAGINA));
@@ -288,24 +459,20 @@ async function obtenerRegistros(opciones = {}) {
   const cursor = cursoresInicioPagina[paginaIndice];
   if (cursor) params.set('cursor', cursor);
 
-  const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
-
-  const datos = await respuesta.json();
-  if (!respuesta.ok) {
-    throw new Error(datos.mensaje || 'Error al cargar estudiantes');
+  let datos;
+  try {
+    const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
+    datos = await leerJson(respuesta);
+    if (!respuesta.ok) {
+      throw new Error(datos.mensaje || 'Error al cargar estudiantes');
+    }
+  } catch (error) {
+    mostrarMensajeTabla('No se pudieron cargar los registros.');
+    throw error;
   }
 
-  registrosCache = datos.datos || [];
-  hayMasPaginas = Boolean(datos.paginacion?.hayMas);
-
-  if (datos.paginacion?.cursorSiguiente) {
-    cursoresInicioPagina[paginaIndice + 1] = datos.paginacion.cursorSiguiente;
-  } else {
-    cursoresInicioPagina = cursoresInicioPagina.slice(0, paginaIndice + 1);
-  }
-
-  renderizarTabla(registrosCache);
-  actualizarControlesPaginacion();
+  mostrarError(errorPanel, '');
+  aplicarResultadoRegistros(datos);
 }
 
 async function irPaginaAnterior() {
@@ -338,18 +505,67 @@ async function marcarEntregado(registro, boton) {
   }
 }
 
-async function obtenerTodosParaExportar() {
-  const params = new URLSearchParams();
-  params.set('limit', '500');
-  if (filtroEstado.value) params.set('status', filtroEstado.value);
-  if (filtroBusqueda.value.trim()) params.set('search', filtroBusqueda.value.trim());
-
-  const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
-  const datos = await respuesta.json();
-  if (!respuesta.ok) {
-    throw new Error(datos.mensaje || 'Error al cargar datos para exportar');
+async function reenviarCorreo(registro, boton) {
+  boton.disabled = true;
+  boton.textContent = 'Enviando…';
+  try {
+    const respuesta = await fetchAdmin(
+      `/api/admin/students/${registro.id}/reenviar-correo`,
+      { method: 'POST' }
+    );
+    const datos = await respuesta.json();
+    if (!respuesta.ok) throw new Error(datos.mensaje || 'No se pudo enviar el correo');
+    await obtenerRegistros();
+  } catch (error) {
+    mostrarError(errorPanel, error.message);
+    boton.disabled = false;
+    boton.textContent = registro.emailEnviadoEn ? 'Reenviar correo' : 'Enviar correo';
   }
-  return datos.datos || [];
+}
+
+async function asignarNumeroCorredor(registro, boton) {
+  boton.disabled = true;
+  boton.textContent = 'Asignando…';
+  try {
+    const respuesta = await fetchAdmin(
+      `/api/admin/students/${registro.id}/asignar-numero`,
+      { method: 'POST' }
+    );
+    const datos = await respuesta.json();
+    if (!respuesta.ok) throw new Error(datos.mensaje || 'No se pudo asignar el número');
+    await obtenerRegistros();
+  } catch (error) {
+    mostrarError(errorPanel, error.message);
+    boton.disabled = false;
+    boton.textContent = 'Asignar número';
+  }
+}
+
+const MAX_PAGINAS_EXPORTACION = 40;
+
+async function obtenerTodosParaExportar() {
+  const todos = [];
+  let cursor = null;
+
+  for (let pagina = 0; pagina < MAX_PAGINAS_EXPORTACION; pagina += 1) {
+    const params = new URLSearchParams();
+    params.set('limit', '500');
+    if (filtroEstado.value) params.set('status', filtroEstado.value);
+    if (filtroBusqueda.value.trim()) params.set('search', filtroBusqueda.value.trim());
+    if (cursor) params.set('cursor', cursor);
+
+    const respuesta = await fetchAdmin(`/api/admin/students?${params}`);
+    const datos = await respuesta.json();
+    if (!respuesta.ok) {
+      throw new Error(datos.mensaje || 'Error al cargar datos para exportar');
+    }
+
+    todos.push(...(datos.datos || []));
+    cursor = datos.paginacion?.cursorSiguiente || null;
+    if (!cursor) break;
+  }
+
+  return todos;
 }
 
 function actualizarCabeceraTablaEventos() {
@@ -401,24 +617,24 @@ function renderizarTablaEventos(registros) {
     const fila = document.createElement('tr');
     if (esHackton) {
       fila.innerHTML = `
-        <td>${registro.nombres || '—'}</td>
-        <td>${registro.apellidos || '—'}</td>
-        <td>${registro.correoElectronico || '—'}</td>
-        <td>${registro.programa || '—'}</td>
-        <td>${registro.codigoEstudiantil || '—'}</td>
-        <td>${estadoCorreoEvento(registro)}</td>
-        <td>${formatearFecha(registro.createdAt)}</td>
+        ${celda(registro.nombres)}
+        ${celda(registro.apellidos)}
+        ${celda(registro.correoElectronico)}
+        ${celda(registro.programa)}
+        ${celda(registro.codigoEstudiantil)}
+        ${celda(estadoCorreoEvento(registro))}
+        ${celda(formatearFecha(registro.createdAt))}
       `;
     } else {
       fila.innerHTML = `
-        <td>${registro.nombre || '—'}</td>
-        <td>${registro.apellido || '—'}</td>
-        <td>${registro.tipoDocumento || '—'} ${registro.numeroDocumento || ''}</td>
-        <td>${registro.telefono || '—'}</td>
-        <td>${registro.correoElectronico || '—'}</td>
-        <td>${registro.emprendimientoMarca || '—'}</td>
-        <td>${estadoCorreoEvento(registro)}</td>
-        <td>${formatearFecha(registro.createdAt)}</td>
+        ${celda(registro.nombre)}
+        ${celda(registro.apellido)}
+        ${celda(`${registro.tipoDocumento || '—'} ${registro.numeroDocumento || ''}`.trim())}
+        ${celda(registro.telefono)}
+        ${celda(registro.correoElectronico)}
+        ${celda(registro.emprendimientoMarca)}
+        ${celda(estadoCorreoEvento(registro))}
+        ${celda(formatearFecha(registro.createdAt))}
       `;
     }
     cuerpoTablaEventos.appendChild(fila);
@@ -515,6 +731,7 @@ function filasExcelFeria(registros) {
 
 async function exportarExcelEventos() {
   try {
+    const XLSX = await cargarLibreriaXlsx();
     const [hackton, feria] = await Promise.all([
       obtenerEventosParaExportar('Hackton'),
       obtenerEventosParaExportar('FeriaEmprendimiento'),
@@ -547,6 +764,7 @@ async function exportarExcelEventos() {
 
 async function exportarExcel() {
   try {
+    const XLSX = await cargarLibreriaXlsx();
     const filasExport = await obtenerTodosParaExportar();
     if (!filasExport.length) {
       mostrarError(errorPanel, 'No hay datos para exportar');
@@ -567,13 +785,20 @@ async function exportarExcel() {
         Correo: info.email,
         CodigoEstudiante: info.studentCode,
         Talla: info.shirtSize,
-        TipoKit: etiquetaKit(r.kitType),
+        NumeroCorredor: r.numeroCorredor || '',
+        ErrorNumeroCorredor: r.numeroCorredorError || '',
+        TipoKit: etiquetaKit(r.kitType, r.kitComponents),
+        Componentes: Array.isArray(r.kitComponents) ? r.kitComponents.join(', ') : '',
         Tarifa: formatearTarifa(r),
+        MontoCentavos: r.amount ?? '',
         CorreoEnviado: r.emailEnviadoEn || '',
         ErrorCorreo: r.emailError || '',
-        CodigoReclamo: r.uniqueClaimCode,
+        CodigoReclamo: r.uniqueClaimCode || '',
         EstadoPago: r.status,
+        AlertaPago: r.alertaPago || '',
         Referencia: r.reference,
+        TransactionId: r.transactionId || '',
+        FechaAprobacion: r.aprobadoEn || '',
         Entregado: r.kitClaimed ? 'Sí' : 'No',
         EntregadoPor: r.claimedByAdminEmail || '',
         FechaCreacion: r.createdAt || '',
@@ -596,7 +821,7 @@ async function iniciarPanel(usuario) {
   mostrarError(errorPanel, '');
   if (vistaPanel) vistaPanel.hidden = false;
   activarPestana('financiera');
-  await Promise.all([cargarPerfilAdmin(), obtenerRegistros({ reiniciar: true })]);
+  await cargarBootstrapAdmin();
 }
 
 document.getElementById('boton-cerrar-sesion').addEventListener('click', async () => {
@@ -701,6 +926,7 @@ formularioCrearAdmin.addEventListener('submit', async (evento) => {
 });
 
 async function iniciar() {
+  precalentarPanelAdmin();
   auth = await obtenerAuth();
 
   onAuthStateChanged(auth, async (usuario) => {

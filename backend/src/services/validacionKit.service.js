@@ -1,18 +1,24 @@
-const { variablesEntorno } = require('../config/variablesEntorno');
+const {
+  DOMINIO_INSTITUCIONAL,
+  obtenerDefinicionKit,
+  normalizarKitType,
+  validarComponentes,
+  obtenerPrecioKit,
+  ordenarComponentes,
+} = require('../config/catalogoKits');
 const { esCiudadResidenciaValida } = require('./ciudadesColombia.service');
 const {
   validarTextoNombre,
   validarSoloNumeros,
 } = require('../utilidades/validacionCamposFormulario');
 
-const DOMINIO_INSTITUCIONAL = '@uniautonoma.edu.co';
-const TIPOS_KIT = ['uniautonomo', 'general'];
 const TALLAS_VALIDAS = ['S', 'M', 'L', 'XL'];
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS', 'NIT'];
 
 function validarTipoKit(kitType) {
-  if (!TIPOS_KIT.includes(kitType)) {
-    return 'Tipo de kit inválido. Use uniautonomo o general.';
+  const definicion = obtenerDefinicionKit(kitType);
+  if (!definicion) {
+    return 'Tipo de kit inválido.';
   }
   return null;
 }
@@ -22,11 +28,7 @@ function validarInformacionPersonal(personalInfo) {
     return 'Información personal requerida';
   }
 
-  const campos = [
-    'firstName',
-    'firstSurname',
-    'email',
-  ];
+  const campos = ['firstName', 'firstSurname', 'email'];
 
   for (const campo of campos) {
     if (!String(personalInfo[campo] || '').trim()) {
@@ -83,32 +85,49 @@ function validarInformacionPersonal(personalInfo) {
   return null;
 }
 
-function validarReglasKitUniautonomo(kitType, personalInfo) {
+function validarReglasKit(kitType, personalInfo, kitComponents) {
+  const definicion = obtenerDefinicionKit(kitType);
+  if (!definicion) return 'Tipo de kit inválido.';
+
   const email = String(personalInfo.email).trim().toLowerCase();
+  const esInstitucional = email.endsWith(DOMINIO_INSTITUCIONAL);
 
-  if (kitType !== 'uniautonomo') {
-    return null;
+  if (definicion.requiereCorreoInstitucional && !esInstitucional) {
+    return 'Correo electrónico inválido';
   }
 
-  if (!email.endsWith(DOMINIO_INSTITUCIONAL)) {
-    return `Para el kit uniautónomo el correo debe terminar en ${DOMINIO_INSTITUCIONAL}`;
+  if (!definicion.requiereCorreoInstitucional && esInstitucional) {
+    return `El correo institucional no puede usarse para el kit externo. Usa un correo personal o elige un kit uniautónomo.`;
   }
 
-  if (!String(personalInfo.studentCode || '').trim()) {
-    return 'El código de estudiante es obligatorio para el kit uniautónomo';
+  if (definicion.requiereCodigoEstudiante && !String(personalInfo.studentCode || '').trim()) {
+    return 'El código de estudiante es obligatorio para este kit';
   }
 
-  return validarSoloNumeros(personalInfo.studentCode, {
-    etiqueta: 'Código de estudiante',
-    max: 20,
-  });
+  if (definicion.requiereCodigoEstudiante) {
+    const errorCodigo = validarSoloNumeros(personalInfo.studentCode, {
+      etiqueta: 'Código de estudiante',
+      max: 20,
+    });
+    if (errorCodigo) return errorCodigo;
+  }
+
+  if (definicion.esPersonalizable) {
+    return validarComponentes(kitComponents);
+  }
+
+  return null;
 }
 
-function obtenerMontoCentavos(kitType) {
-  if (kitType === 'uniautonomo') {
-    return variablesEntorno.montos.uniautonomo;
-  }
-  return variablesEntorno.montos.general;
+function obtenerMontoCentavos(kitType, kitComponents = []) {
+  return obtenerPrecioKit(kitType, kitComponents);
+}
+
+function normalizarKitComponents(kitComponents) {
+  if (!Array.isArray(kitComponents)) return [];
+  return ordenarComponentes(
+    kitComponents.map((c) => String(c || '').trim()).filter(Boolean)
+  );
 }
 
 function normalizarInformacionPersonal(personalInfo) {
@@ -127,16 +146,25 @@ function normalizarInformacionPersonal(personalInfo) {
   };
 }
 
-function validarSolicitudCheckout({ kitType, personalInfo }) {
-  let error = validarTipoKit(kitType);
+function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
+  const tipoNormalizado = normalizarKitType(kitType);
+
+  let error = validarTipoKit(tipoNormalizado);
   if (error) return error;
 
   error = validarInformacionPersonal(personalInfo);
   if (error) return error;
 
   const infoNormalizada = normalizarInformacionPersonal(personalInfo);
-  error = validarReglasKitUniautonomo(kitType, infoNormalizada);
+  const componentesNormalizados = normalizarKitComponents(kitComponents);
+
+  error = validarReglasKit(tipoNormalizado, infoNormalizada, componentesNormalizados);
   if (error) return error;
+
+  const monto = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);
+  if (!monto || monto <= 0) {
+    return 'No se pudo calcular el monto del kit.';
+  }
 
   return null;
 }
@@ -145,4 +173,6 @@ module.exports = {
   validarSolicitudCheckout,
   obtenerMontoCentavos,
   normalizarInformacionPersonal,
+  normalizarKitType,
+  normalizarKitComponents,
 };

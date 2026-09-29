@@ -27,6 +27,11 @@ const variablesEntorno = {
   montos: {
     uniautonomo: obtenerEntero('MONTO_KIT_UNIAUTONOMO', 7500000),
     general: obtenerEntero('MONTO_KIT_GENERAL', 8000000),
+    componentes: {
+      carrera: obtenerEntero('MONTO_COMPONENTE_CARRERA', 6000000),
+      fiesta: obtenerEntero('MONTO_COMPONENTE_FIESTA', 2000000),
+      bingo: obtenerEntero('MONTO_COMPONENTE_BINGO', 1000000),
+    },
   },
   firebase: {
     projectId: process.env.FIREBASE_PROJECT_ID,
@@ -48,6 +53,7 @@ const variablesEntorno = {
     /** En sandbox (onboarding@resend.dev), reenvía todos los correos a esta bandeja. */
     correoSandbox: process.env.RESEND_CORREO_SANDBOX?.trim() || null,
   },
+  validarPagoUnicoInstitucional: process.env.VALIDAR_PAGO_UNICO_INSTITUCIONAL === 'true',
 };
 
 module.exports = { variablesEntorno };

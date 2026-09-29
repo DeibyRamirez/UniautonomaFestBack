@@ -105,6 +105,48 @@
 
   var tipoEvento = null;
   var enviando = false;
+  var RETRASOS_REINTENTO_MS = [1500, 3000];
+  var MENSAJE_SIN_CONEXION =
+    'No se pudo conectar con el servidor. Intenta de nuevo en unos segundos.';
+
+  function esErrorRed(error) {
+    if (!error) return false;
+    if (error.name === 'TypeError') return true;
+    return /NetworkError|Failed to fetch|Load failed|fetch resource/i.test(error.message || '');
+  }
+
+  function esperar(ms) {
+    return new Promise(function (resolver) {
+      setTimeout(resolver, ms);
+    });
+  }
+
+  function fetchConReintento(url, options, reintentosRestantes, onReintento) {
+    return fetch(url, options).catch(function (error) {
+      if (!esErrorRed(error) || reintentosRestantes <= 0) {
+        if (esErrorRed(error)) {
+          throw new Error(MENSAJE_SIN_CONEXION);
+        }
+        throw error;
+      }
+
+      if (onReintento) onReintento();
+      var retraso = RETRASOS_REINTENTO_MS[RETRASOS_REINTENTO_MS.length - reintentosRestantes] || 3000;
+      return esperar(retraso).then(function () {
+        return fetchConReintento(url, options, reintentosRestantes - 1, onReintento);
+      });
+    });
+  }
+
+  function precalentarRegistro() {
+    fetch('/api/eventos/warmup').catch(function () {});
+  }
+
+  function leerJson(respuesta) {
+    return respuesta.json().catch(function () {
+      return { mensaje: 'El servidor respondió con un error (HTTP ' + respuesta.status + ').' };
+    });
+  }
 
   function resolverTipoEvento() {
     var params = new URLSearchParams(window.location.search);
@@ -240,6 +282,7 @@
     montarFormulario(tipoEvento);
     mostrarPaso('datos');
     mostrarError('');
+    precalentarRegistro();
 
     formulario.addEventListener('submit', function (evento) {
       evento.preventDefault();
@@ -251,26 +294,45 @@
       boton.textContent = 'Enviando…';
       mostrarError('');
 
-      fetch('/api/eventos/inscripcion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tipoEvento: tipoEvento,
-          datos: recogerDatos(),
-        }),
-      })
+      fetchConReintento(
+        '/api/eventos/inscripcion',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tipoEvento: tipoEvento,
+            datos: recogerDatos(),
+          }),
+        },
+        2,
+        function () {
+          mostrarError('No pudimos conectar con el servidor. Reintentando…');
+        }
+      )
         .then(function (respuesta) {
-          return respuesta.json().then(function (cuerpo) {
-            return { ok: respuesta.ok, cuerpo: cuerpo };
+          return leerJson(respuesta).then(function (cuerpo) {
+            return { ok: respuesta.ok, status: respuesta.status, cuerpo: cuerpo };
           });
         })
         .then(function (resultado) {
+          if (!resultado.ok && resultado.status === 409 && resultado.cuerpo.inscripcionExistente) {
+            formulario.reset();
+            mostrarPaso('confirmacion');
+            mostrarError('');
+            textoConfirmacion.textContent = '¡Te esperamos!';
+            textoConfirmacionExtra.textContent =
+              resultado.cuerpo.mensaje ||
+              'Tu inscripción ya quedó registrada. Revisa tu correo.';
+            return;
+          }
+
           if (!resultado.ok) {
             throw new Error(resultado.cuerpo.mensaje || 'No se pudo completar el registro');
           }
 
           formulario.reset();
           mostrarPaso('confirmacion');
+          mostrarError('');
           textoConfirmacion.textContent = '¡Te esperamos!';
           var extra =
             resultado.cuerpo.mensaje ||
@@ -281,7 +343,9 @@
           textoConfirmacionExtra.textContent = extra;
         })
         .catch(function (error) {
-          mostrarError(error.message);
+          mostrarError(
+            esErrorRed(error) ? MENSAJE_SIN_CONEXION : error.message
+          );
         })
         .finally(function () {
           enviando = false;

@@ -11,5 +11,10 @@
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index" },
     { "source": "/eventos", "destination": "/eventos/index.html" }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  }
 }

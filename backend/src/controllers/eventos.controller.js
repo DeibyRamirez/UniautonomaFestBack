@@ -17,7 +17,9 @@ async function postInscripcion(req, res) {
     );
     if (duplicado) {
       return res.status(409).json({
-        mensaje: 'Ya registraste este correo hace pocos minutos. Revisa tu bandeja de entrada.',
+        mensaje:
+          'Tu inscripción ya quedó registrada. Revisa tu correo o intenta más tarde.',
+        inscripcionExistente: true,
       });
     }
 
