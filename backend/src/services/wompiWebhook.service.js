@@ -15,6 +15,8 @@ async function procesarEventoWompi(cuerpo) {
     reference: transaccion.reference,
     transactionId: transaccion.id,
     estado: transaccion.status,
+    montoCentavos: transaccion.amount_in_cents,
+    moneda: transaccion.currency,
   });
 }
 

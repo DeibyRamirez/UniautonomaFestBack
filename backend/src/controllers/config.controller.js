@@ -1,5 +1,9 @@
 const { variablesEntorno } = require('../config/variablesEntorno');
 const configuracionWompi = require('../config/wompi');
+const {
+  listarKitsPublicos,
+  listarComponentesPublicos,
+} = require('../config/catalogoKits');
 const { listarCiudades } = require('../services/ciudadesColombia.service');
 
 function getConfigPublica(req, res) {
@@ -13,6 +17,10 @@ function getConfigPublica(req, res) {
       llavePublica: configuracionWompi.llavePublica,
     },
     montos: variablesEntorno.montos,
+    catalogo: {
+      kits: listarKitsPublicos(),
+      componentes: listarComponentesPublicos(),
+    },
   });
 }
 

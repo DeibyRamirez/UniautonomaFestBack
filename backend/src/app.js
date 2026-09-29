@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+const { precalentarFirebase } = require('./config/firebase');
 const checkoutRoutes = require('./routes/checkout.routes');
 const pagosRoutes = require('./routes/pagos.routes');
 const adminRoutes = require('./routes/admin.routes');
@@ -9,6 +10,9 @@ const configRoutes = require('./routes/config.routes');
 const eventosRoutes = require('./routes/eventos.routes');
 
 const app = express();
+
+// Vercel antepone un proxy; sin esto el rate limit ve la IP del proxy y no la del cliente.
+app.set('trust proxy', 1);
 
 app.use(
   cors({
@@ -20,6 +24,67 @@ app.use(express.json({ limit: '1mb' }));
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, servicio: 'uniautonoma-fest-api' });
+});
+
+app.get('/api/checkout/warmup', async (req, res) => {
+  try {
+    const db = precalentarFirebase();
+    if (!db) {
+      const err = new Error('Firebase no configurado');
+      err.codigo = 503;
+      throw err;
+    }
+
+    await db.collection('payments').limit(1).get();
+
+    return res.json({ ok: true, warmed: true });
+  } catch (error) {
+    const codigo = error.codigo || 503;
+    return res.status(codigo).json({
+      ok: false,
+      mensaje: error.message || 'No se pudo precalentar el checkout',
+    });
+  }
+});
+
+app.get('/api/eventos/warmup', async (req, res) => {
+  try {
+    const db = precalentarFirebase();
+    if (!db) {
+      const err = new Error('Firebase no configurado');
+      err.codigo = 503;
+      throw err;
+    }
+
+    await db.collection('eventos').doc('uaf2026').collection('Hackton').limit(1).get();
+    return res.json({ ok: true, warmed: true });
+  } catch (error) {
+    const codigo = error.codigo || 503;
+    return res.status(codigo).json({
+      ok: false,
+      mensaje: error.message || 'No se pudo precalentar el registro de eventos',
+    });
+  }
+});
+
+app.get('/api/admin/warmup', async (req, res) => {
+  try {
+    const db = precalentarFirebase();
+    if (!db) {
+      const err = new Error('Firebase no configurado');
+      err.codigo = 503;
+      throw err;
+    }
+
+    await db.collection('payments').limit(1).get();
+    return res.json({ ok: true, warmed: true });
+  } catch (error) {
+    const codigo = error.codigo || 503;
+    return res.status(codigo).json({
+      ok: false,
+      mensaje: error.message || 'No se pudo precalentar el panel admin',
+    });
+  }
 });
 
 app.use('/api/checkout', checkoutRoutes);

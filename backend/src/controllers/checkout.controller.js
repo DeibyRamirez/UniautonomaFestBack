@@ -35,8 +35,8 @@ async function postConfirmarCheckout(req, res) {
 
 async function postIniciarCheckout(req, res) {
   try {
-    const { kitType, personalInfo } = req.body;
-    const resultado = await iniciarCheckout({ kitType, personalInfo });
+    const { kitType, kitComponents, personalInfo } = req.body;
+    const resultado = await iniciarCheckout({ kitType, kitComponents, personalInfo });
     return res.status(201).json(resultado);
   } catch (error) {
     const codigo = error.codigo || 500;

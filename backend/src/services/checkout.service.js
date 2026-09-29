@@ -1,14 +1,17 @@
 const pagosRepository = require('../repositories/pagos.repository');
 const configuracionWompi = require('../config/wompi');
 const { variablesEntorno } = require('../config/variablesEntorno');
+const { esKitInstitucional } = require('../config/catalogoKits');
 const {
   validarSolicitudCheckout,
   obtenerMontoCentavos,
   normalizarInformacionPersonal,
+  normalizarKitType,
+  normalizarKitComponents,
 } = require('./validacionKit.service');
 const { generarReferenciaPago } = require('./codigoReclamo.service');
 const { calcularFirmaIntegridad } = require('./wompiIntegridad.service');
-const { validarLlavePublicaComercio } = require('./wompiValidacion.service');
+const { validarFormatoLlavePublica } = require('./wompiValidacion.service');
 const { intentarEnviarCorreoReclamo } = require('./correoReclamo.service');
 const { aplicarEstadoTransaccion } = require('./confirmacionPago.service');
 const { consultarTransaccionPorId } = require('./wompiTransaccion.service');
@@ -26,33 +29,44 @@ function construirRespuestaInicio({ pago, reference, amount }) {
     currency: configuracionWompi.moneda,
     publicKey: configuracionWompi.llavePublica,
     signatureIntegrity,
-    redirectUrl: `${variablesEntorno.urlBase}/#kit`,
+    redirectUrl: `${variablesEntorno.urlBase}/`,
     checkoutUrl: configuracionWompi.urlCheckout,
   };
 }
 
-async function iniciarCheckout({ kitType, personalInfo }) {
-  const errorValidacion = validarSolicitudCheckout({ kitType, personalInfo });
+async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
+  const tipoNormalizado = normalizarKitType(kitType);
+  const componentesNormalizados = normalizarKitComponents(kitComponents);
+
+  const errorValidacion = validarSolicitudCheckout({
+    kitType: tipoNormalizado,
+    kitComponents: componentesNormalizados,
+    personalInfo,
+  });
   if (errorValidacion) {
     const err = new Error(errorValidacion);
     err.codigo = 400;
     throw err;
   }
 
-  if (!configuracionWompi.llavePublica) {
-    const err = new Error('WOMPI_PUBLIC_KEY no configurada en el servidor');
-    err.codigo = 500;
-    throw err;
-  }
-
-  await validarLlavePublicaComercio(configuracionWompi.llavePublica);
+  validarFormatoLlavePublica(configuracionWompi.llavePublica);
 
   const info = normalizarInformacionPersonal(personalInfo);
-  const amount = obtenerMontoCentavos(kitType);
+  const amount = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);
+
+  if (variablesEntorno.validarPagoUnicoInstitucional && esKitInstitucional(tipoNormalizado)) {
+    const pagoExistente = await pagosRepository.buscarPagoInstitucionalAprobado(info.email);
+    if (pagoExistente) {
+      const err = new Error('Este correo ya tiene un kit registrado.');
+      err.codigo = 409;
+      throw err;
+    }
+  }
 
   let pago = await pagosRepository.buscarPendienteReciente({
     email: info.email,
-    kitType,
+    kitType: tipoNormalizado,
+    kitComponents: componentesNormalizados,
     amount,
   });
 
@@ -62,13 +76,15 @@ async function iniciarCheckout({ kitType, personalInfo }) {
     reference = pago.reference;
     await pagosRepository.actualizarInformacionPendiente(pago.id, {
       personalInfo: info,
+      kitComponents: componentesNormalizados,
     });
   } else {
     reference = generarReferenciaPago();
     pago = await pagosRepository.crearPagoPendiente({
       reference,
       personalInfo: info,
-      kitType,
+      kitType: tipoNormalizado,
+      kitComponents: componentesNormalizados,
       amount,
     });
   }
@@ -80,8 +96,11 @@ function respuestaEstadoDesdePago(pago) {
   return {
     status: pago.status,
     uniqueClaimCode: pago.uniqueClaimCode,
+    numeroCorredor: pago.numeroCorredor || null,
     kitType: pago.kitType,
+    kitComponents: pago.kitComponents || [],
     emailEnviado: Boolean(pago.emailEnviadoEn),
+    emailError: pago.emailError || null,
   };
 }
 
@@ -119,18 +138,19 @@ async function confirmarPagoCheckout({ reference, transactionId }) {
     throw err;
   }
 
-  const montoWompi = Number(transaccion.amount_in_cents);
-  if (Number.isFinite(montoWompi) && montoWompi !== Number(pago.amount)) {
-    const err = new Error('El monto de la transacción no coincide con el kit');
-    err.codigo = 400;
-    throw err;
-  }
-
   const resultado = await aplicarEstadoTransaccion({
     reference: referenciaLimpia,
     transactionId: transaccion.id,
     estado: transaccion.status,
+    montoCentavos: transaccion.amount_in_cents,
+    moneda: transaccion.currency,
   });
+
+  if (resultado.motivo === 'discrepancia') {
+    const err = new Error('El monto de la transacción no coincide con el kit');
+    err.codigo = 400;
+    throw err;
+  }
 
   const pagoFinal =
     (resultado.pago && (await pagosRepository.obtenerPorId(resultado.pago.id))) ||

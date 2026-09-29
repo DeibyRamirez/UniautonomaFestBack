@@ -61,6 +61,7 @@ npm run crear-super-admin -- correo@uniautonoma.edu.co ContraseñaSegura123
 | POST | `/api/payments/webhook` | Eventos Wompi (firma SHA256) |
 | GET | `/api/admin/students` | Listado (Bearer Firebase) |
 | PATCH | `/api/admin/students/:id/deliver` | Marcar kit entregado |
+| POST | `/api/admin/students/:id/reenviar-correo` | Reenviar correo de código de reclamo |
 | POST | `/api/admin/create-admin` | Crear admin (super admin) |
 | GET | `/api/config/publica` | Config Firebase/Wompi pública |
 | GET | `/api/checkout/estado?reference=` | Estado del pago y código de reclamo |
@@ -78,7 +79,52 @@ cd backend
 npm run probar-correo -- tu-correo@ejemplo.com
 ```
 
-Si el pago quedó aprobado pero el correo falló, el sistema reintenta al consultar `GET /api/checkout/estado` o en un webhook idempotente. Revisa en Firestore los campos `emailEnviadoEn` y `emailError`.
+Si el pago quedó aprobado pero el correo falló, el sistema reintenta al consultar `GET /api/checkout/estado` o en un webhook idempotente. Revisa en Firestore los campos `emailEnviadoEn` y `emailError`. Desde el panel admin puedes usar **Enviar correo** / **Reenviar correo** en cada fila aprobada.
+
+### Diagnóstico Resend
+
+| Síntoma | Causa probable | Solución |
+|---------|----------------|----------|
+| `emailError` menciona dominio no verificado | `CORREO_REMITENTE` no coincide con un dominio verificado en Resend | Verifica el subdominio en [resend.com/domains](https://resend.com/domains) (ej. `fest@send.cheiviz.com`) |
+| Correo no llega en local con `onboarding@resend.dev` | Sandbox solo envía a tu cuenta Resend | Define `RESEND_CORREO_SANDBOX=tu-correo@...` en `.env` |
+| Pago APPROVED sin número de corredor | Falló la reserva de número (queda en `numeroCorredorError`) | En el panel admin usa **Asignar número** en la fila; se reenvía el correo con el número |
+
+Prueba directa sin Wompi:
+
+```bash
+cd backend
+npm run probar-correo -- tu-correo@ejemplo.com
+```
+
+Reenvío manual por referencia:
+
+```bash
+cd backend
+npm run reenviar-correo -- Unifest26-PAY-XXXXXXXX
+```
+
+### Números de corredor (001–999)
+
+| Kit | Número asignado |
+|-----|-----------------|
+| Kit Uniautónomo (`uniautonomo`) | Sí — carrera y rifa de la moto |
+| Arma tu kit con componente **Carrera** | Sí — solo carrera |
+| Arma tu kit sin carrera | No |
+| Kit externo (`general`) | No |
+
+El número se guarda en `numeroCorredor`, aparece en el correo, en la confirmación del modal y en la exportación Excel del admin.
+
+La aprobación del pago y la reserva del número ocurren en una sola transacción de Firestore: aunque el webhook y la confirmación del navegador lleguen a la vez, cada pago recibe un único número. Cada número reservado queda además en `numerosCorredor/{numero}` con el `paymentId`, lo que impide que dos pagos compartan número.
+
+Antes de abrir la venta real, reinicia la numeración para que empiece en 001 (los pagos de prueba conservan su número en `numeroCorredorPrueba`):
+
+```bash
+cd backend
+npm run reiniciar-numero-corredor                 # simulación
+npm run reiniciar-numero-corredor -- --confirmar  # aplica
+```
+
+Para que la búsqueda por nombre del panel encuentre pagos anteriores a este cambio, ejecuta una vez `npm run rellenar-nombre-busqueda` y despliega los índices con `firebase deploy --only firestore:indexes`.
 
 ## Checklist pre-producción
 

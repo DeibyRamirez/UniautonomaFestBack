@@ -16,8 +16,17 @@ const limiteInicio = rateLimit({
   message: { mensaje: 'Demasiados intentos. Intenta más tarde.' },
 });
 
+// El navegador consulta cada 3 s durante ~2 min por pago; 120/5 min deja margen para reintentos.
+const limiteEstado = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { mensaje: 'Demasiadas consultas. Espera un momento.' },
+});
+
 router.post('/initiate', limiteInicio, postIniciarCheckout);
 router.post('/confirmar', limiteInicio, postConfirmarCheckout);
-router.get('/estado', getEstadoCheckout);
+router.get('/estado', limiteEstado, getEstadoCheckout);
 
 module.exports = router;

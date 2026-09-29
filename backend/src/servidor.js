@@ -11,6 +11,17 @@ if (!variablesEntorno.resend.apiKey) {
   );
 }
 
-app.listen(puerto, () => {
+const servidor = app.listen(puerto, () => {
   console.log(`API Uniautónoma Fest escuchando en http://localhost:${puerto}`);
+});
+
+servidor.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(
+      `[servidor] El puerto ${puerto} ya está en uso: hay otra instancia del backend corriendo. ` +
+        'Ciérrala (o cambia PUERTO en .env) antes de iniciar esta.'
+    );
+    process.exit(1);
+  }
+  throw error;
 });

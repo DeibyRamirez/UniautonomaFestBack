@@ -1,3 +1,5 @@
+let llaveValidadaEnProceso = null;
+
 function urlBaseWompi(llavePublica) {
   if (llavePublica.startsWith('pub_test_')) {
     return 'https://sandbox.wompi.co/v1';
@@ -8,22 +10,30 @@ function urlBaseWompi(llavePublica) {
   return null;
 }
 
-async function validarLlavePublicaComercio(llavePublica) {
+function validarFormatoLlavePublica(llavePublica) {
   if (!llavePublica) {
     const err = new Error('WOMPI_PUBLIC_KEY vacía en backend/.env');
     err.codigo = 500;
     throw err;
   }
 
-  const base = urlBaseWompi(llavePublica);
-  if (!base) {
+  if (!urlBaseWompi(llavePublica)) {
     const err = new Error(
       'WOMPI_PUBLIC_KEY inválida: debe empezar por pub_test_ (sandbox) o pub_prod_ (producción)'
     );
     err.codigo = 500;
     throw err;
   }
+}
 
+async function validarLlavePublicaComercio(llavePublica) {
+  validarFormatoLlavePublica(llavePublica);
+
+  if (llaveValidadaEnProceso === llavePublica) {
+    return;
+  }
+
+  const base = urlBaseWompi(llavePublica);
   const url = `${base}/merchants/${encodeURIComponent(llavePublica)}`;
   const respuesta = await fetch(url, {
     headers: {
@@ -48,6 +58,8 @@ async function validarLlavePublicaComercio(llavePublica) {
     err.codigo = 502;
     throw err;
   }
+
+  llaveValidadaEnProceso = llavePublica;
 }
 
-module.exports = { validarLlavePublicaComercio, urlBaseWompi };
+module.exports = { validarLlavePublicaComercio, validarFormatoLlavePublica, urlBaseWompi };

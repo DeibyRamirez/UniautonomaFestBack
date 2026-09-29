@@ -1,5 +1,6 @@
 const { obtenerClienteResend, correoRemitente } = require('../config/resend');
 const { variablesEntorno } = require('../config/variablesEntorno');
+const { etiquetaKit } = require('../config/catalogoKits');
 const {
   validarRemitenteResend,
   extraerCorreoRemitente,
@@ -14,19 +15,48 @@ function escaparHtml(texto) {
     .replace(/"/g, '&quot;');
 }
 
+function etiquetaNumeroCorredor(tipoKit, kitComponents = []) {
+  const tipo = String(tipoKit || '').trim();
+
+  if (tipo === 'uniautonomo') {
+    return 'Tu número de corredor y participación en la rifa de la moto:';
+  }
+
+  if (
+    tipo === 'personalizado' &&
+    Array.isArray(kitComponents) &&
+    kitComponents.includes('carrera')
+  ) {
+    return 'Tu número de corredor:';
+  }
+
+  return null;
+}
+
 function construirHtmlCodigoReclamo({
   nombre,
   codigoReclamo,
+  numeroCorredor,
   tipoKit,
+  kitComponents,
   tallaCamiseta,
   correoCompradorOriginal,
 }) {
-  const etiquetaKit =
-    tipoKit === 'uniautonomo' ? 'Kit Sangre Azul' : 'Kit Corredor';
+  const etiqueta = etiquetaKit(tipoKit, kitComponents);
   const nombreSeguro = escaparHtml(nombre);
   const codigoSeguro = escaparHtml(codigoReclamo);
   const talla = tallaCamiseta
     ? `Talla de camiseta: <strong>${escaparHtml(tallaCamiseta)}</strong>.`
+    : '';
+  const bloqueNumeroCorredor = numeroCorredor
+    ? (() => {
+        const etiquetaNumero =
+          etiquetaNumeroCorredor(tipoKit, kitComponents) || 'Tu número de corredor:';
+        return (
+          `<p style="color:#b8c5d9;line-height:1.6">${escaparHtml(etiquetaNumero)}</p>` +
+          `<p style="font-size:28px;font-weight:700;letter-spacing:.08em;text-align:center;background:#123456;padding:16px;border-radius:8px;color:#6eb5ff;margin:16px 0">${escaparHtml(numeroCorredor)}</p>`
+        );
+      })()
     : '';
 
   return `<!DOCTYPE html>
@@ -36,8 +66,9 @@ function construirHtmlCodigoReclamo({
   <div style="max-width:560px;margin:0 auto;background:#111f38;border-radius:12px;padding:32px;border:1px solid #2a4a7a">
     <p style="color:#6eb5ff;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:0">Uniautónoma Fest 2026</p>
     <h1 style="font-size:22px;margin:16px 0 8px">¡Pago confirmado!</h1>
-    <p style="color:#b8c5d9;line-height:1.6">Hola <strong>${nombreSeguro}</strong>, tu compra del <strong>${etiquetaKit}</strong> fue aprobada.</p>
+    <p style="color:#b8c5d9;line-height:1.6">Hola <strong>${nombreSeguro}</strong>, tu compra del <strong>${etiqueta}</strong> fue aprobada.</p>
     ${talla ? `<p style="color:#b8c5d9;line-height:1.6">${talla}</p>` : ''}
+    ${bloqueNumeroCorredor}
     ${
       correoCompradorOriginal
         ? `<p style="color:#fbbf24;font-size:13px;line-height:1.5;background:rgba(251,191,36,.08);padding:12px;border-radius:8px;margin:0 0 16px">` +
@@ -62,7 +93,9 @@ async function enviarCorreoCodigoReclamo({
   destinatario,
   nombre,
   codigoReclamo,
+  numeroCorredor,
   tipoKit,
+  kitComponents,
   tallaCamiseta,
   idPago,
   reintentarTrasError,
@@ -97,7 +130,9 @@ async function enviarCorreoCodigoReclamo({
   const html = construirHtmlCodigoReclamo({
     nombre,
     codigoReclamo,
+    numeroCorredor,
     tipoKit,
+    kitComponents,
     tallaCamiseta,
     correoCompradorOriginal,
   });
@@ -142,4 +177,5 @@ async function enviarCorreoCodigoReclamo({
 module.exports = {
   enviarCorreoCodigoReclamo,
   construirHtmlCodigoReclamo,
+  etiquetaNumeroCorredor,
 };

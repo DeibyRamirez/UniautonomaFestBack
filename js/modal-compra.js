@@ -22,9 +22,16 @@
   const inputCodigo = document.getElementById('compra-studentCode');
   const selectResidenceCity = document.getElementById('compra-residenceCity');
   const codigoMostrar = document.getElementById('codigo-reclamo-mostrar');
+  const numeroCorredorBloque = document.getElementById('numero-corredor-mostrar');
+  const numeroCorredorEtiqueta = document.getElementById('numero-corredor-etiqueta');
+  const numeroCorredorValor = document.getElementById('numero-corredor-valor');
+  const CLAVE_REFERENCIA_PENDIENTE = 'uaf26-pago-referencia';
   const textoConfirmacion = document.getElementById('texto-confirmacion');
   const textoConfirmacionExtra = document.getElementById('texto-confirmacion-extra');
   const indicadoresPaso = modal.querySelectorAll('[data-indicador-paso]');
+  const selectorComponentes = document.getElementById('selector-componentes-kit');
+  const listaComponentes = document.getElementById('lista-componentes-kit');
+  const totalComponentesEl = document.getElementById('total-componentes-kit');
 
   let tipoKit = 'uniautonomo';
   let enviandoPago = false;
@@ -34,6 +41,92 @@
   let intervaloPolling = null;
   let ciudadesResidencia = null;
   let promesaCiudadesResidencia = null;
+
+  function esErrorRed(error) {
+    if (!error) return false;
+    if (error.name === 'TypeError') return true;
+    var mensaje = error.message || '';
+    return /NetworkError|Failed to fetch|Load failed|fetch resource/i.test(mensaje);
+  }
+
+  function esperar(ms) {
+    return new Promise(function (resolver) {
+      setTimeout(resolver, ms);
+    });
+  }
+
+  function fetchConReintento(url, options, reintentosRestantes, onReintento) {
+    return fetch(url, options).catch(function (error) {
+      if (!esErrorRed(error) || reintentosRestantes <= 0) {
+        if (esErrorRed(error)) {
+          throw new Error('El servidor tardó en responder. Intenta de nuevo.');
+        }
+        throw error;
+      }
+
+      if (onReintento) onReintento();
+      var retraso = reintentosRestantes === 1 ? 1500 : 3000;
+      return esperar(retraso).then(function () {
+        return fetchConReintento(url, options, reintentosRestantes - 1, onReintento);
+      });
+    });
+  }
+
+  function precalentarCheckout() {
+    fetch('/api/checkout/warmup').catch(function () {});
+  }
+
+  precalentarCheckout();
+
+  function mostrarNumeroCorredor(d) {
+    if (!numeroCorredorBloque) return;
+    if (!d || !d.numeroCorredor) {
+      numeroCorredorBloque.hidden = true;
+      numeroCorredorValor.textContent = '';
+      return;
+    }
+    numeroCorredorEtiqueta.textContent =
+      d.kitType === 'uniautonomo'
+        ? 'Tu número de corredor y de participación en la rifa de la moto'
+        : 'Tu número de corredor';
+    numeroCorredorValor.textContent = d.numeroCorredor;
+    numeroCorredorBloque.hidden = false;
+  }
+
+  function guardarReferenciaPendiente(reference) {
+    try {
+      sessionStorage.setItem(CLAVE_REFERENCIA_PENDIENTE, reference);
+    } catch (e) {}
+  }
+
+  function leerReferenciaPendiente() {
+    try {
+      return sessionStorage.getItem(CLAVE_REFERENCIA_PENDIENTE);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function limpiarReferenciaPendiente() {
+    try {
+      sessionStorage.removeItem(CLAVE_REFERENCIA_PENDIENTE);
+    } catch (e) {}
+  }
+
+  function mensajeEstadoCorreo(d) {
+    if (d.emailEnviado) {
+      return 'También lo enviamos a tu correo.';
+    }
+    if (d.emailError) {
+      return (
+        'No pudimos enviar el correo (' +
+        d.emailError +
+        '). Usa el código en pantalla; también puedes acercarte a sede con tu comprobante.'
+      );
+    }
+    return 'Si no llega el correo, revisa spam o usa este código en pantalla.';
+  }
+
   function bloquearScrollLanding() {
     document.documentElement.classList.add('compra-scroll-lock');
   }
@@ -46,6 +139,10 @@
     return window.PreciosKit ? window.PreciosKit.METADATOS : null;
   }
 
+  function obtenerComponentes() {
+    return window.PreciosKit ? window.PreciosKit.componentes : {};
+  }
+
   function metaKit(tipo) {
     var metadatos = obtenerMetadatosKit();
     if (metadatos && metadatos[tipo]) return metadatos[tipo];
@@ -53,6 +150,8 @@
       titulo: tipo === 'general' ? 'Kit Corredor' : 'Kit Sangre Azul',
       descripcion: '',
       precioCentavos: tipo === 'general' ? 8000000 : 7500000,
+      requiereCodigoEstudiante: tipo !== 'general',
+      esPersonalizable: tipo === 'personalizado',
     };
   }
 
@@ -140,27 +239,103 @@
     if (nombre === 'confirmacion') marcarPaso(3);
   }
 
+  function obtenerComponentesSeleccionados() {
+    if (!listaComponentes) return [];
+    return Array.from(listaComponentes.querySelectorAll('input[type="checkbox"]:checked')).map(
+      function (input) {
+        return input.value;
+      }
+    );
+  }
+
+  function actualizarTotalComponentes() {
+    if (!totalComponentesEl) return;
+    var seleccionados = obtenerComponentesSeleccionados();
+    var total = window.PreciosKit
+      ? window.PreciosKit.calcularTotalComponentes(seleccionados)
+      : 0;
+    totalComponentesEl.textContent = formatearPrecio(total);
+
+    if (tipoKit === 'personalizado' && precioEl) {
+      precioEl.innerHTML =
+        (seleccionados.length ? formatearPrecio(total) : 'Selecciona componentes') +
+        '<small style="font-size:.45em;opacity:.7"> COP</small>';
+    }
+  }
+
+  function renderizarSelectorComponentes() {
+    if (!listaComponentes) return;
+
+    var componentes = obtenerComponentes();
+    listaComponentes.replaceChildren();
+
+    Object.keys(componentes).forEach(function (clave) {
+      var componente = componentes[clave];
+      var etiqueta = document.createElement('label');
+      etiqueta.className = 'kit-componente';
+
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.name = 'kitComponent';
+      input.value = componente.id;
+      input.addEventListener('change', actualizarTotalComponentes);
+
+      var info = document.createElement('div');
+      info.className = 'kit-componente__info';
+      info.innerHTML =
+        '<b>' +
+        componente.titulo +
+        '</b>' +
+        (componente.descripcion ? '<span>' + componente.descripcion + '</span>' : '');
+
+      var precio = document.createElement('span');
+      precio.className = 'kit-componente__precio';
+      precio.textContent = formatearPrecio(componente.precioCentavos);
+
+      etiqueta.appendChild(input);
+      etiqueta.appendChild(info);
+      etiqueta.appendChild(precio);
+      listaComponentes.appendChild(etiqueta);
+    });
+
+    actualizarTotalComponentes();
+  }
+
   function abrirModal(kit) {
-    tipoKit = kit === 'general' ? 'general' : 'uniautonomo';
+    tipoKit = kit === 'general' ? 'general' : kit === 'personalizado' ? 'personalizado' : 'uniautonomo';
     var meta = metaKit(tipoKit);
     titulo.textContent = 'Comprar ' + meta.titulo;
     descripcion.textContent = meta.descripcion;
-    precioEl.innerHTML =
-      formatearPrecio(meta.precioCentavos) + '<small style="font-size:.45em;opacity:.7"> COP</small>';
 
-    if (tipoKit === 'general') {
-      campoCodigo.hidden = true;
-      inputCodigo.removeAttribute('required');
+    if (tipoKit === 'personalizado') {
+      renderizarSelectorComponentes();
+      if (selectorComponentes) selectorComponentes.hidden = false;
+      precioEl.innerHTML =
+        'Selecciona componentes<small style="font-size:.45em;opacity:.7"> COP</small>';
     } else {
+      if (selectorComponentes) selectorComponentes.hidden = true;
+      precioEl.innerHTML =
+        formatearPrecio(meta.precioCentavos) + '<small style="font-size:.45em;opacity:.7"> COP</small>';
+    }
+
+    if (meta.requiereCodigoEstudiante) {
       campoCodigo.hidden = false;
       inputCodigo.setAttribute('required', 'required');
+    } else {
+      campoCodigo.hidden = true;
+      inputCodigo.removeAttribute('required');
     }
 
     cargarCiudadesResidencia().catch(function (error) {
       mostrarError(error.message);
     });
+    precalentarCheckout();
+    cargarScriptWidgetWompi().catch(function () {});
 
     formulario.reset();
+    if (tipoKit === 'personalizado') {
+      renderizarSelectorComponentes();
+    }
     datosCheckout = null;
     datosPersonales = null;
     referenciaActual = null;
@@ -172,6 +347,7 @@
     botonContinuar.innerHTML = '<i class="tick"></i>Continuar al pago seguro';
     botonAbrirWompi.disabled = false;
     codigoMostrar.hidden = true;
+    mostrarNumeroCorredor(null);
     textoConfirmacion.textContent = 'Confirmando tu pago…';
     textoConfirmacionExtra.textContent = '';
 
@@ -202,7 +378,7 @@
   }
 
   function obtenerDatosFormulario() {
-    return {
+    var cuerpo = {
       kitType: tipoKit,
       personalInfo: {
         firstName: formulario.firstName.value.trim(),
@@ -218,6 +394,12 @@
         shirtSize: formulario.shirtSize.value,
       },
     };
+
+    if (tipoKit === 'personalizado') {
+      cuerpo.kitComponents = obtenerComponentesSeleccionados();
+    }
+
+    return cuerpo;
   }
 
   function nombreCompleto(info) {
@@ -256,12 +438,12 @@
     if (!d || d.status !== 'APPROVED' || !d.uniqueClaimCode) return false;
     codigoMostrar.textContent = d.uniqueClaimCode;
     codigoMostrar.hidden = false;
+    mostrarNumeroCorredor(d);
     textoConfirmacion.textContent = '¡Pago confirmado! Tu código de reclamo:';
     textoConfirmacionExtra.textContent =
       'Presenta este código en la sede principal con tu documento. ' +
-      (d.emailEnviado
-        ? 'También lo enviamos a tu correo.'
-        : 'Si no llega el correo, usa este código en pantalla.');
+      mensajeEstadoCorreo(d);
+    limpiarReferenciaPendiente();
     return true;
   }
 
@@ -337,6 +519,7 @@
       }
       if (d.status === 'REJECTED') {
         detenerPolling();
+        limpiarReferenciaPendiente();
         textoConfirmacion.textContent = 'El pago no fue aprobado.';
         textoConfirmacionExtra.textContent = 'Puedes intentar de nuevo desde la sección Kit.';
       }
@@ -383,6 +566,7 @@
           opciones.redirectUrl = datosCheckout.redirectUrl;
         }
 
+        guardarReferenciaPendiente(datosCheckout.reference);
         activarPasarelaWompi();
 
         var checkout = new window.WidgetCheckout(opciones);
@@ -429,18 +613,32 @@
     evento.preventDefault();
     if (enviandoPago) return;
 
+    var cuerpo = obtenerDatosFormulario();
+
+    if (tipoKit === 'personalizado' && (!cuerpo.kitComponents || !cuerpo.kitComponents.length)) {
+      mostrarError('Selecciona al menos un componente para tu kit.');
+      return;
+    }
+
     enviandoPago = true;
     mostrarError('');
     botonContinuar.disabled = true;
-    botonContinuar.textContent = 'Procesando…';
+    botonContinuar.textContent = 'Preparando pago seguro…';
 
-    var cuerpo = obtenerDatosFormulario();
+    cargarScriptWidgetWompi().catch(function () {});
 
-    fetch('/api/checkout/initiate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cuerpo),
-    })
+    fetchConReintento(
+      '/api/checkout/initiate',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cuerpo),
+      },
+      2,
+      function () {
+        mostrarError('No pudimos conectar con el servidor. Reintentando…');
+      }
+    )
       .then(function (respuesta) {
         return respuesta.json().then(function (datos) {
           return { ok: respuesta.ok, datos: datos };
@@ -457,7 +655,7 @@
         datosPersonales = cuerpo.personalInfo;
         referenciaActual = datos.reference;
 
-        resumenPago.innerHTML =
+        var resumenHtml =
           '<strong>Kit:</strong> ' +
           metaKit(tipoKit).titulo +
           '<br><strong>Total:</strong> ' +
@@ -467,13 +665,29 @@
           '<br><strong>Correo:</strong> ' +
           cuerpo.personalInfo.email;
 
+        if (tipoKit === 'personalizado' && cuerpo.kitComponents.length) {
+          var componentes = obtenerComponentes();
+          var nombres = cuerpo.kitComponents
+            .map(function (id) {
+              return componentes[id] ? componentes[id].titulo : id;
+            })
+            .join(', ');
+          resumenHtml += '<br><strong>Componentes:</strong> ' + nombres;
+        }
+
+        resumenPago.innerHTML = resumenHtml;
+
         mostrarPaso('pago');
         enviandoPago = false;
         botonAbrirWompi.disabled = false;
         botonAbrirWompi.innerHTML = '<i class="tick"></i>Pagar con Wompi';
       })
       .catch(function (error) {
-        mostrarError(error.message);
+        mostrarError(
+          esErrorRed(error)
+            ? 'El servidor tardó en responder. Intenta de nuevo.'
+            : error.message
+        );
         enviandoPago = false;
         botonContinuar.disabled = false;
         botonContinuar.innerHTML = '<i class="tick"></i>Continuar al pago seguro';
@@ -515,8 +729,56 @@
     });
   });
 
+  function leerIdTransaccionRetorno() {
+    var desdeQuery = new URLSearchParams(window.location.search).get('id');
+    if (desdeQuery) return desdeQuery;
+    var hash = window.location.hash || '';
+    var posicion = hash.indexOf('?');
+    if (posicion === -1) return null;
+    return new URLSearchParams(hash.slice(posicion + 1)).get('id');
+  }
+
+  function limpiarParametrosRetorno() {
+    if (!window.history.replaceState) return;
+    var url = new URL(window.location.href);
+    url.searchParams.delete('id');
+    url.searchParams.delete('env');
+    var hash = url.hash.split('?')[0];
+    window.history.replaceState({}, '', url.pathname + url.search + hash);
+  }
+
+  function retomarPagoTrasRedireccion() {
+    var idTransaccion = leerIdTransaccionRetorno();
+    var referencia = leerReferenciaPendiente();
+    if (!idTransaccion || !referencia) return false;
+
+    limpiarParametrosRetorno();
+    referenciaActual = referencia;
+    titulo.textContent = 'Confirmación de pago';
+    descripcion.textContent = '';
+    precioEl.innerHTML = '';
+    codigoMostrar.hidden = true;
+    mostrarNumeroCorredor(null);
+    textoConfirmacion.textContent = 'Verificando tu pago con Wompi…';
+    textoConfirmacionExtra.textContent = '';
+    mostrarError('');
+    mostrarPaso('confirmacion');
+    modal.hidden = false;
+    modal.classList.add('activo');
+    bloquearScrollLanding();
+
+    confirmarPagoEnServidor(idTransaccion).then(function (d) {
+      if (mostrarCodigoReclamoEnPantalla(d)) {
+        detenerPolling();
+      } else {
+        iniciarPollingEstado();
+      }
+    });
+    return true;
+  }
+
   var params = new URLSearchParams(window.location.search);
-  var comprar = params.get('comprar') || params.get('kit');
+  var comprar = retomarPagoTrasRedireccion() ? null : params.get('comprar') || params.get('kit');
   if (comprar) {
     var listoCompra = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
     Promise.all([listoCompra, cargarCiudadesResidencia().catch(function () { return null; })])

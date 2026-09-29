@@ -4,6 +4,7 @@ const administradoresRepository = require('../repositories/administradores.repos
 const { obtenerAuth } = require('../config/firebase');
 const { invalidarCacheAdmin } = require('../utilidades/cacheAdmin');
 const { validarTipoEvento } = require('../services/validacionEvento.service');
+const { intentarEnviarCorreoReclamo } = require('../services/correoReclamo.service');
 
 async function getPerfilAdmin(req, res) {
   try {
@@ -56,6 +57,44 @@ async function getEstudiantes(req, res) {
       });
     }
     return res.status(500).json({ mensaje: 'No se pudo obtener el listado' });
+  }
+}
+
+async function getBootstrapAdmin(req, res) {
+  try {
+    const registro = req.admin;
+    const status = req.query.status || undefined;
+    const search = req.query.search || undefined;
+    const limite = req.query.limit || undefined;
+    const resultado = await pagosRepository.listarPagos({
+      status,
+      busqueda: search,
+      limite,
+    });
+
+    return res.json({
+      perfil: {
+        email: registro.email,
+        role: registro.role,
+        esSuperAdmin: registro.role === 'SUPER_ADMIN',
+      },
+      datos: resultado.datos,
+      paginacion: resultado.paginacion,
+    });
+  } catch (error) {
+    console.error('[admin bootstrap]', error);
+    const detalle = String(error.details || error.message || '');
+    if (
+      error.code === 9 ||
+      detalle.includes('requires an index') ||
+      detalle.includes('currently building')
+    ) {
+      return res.status(503).json({
+        mensaje:
+          'Los índices de búsqueda de Firebase se están creando. Espera unos minutos y recarga.',
+      });
+    }
+    return res.status(500).json({ mensaje: 'No se pudo cargar el panel administrativo' });
   }
 }
 
@@ -129,6 +168,67 @@ async function postCrearAdmin(req, res) {
   }
 }
 
+async function postReenviarCorreo(req, res) {
+  try {
+    const { id } = req.params;
+    const pago = await pagosRepository.obtenerPorId(id);
+
+    if (!pago) {
+      return res.status(404).json({ mensaje: 'Registro no encontrado' });
+    }
+
+    if (pago.status !== 'APPROVED' || !pago.uniqueClaimCode) {
+      return res.status(400).json({
+        mensaje: 'Solo se puede reenviar correo de pagos aprobados con código de reclamo',
+      });
+    }
+
+    const resultado = await intentarEnviarCorreoReclamo(pago, { forzarReenvio: true });
+
+    if (resultado.enviado) {
+      return res.json({
+        mensaje: 'Correo reenviado correctamente',
+        enviado: true,
+        idResend: resultado.idResend || null,
+      });
+    }
+
+    return res.status(502).json({
+      mensaje: resultado.motivo || 'No se pudo reenviar el correo',
+      enviado: false,
+    });
+  } catch (error) {
+    console.error('[admin reenviar correo]', error);
+    return res.status(500).json({ mensaje: 'No se pudo reenviar el correo' });
+  }
+}
+
+async function postAsignarNumeroCorredor(req, res) {
+  try {
+    const { id } = req.params;
+    const resultado = await pagosRepository.asignarNumeroPendiente(id);
+    const pago = await pagosRepository.obtenerPorId(id);
+
+    if (!resultado.idempotente && pago) {
+      await intentarEnviarCorreoReclamo(pago, { forzarReenvio: true });
+    }
+
+    return res.json({
+      mensaje: resultado.idempotente
+        ? 'El registro ya tenía número de corredor'
+        : 'Número de corredor asignado',
+      numeroCorredor: resultado.numeroCorredor,
+      dato: pago,
+    });
+  } catch (error) {
+    const codigo = error.codigo || 500;
+    if (codigo >= 500) console.error('[admin asignar numero]', error);
+    return res.status(codigo).json({
+      mensaje: error.message || 'No se pudo asignar el número de corredor',
+    });
+  }
+}
+
 async function getInscripcionesEventos(req, res) {
   try {
     const tipoEvento = req.query.tipoEvento;
@@ -158,7 +258,10 @@ module.exports = {
   getPerfilAdmin,
   getAdministradores,
   getEstudiantes,
+  getBootstrapAdmin,
   getInscripcionesEventos,
   patchEntregarKit,
   postCrearAdmin,
+  postReenviarCorreo,
+  postAsignarNumeroCorredor,
 };

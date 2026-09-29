@@ -14,7 +14,9 @@
     "semilla-admin": "node scripts/crear-admin-semilla.js",
     "verificar-admin": "node scripts/verificar-admin-semilla.js",
     "probar-correo": "node scripts/probar-correo.js",
-    "reenviar-correo": "node scripts/reenviar-correo-reclamo.js"
+    "reenviar-correo": "node scripts/reenviar-correo-reclamo.js",
+    "rellenar-nombre-busqueda": "node scripts/rellenar-nombre-busqueda.js",
+    "reiniciar-numero-corredor": "node scripts/reiniciar-numero-corredor.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

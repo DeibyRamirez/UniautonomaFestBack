@@ -1,25 +1,37 @@
 const { FieldValue } = require('firebase-admin/firestore');
 const { obtenerFirestore } = require('../config/firebase');
+const { esKitInstitucional } = require('../config/catalogoKits');
+const {
+  debeAsignarNumeroCorredor,
+  reservarNumeroEnTransaccion,
+} = require('../services/numeroCorredor.service');
+const {
+  normalizarTextoBusqueda,
+  camposBusquedaNombre,
+} = require('../utilidades/busquedaNombre');
 
 const COLECCION = 'payments';
 
-function serializarDocumento(id, datos) {
-  const createdAt = datos.createdAt?.toDate?.()
-    ? datos.createdAt.toDate().toISOString()
-    : datos.createdAt ?? null;
-  const claimedAt = datos.claimedAt?.toDate?.()
-    ? datos.claimedAt.toDate().toISOString()
-    : datos.claimedAt ?? null;
-  const emailEnviadoEn = datos.emailEnviadoEn?.toDate?.()
-    ? datos.emailEnviadoEn.toDate().toISOString()
-    : datos.emailEnviadoEn ?? null;
+function componentesCoinciden(a, b) {
+  const listaA = Array.isArray(a) ? [...a].sort() : [];
+  const listaB = Array.isArray(b) ? [...b].sort() : [];
+  if (listaA.length !== listaB.length) return false;
+  return listaA.every((valor, indice) => valor === listaB[indice]);
+}
 
+function fechaIso(valor) {
+  return valor?.toDate?.() ? valor.toDate().toISOString() : valor ?? null;
+}
+
+function serializarDocumento(id, datos) {
   return {
     id,
     ...datos,
-    createdAt,
-    claimedAt,
-    emailEnviadoEn,
+    createdAt: fechaIso(datos.createdAt),
+    claimedAt: fechaIso(datos.claimedAt),
+    emailEnviadoEn: fechaIso(datos.emailEnviadoEn),
+    aprobadoEn: fechaIso(datos.aprobadoEn),
+    alertaPagoEn: fechaIso(datos.alertaPagoEn),
   };
 }
 
@@ -30,10 +42,13 @@ async function crearPagoPendiente(datos) {
     reference: datos.reference,
     transactionId: null,
     personalInfo: datos.personalInfo,
+    ...camposBusquedaNombre(datos.personalInfo),
     kitType: datos.kitType,
+    kitComponents: datos.kitComponents || [],
     amount: datos.amount,
     status: 'PENDING',
     uniqueClaimCode: null,
+    numeroCorredor: null,
     kitClaimed: false,
     claimedAt: null,
     claimedByAdminEmail: null,
@@ -45,33 +60,69 @@ async function crearPagoPendiente(datos) {
   return { id: referencia.id, ...carga };
 }
 
-async function buscarPendienteReciente({ email, kitType, amount, ventanaMinutos = 30 }) {
+async function buscarPendienteReciente({
+  email,
+  kitType,
+  kitComponents = [],
+  amount,
+  ventanaMinutos = 30,
+}) {
   const db = obtenerFirestore();
   const limite = new Date(Date.now() - ventanaMinutos * 60 * 1000);
 
-  const consulta = await db
-    .collection(COLECCION)
-    .where('status', '==', 'PENDING')
-    .orderBy('createdAt', 'desc')
-    .limit(50)
-    .get();
+  let consulta;
+  try {
+    consulta = await db
+      .collection(COLECCION)
+      .where('personalInfo.email', '==', email)
+      .where('status', '==', 'PENDING')
+      .where('createdAt', '>=', limite)
+      .orderBy('createdAt', 'desc')
+      .limit(10)
+      .get();
+  } catch (error) {
+    if (!esIndiceFirestorePendiente(error)) throw error;
+    console.warn('[pagos] índice email+status en construcción; se crea un pago nuevo');
+    return null;
+  }
 
   for (const doc of consulta.docs) {
     const datos = doc.data();
     if (datos.kitType !== kitType || datos.amount !== amount) continue;
-    const creado = datos.createdAt?.toDate?.();
-    if (creado && creado.getTime() < limite.getTime()) continue;
-    const info = datos.personalInfo || {};
-    if (info.email === email) {
+    if (!componentesCoinciden(datos.kitComponents, kitComponents)) continue;
+    return serializarDocumento(doc.id, datos);
+  }
+  return null;
+}
+
+async function buscarPagoInstitucionalAprobado(email) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  if (!correo) return null;
+
+  const consulta = await db
+    .collection(COLECCION)
+    .where('status', '==', 'APPROVED')
+    .where('personalInfo.email', '==', correo)
+    .limit(20)
+    .get();
+
+  for (const doc of consulta.docs) {
+    const datos = doc.data();
+    if (esKitInstitucional(datos.kitType)) {
       return serializarDocumento(doc.id, datos);
     }
   }
   return null;
 }
 
-async function actualizarInformacionPendiente(id, { personalInfo }) {
+async function actualizarInformacionPendiente(id, { personalInfo, kitComponents }) {
   const db = obtenerFirestore();
-  await db.collection(COLECCION).doc(id).update({ personalInfo });
+  const actualizacion = { personalInfo, ...camposBusquedaNombre(personalInfo) };
+  if (kitComponents !== undefined) {
+    actualizacion.kitComponents = kitComponents;
+  }
+  await db.collection(COLECCION).doc(id).update(actualizacion);
 }
 
 async function marcarCorreoEnviado(id) {
@@ -109,20 +160,131 @@ async function obtenerPorId(id) {
   return serializarDocumento(doc.id, doc.data());
 }
 
-async function marcarAprobado(id, { transactionId, uniqueClaimCode }) {
+/**
+ * Aprueba el pago y, si aplica, le asigna número de corredor en una única transacción.
+ * Si dos procesos (webhook y confirmación del navegador) llegan a la vez, Firestore
+ * reintenta al perdedor, que entonces ve APPROVED y no reserva un segundo número.
+ */
+async function aprobarPagoAtomico(id, { transactionId, generarCodigo }) {
   const db = obtenerFirestore();
-  await db.collection(COLECCION).doc(id).update({
-    status: 'APPROVED',
-    transactionId,
-    uniqueClaimCode,
+  const refPago = db.collection(COLECCION).doc(id);
+
+  return db.runTransaction(async (transaccion) => {
+    const snapshot = await transaccion.get(refPago);
+    if (!snapshot.exists) {
+      return { aprobado: false, motivo: 'pago_no_encontrado' };
+    }
+
+    const datos = snapshot.data();
+    if (datos.status === 'APPROVED') {
+      return { aprobado: false, idempotente: true };
+    }
+
+    let reserva = null;
+    let numeroCorredorError = null;
+
+    if (debeAsignarNumeroCorredor(datos.kitType, datos.kitComponents)) {
+      try {
+        reserva = await reservarNumeroEnTransaccion(db, transaccion, {
+          paymentId: id,
+          reference: datos.reference,
+          email: datos.personalInfo?.email,
+        });
+      } catch (error) {
+        numeroCorredorError = error?.message || 'Error al asignar número de corredor';
+      }
+    }
+
+    const actualizacion = {
+      status: 'APPROVED',
+      transactionId: transactionId ?? null,
+      uniqueClaimCode: generarCodigo(),
+      aprobadoEn: FieldValue.serverTimestamp(),
+      numeroCorredor: reserva ? reserva.numero : null,
+      numeroCorredorError: numeroCorredorError
+        ? String(numeroCorredorError).slice(0, 500)
+        : null,
+    };
+
+    if (reserva) reserva.escribir();
+    transaccion.update(refPago, actualizacion);
+
+    return {
+      aprobado: true,
+      numeroCorredor: actualizacion.numeroCorredor,
+      numeroCorredorError: actualizacion.numeroCorredorError,
+    };
+  });
+}
+
+/**
+ * Reintenta asignar número a un pago aprobado que quedó sin número (p. ej. error transitorio).
+ */
+async function asignarNumeroPendiente(id) {
+  const db = obtenerFirestore();
+  const refPago = db.collection(COLECCION).doc(id);
+
+  return db.runTransaction(async (transaccion) => {
+    const snapshot = await transaccion.get(refPago);
+    if (!snapshot.exists) {
+      const err = new Error('Registro no encontrado');
+      err.codigo = 404;
+      throw err;
+    }
+
+    const datos = snapshot.data();
+    if (datos.status !== 'APPROVED') {
+      const err = new Error('Solo se asigna número a pagos aprobados');
+      err.codigo = 400;
+      throw err;
+    }
+    if (datos.numeroCorredor) {
+      return { numeroCorredor: datos.numeroCorredor, idempotente: true };
+    }
+    if (!debeAsignarNumeroCorredor(datos.kitType, datos.kitComponents)) {
+      const err = new Error('Este kit no incluye número de corredor');
+      err.codigo = 400;
+      throw err;
+    }
+
+    const reserva = await reservarNumeroEnTransaccion(db, transaccion, {
+      paymentId: id,
+      reference: datos.reference,
+      email: datos.personalInfo?.email,
+    });
+
+    reserva.escribir();
+    transaccion.update(refPago, {
+      numeroCorredor: reserva.numero,
+      numeroCorredorError: null,
+    });
+
+    return { numeroCorredor: reserva.numero };
   });
 }
 
 async function marcarRechazado(id, transactionId) {
   const db = obtenerFirestore();
+  const refPago = db.collection(COLECCION).doc(id);
+
+  return db.runTransaction(async (transaccion) => {
+    const snapshot = await transaccion.get(refPago);
+    if (!snapshot.exists || snapshot.data().status !== 'PENDING') {
+      return false;
+    }
+    transaccion.update(refPago, {
+      status: 'REJECTED',
+      transactionId: transactionId ?? null,
+    });
+    return true;
+  });
+}
+
+async function registrarAlertaPago(id, alerta) {
+  const db = obtenerFirestore();
   await db.collection(COLECCION).doc(id).update({
-    status: 'REJECTED',
-    transactionId: transactionId ?? null,
+    alertaPago: String(alerta).slice(0, 500),
+    alertaPagoEn: FieldValue.serverTimestamp(),
   });
 }
 
@@ -135,7 +297,7 @@ async function marcarEntregado(id, correoAdmin) {
   });
 }
 
-const LIMITE_FILAS_POR_PAGINA = 6;
+const LIMITE_FILAS_POR_PAGINA = 15;
 const LOTE_BUSQUEDA_FIRESTORE = 12;
 const MAX_LECTURAS_BUSQUEDA_NOMBRE = 20;
 const LIMITE_TERMINO_BUSQUEDA = 120;
@@ -143,17 +305,11 @@ const LIMITE_TERMINO_BUSQUEDA = 120;
 function coincideBusqueda(pago, termino) {
   if (!termino) return true;
   const info = pago.personalInfo || {};
-  const nombreCompleto = [
-    info.firstName,
-    info.secondName,
-    info.firstSurname,
-    info.secondSurname,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
+  const nombreCompleto = camposBusquedaNombre(info).nombreBusqueda;
   return (
-    nombreCompleto.includes(termino) ||
+    nombreCompleto.includes(normalizarTextoBusqueda(termino)) ||
+    String(info.documentNumber || '').includes(termino) ||
+    String(pago.numeroCorredor || '') === termino.padStart(3, '0') ||
     String(info.studentCode || '')
       .toLowerCase()
       .includes(termino) ||
@@ -178,9 +334,19 @@ function detectarEstrategiaBusqueda(termino) {
   if (/^unifest26-pay-/i.test(termino)) return 'reference';
   if (/^uaf26-pay-/i.test(termino)) return 'reference';
   if (/^uaf26-/i.test(termino)) return 'claimCode';
-  if (/^\d+$/.test(termino)) return 'studentCode';
-  return 'nombre';
+  if (/^\d{1,3}$/.test(termino)) return 'numeroCorredor';
+  if (/^\d+$/.test(termino)) return 'documento';
+  if (!/\s/.test(termino)) return 'nombrePalabra';
+  return 'nombrePrefijo';
 }
+
+// Si la búsqueda indexada no trae nada, se intenta otra: un número largo puede ser
+// código de estudiante, y registros antiguos pueden no tener los campos de nombre.
+const ESTRATEGIA_RESPALDO = {
+  documento: 'studentCode',
+  nombrePalabra: 'escaneo',
+  nombrePrefijo: 'escaneo',
+};
 
 function construirConsultaPagos(db, status) {
   if (status) {
@@ -211,6 +377,29 @@ function construirConsultaPagosIndexada(db, estrategia, termino) {
   if (estrategia === 'studentCode') {
     return coleccion
       .where('personalInfo.studentCode', '==', termino)
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'numeroCorredor') {
+    return coleccion
+      .where('numeroCorredor', '==', termino.padStart(3, '0'))
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'documento') {
+    return coleccion
+      .where('personalInfo.documentNumber', '==', termino)
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'nombrePalabra') {
+    return coleccion
+      .where('tokensNombre', 'array-contains', normalizarTextoBusqueda(termino))
+      .orderBy('createdAt', 'desc');
+  }
+  if (estrategia === 'nombrePrefijo') {
+    const prefijo = normalizarTextoBusqueda(termino);
+    return coleccion
+      .where('nombreBusqueda', '>=', prefijo)
+      .where('nombreBusqueda', '<=', `${prefijo}\uf8ff`)
+      .orderBy('nombreBusqueda')
       .orderBy('createdAt', 'desc');
   }
 
@@ -298,7 +487,7 @@ async function buscarPagosIndexado({
   filasPorPagina,
   cursor,
 }) {
-  if (estrategia === 'nombre') {
+  if (estrategia === 'escaneo') {
     return buscarPagosPorNombre({
       db,
       status,
@@ -335,6 +524,18 @@ async function buscarPagosIndexado({
     const pagina = datos.slice(0, filasPorPagina);
     const ultimoDoc = snapshot.docs[Math.min(filasPorPagina, snapshot.docs.length - 1)];
 
+    const respaldo = ESTRATEGIA_RESPALDO[estrategia];
+    if (!pagina.length && !cursor && respaldo) {
+      return buscarPagosIndexado({
+        db,
+        status,
+        estrategia: respaldo,
+        termino,
+        filasPorPagina,
+        cursor,
+      });
+    }
+
     return {
       datos: pagina,
       paginacion: {
@@ -370,7 +571,7 @@ async function listarPagos({
 }) {
   const db = obtenerFirestore();
   const limiteSolicitado = Number.parseInt(String(limite), 10);
-  const modoExportacion = !cursor && limiteSolicitado >= 100;
+  const modoExportacion = limiteSolicitado >= 100;
   const filasPorPagina = modoExportacion
     ? Math.min(500, limiteSolicitado)
     : Math.min(
@@ -381,8 +582,16 @@ async function listarPagos({
 
   if (modoExportacion) {
     let consultaExport = construirConsultaPagos(db, status);
-    const snapshot = await consultaExport.limit(filasPorPagina).get();
-    let datos = snapshot.docs.map((doc) => serializarDocumento(doc.id, doc.data()));
+    if (cursor) {
+      const docCursor = await db.collection(COLECCION).doc(String(cursor)).get();
+      if (docCursor.exists) {
+        consultaExport = consultaExport.startAfter(docCursor);
+      }
+    }
+    const snapshot = await consultaExport.limit(filasPorPagina + 1).get();
+    const docs = snapshot.docs.slice(0, filasPorPagina);
+    const hayMas = snapshot.size > filasPorPagina;
+    let datos = docs.map((doc) => serializarDocumento(doc.id, doc.data()));
     if (termino) {
       datos = datos.filter((pago) => coincideBusqueda(pago, termino));
     }
@@ -390,8 +599,8 @@ async function listarPagos({
       datos,
       paginacion: {
         limite: filasPorPagina,
-        hayMas: false,
-        cursorSiguiente: null,
+        hayMas,
+        cursorSiguiente: hayMas && docs.length ? docs[docs.length - 1].id : null,
         lecturasFirestore: snapshot.size,
       },
     };
@@ -438,11 +647,14 @@ async function listarPagos({
 module.exports = {
   crearPagoPendiente,
   buscarPendienteReciente,
+  buscarPagoInstitucionalAprobado,
   actualizarInformacionPendiente,
   buscarPorReferencia,
   obtenerPorId,
-  marcarAprobado,
+  aprobarPagoAtomico,
+  asignarNumeroPendiente,
   marcarRechazado,
+  registrarAlertaPago,
   marcarEntregado,
   marcarCorreoEnviado,
   registrarErrorCorreo,
