@@ -1,6 +1,6 @@
 # Docker — Uniautónoma Fest 2026
 
-Guía para ejecutar la plataforma completa (landing, checkout Wompi, registro de eventos en Firestore y correos con Resend) usando Docker.
+Guía para ejecutar la plataforma completa (landing, checkout Wompi, registro de eventos en Firestore y correos vía Resend o SMTP) usando Docker.
 
 ---
 
@@ -28,7 +28,7 @@ Guía para ejecutar la plataforma completa (landing, checkout Wompi, registro de
 | Node.js + Express | Firestore (Firebase) |
 | Landing (`index.html`, `js/`, `img/`) | Firebase Auth |
 | Checkout (`/checkout`) | Wompi (pagos + webhooks) |
-| Admin (`/admin`) | Resend (correos) |
+| Admin (`/admin`) | Resend o servidor SMTP (correos) |
 | Eventos (`/eventos`) | Reglas Firestore (desplegadas con Firebase CLI) |
 | API REST (`/api/*`) | |
 
@@ -41,12 +41,12 @@ Guía para ejecutar la plataforma completa (landing, checkout Wompi, registro de
 │  └─────────────┘  └──────────────┘  └───────┬───────┘  │
 └─────────────────────────────────────────────┼──────────┘
                                               │
-              ┌───────────────────────────────┼───────────────────────────────┐
-              │                               │                               │
-              ▼                               ▼                               ▼
-        ┌──────────┐                   ┌──────────┐                   ┌──────────┐
-        │ Firestore│                   │  Wompi   │                   │  Resend  │
-        └──────────┘                   └──────────┘                   └──────────┘
+              ┌───────────────────────────────┼───────────────────────────────┬───────────────┐
+              │                               │                               │               │
+              ▼                               ▼                               ▼               ▼
+        ┌──────────┐                   ┌──────────┐                   ┌──────────┐   ┌──────────┐
+        │ Firestore│                   │  Wompi   │                   │  Resend  │   │   SMTP   │
+        └──────────┘                   └──────────┘                   └──────────┘   └──────────┘
 ```
 
 ---
@@ -57,7 +57,7 @@ Guía para ejecutar la plataforma completa (landing, checkout Wompi, registro de
 2. Archivo `backend/.env` completo (copiar de `backend/.env.example`).
 3. Reglas Firestore desplegadas: `firebase deploy --only firestore`.
 4. Cuenta Wompi con llaves y webhook configurado.
-5. Cuenta Resend con dominio verificado (producción) o sandbox (pruebas).
+5. Proveedor de correo configurado: Resend (API) o SMTP (universidad / Mailtrap para pruebas).
 
 ---
 
@@ -76,9 +76,36 @@ Edita `backend/.env` con tus credenciales reales. Variables críticas:
 | `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` | Conexión a Firestore |
 | `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN` | Login del panel admin |
 | `WOMPI_PUBLIC_KEY`, `WOMPI_INTEGRITY_SECRET`, `WOMPI_EVENTS_SECRET` | Pagos y webhooks |
-| `RESEND_API_KEY`, `CORREO_REMITENTE` | Envío de correos |
+| `EMAIL_DRIVER` | Canal de correo: `resend` o `smtp` (tiene prioridad sobre `USO_RESEND`) |
+| `RESEND_API_KEY`, `CORREO_REMITENTE` | Envío vía Resend (cuando `EMAIL_DRIVER=resend`) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | Envío vía SMTP (cuando `EMAIL_DRIVER=smtp`) |
+| `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME` | Remitente SMTP |
+| `ENABLE_EMAIL_FALLBACK` | Si el canal principal falla, intenta el otro (`true`/`false`) |
 | `URL_BASE` | URL pública del sitio (enlaces en correos y callbacks) |
 | `PUERTO` | Puerto interno (3000 por defecto) |
+
+**Ejemplo SMTP (Mailtrap / universidad):**
+
+```env
+EMAIL_DRIVER=smtp
+SMTP_HOST=sandbox.smtp.mailtrap.io
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=tu_usuario
+SMTP_PASS=tu_password
+EMAIL_FROM_ADDRESS=no-reply@uniautonoma.edu.co
+EMAIL_FROM_NAME=Uniautónoma Fest
+```
+
+**Ejemplo Resend:**
+
+```env
+EMAIL_DRIVER=resend
+RESEND_API_KEY=re_...
+CORREO_REMITENTE=Uniautónoma Fest <fest@tudominio.com>
+```
+
+> Las variables SMTP se inyectan automáticamente vía `env_file: ./backend/.env` en `docker-compose.yml`. No hace falta modificar el Dockerfile ni abrir puertos adicionales (SMTP es conexión saliente).
 
 > **Importante:** En producción, `URL_BASE` debe ser la URL pública real (ej. `https://fest.uniautonoma.edu.co`), no `http://localhost:3000`.
 
@@ -145,7 +172,7 @@ El `package.json` de la raíz es para CI/Vercel. En Docker solo se instalan las 
 
 ### 4. Secretos en runtime, no en build
 
-Las credenciales (`FIREBASE_PRIVATE_KEY`, `WOMPI_*`, `RESEND_API_KEY`) se inyectan vía `env_file` en `docker-compose.yml`. Nunca se copian al build (`.dockerignore` excluye `.env`).
+Las credenciales (`FIREBASE_PRIVATE_KEY`, `WOMPI_*`, `RESEND_API_KEY`, `SMTP_*`) se inyectan vía `env_file` en `docker-compose.yml`. Nunca se copian al build (`.dockerignore` excluye `.env`).
 
 ### 5. Usuario no-root
 
@@ -183,7 +210,9 @@ Principios que aplican a cualquier aplicación, hoy y siempre:
 
 11. **URL pública y webhooks** — Servicios externos (Wompi) deben alcanzar tu host. En local, usa ngrok o similar para probar webhooks.
 
-12. **No dockerizar lo que ya es SaaS** — Firestore, Resend y Wompi siguen siendo externos. Docker solo empaqueta tu código.
+12. **No dockerizar lo que ya es SaaS** — Firestore, Wompi y el proveedor de correo (Resend o SMTP) siguen siendo externos. Docker solo empaqueta tu código.
+
+13. **SMTP es saliente** — El contenedor no expone puertos SMTP; solo conecta hacia el servidor externo (587, 465 o 2525). Verifica que el firewall del host permita tráfico saliente en esos puertos.
 
 ---
 
@@ -211,7 +240,8 @@ Opciones:
 
 - [ ] `URL_BASE` = URL canónica del sitio en producción
 - [ ] Wompi: llaves de producción y webhook apuntando al dominio real
-- [ ] Resend: dominio verificado y `CORREO_REMITENTE` con ese dominio
+- [ ] Correo: si usas Resend, dominio verificado y `CORREO_REMITENTE` con ese dominio; si usas SMTP, credenciales y `EMAIL_FROM_ADDRESS` válidos para el servidor institucional
+- [ ] `EMAIL_DRIVER` definido según el canal activo en producción
 - [ ] Firestore: reglas e índices desplegados
 - [ ] `FIREBASE_PRIVATE_KEY` con saltos de línea correctos (`\n` en el `.env`)
 - [ ] Firewall: solo puertos 80/443 expuestos (no 3000 directamente)
@@ -240,9 +270,27 @@ Causas comunes:
 
 ### Los correos no se envían
 
+Revisa el driver activo en los logs al arrancar: `[correo] driver activo: smtp` o `resend`.
+
+**Si `EMAIL_DRIVER=resend`:**
+
 - Revisa que `RESEND_API_KEY` esté configurada (sin ella verás un warning al arrancar).
 - En sandbox (`onboarding@resend.dev`), solo envía a correos permitidos (`RESEND_CORREO_SANDBOX`).
 - En producción, el dominio de `CORREO_REMITENTE` debe estar verificado en Resend.
+
+**Si `EMAIL_DRIVER=smtp`:**
+
+- Confirma `SMTP_HOST`, `SMTP_USER` y `SMTP_PASS` en `backend/.env`.
+- Puerto 587 o 2525 → `SMTP_SECURE=false`; puerto 465 → `SMTP_SECURE=true`.
+- En Mailtrap sandbox los correos no llegan a Gmail/Outlook; revísalos en el panel de Mailtrap.
+- Si ves `[correo] SMTP no disponible` al arrancar, el contenedor sigue vivo pero no enviará correos hasta corregir la configuración.
+
+**Probar envío dentro del contenedor:**
+
+```bash
+docker compose exec app npm run probar-correo -- tu@email.com
+docker compose exec app npm run probar-correo-evento -- tu@email.com Hackton
+```
 
 ### La landing carga pero la API falla
 
