@@ -675,7 +675,14 @@
           resumenHtml += '<br><strong>Componentes:</strong> ' + nombres;
         }
 
+        if (datos.retomandoPagoPendiente) {
+          resumenHtml =
+            '<p class="modal-compra__aviso">Tienes un pago pendiente con este correo. Continúa con Wompi para completarlo.</p>' +
+            resumenHtml;
+        }
+
         resumenPago.innerHTML = resumenHtml;
+        mostrarError('');
 
         mostrarPaso('pago');
         enviandoPago = false;
@@ -713,7 +720,7 @@
     rf.enlazarSoloTexto(formulario.firstSurname);
     rf.enlazarSoloTexto(formulario.secondSurname);
     rf.enlazarSoloNumeros(formulario.documentNumber);
-    rf.enlazarSoloNumeros(formulario.studentCode);
+    rf.enlazarCodigoEstudiante(formulario.studentCode);
   }
 
   enlazarRestriccionesFormulario();

@@ -48,13 +48,18 @@ async function intentarEnviarCorreoReclamo(pago, opciones = {}) {
     if (resultado?.omitido) {
       await pagosRepository.registrarErrorCorreo(
         pago.id,
-        'RESEND_API_KEY no configurada'
+        'Proveedor de correo no configurado'
       );
-      return { enviado: false, motivo: 'resend_no_configurado' };
+      return { enviado: false, motivo: 'correo_no_configurado' };
     }
 
     await pagosRepository.marcarCorreoEnviado(pago.id);
-    return { enviado: true, idResend: resultado?.data?.id };
+    return {
+      enviado: true,
+      idMensaje: resultado?.data?.id,
+      idResend: resultado?.data?.id,
+      proveedor: resultado?.provider,
+    };
   } catch (error) {
     const mensaje = error?.message || 'Error desconocido al enviar correo';
     console.error('[correo] error al enviar a', info.email, mensaje);

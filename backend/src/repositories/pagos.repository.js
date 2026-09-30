@@ -95,6 +95,47 @@ async function buscarPendienteReciente({
   return null;
 }
 
+async function buscarPendienteInstitucionalPorCorreo(email, { horasMaximas = null } = {}) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  if (!correo) return null;
+
+  let consulta = db
+    .collection(COLECCION)
+    .where('personalInfo.email', '==', correo)
+    .where('status', '==', 'PENDING')
+    .orderBy('createdAt', 'desc')
+    .limit(10);
+
+  if (horasMaximas != null && horasMaximas > 0) {
+    const limite = new Date(Date.now() - horasMaximas * 60 * 60 * 1000);
+    consulta = db
+      .collection(COLECCION)
+      .where('personalInfo.email', '==', correo)
+      .where('status', '==', 'PENDING')
+      .where('createdAt', '>=', limite)
+      .orderBy('createdAt', 'desc')
+      .limit(10);
+  }
+
+  let snapshot;
+  try {
+    snapshot = await consulta.get();
+  } catch (error) {
+    if (!esIndiceFirestorePendiente(error)) throw error;
+    console.warn('[pagos] índice email+status en construcción; no se reutiliza PENDING');
+    return null;
+  }
+
+  for (const doc of snapshot.docs) {
+    const datos = doc.data();
+    if (esKitInstitucional(datos.kitType)) {
+      return serializarDocumento(doc.id, datos);
+    }
+  }
+  return null;
+}
+
 async function buscarPagoInstitucionalAprobado(email) {
   const db = obtenerFirestore();
   const correo = String(email || '').trim().toLowerCase();
@@ -116,11 +157,20 @@ async function buscarPagoInstitucionalAprobado(email) {
   return null;
 }
 
-async function actualizarInformacionPendiente(id, { personalInfo, kitComponents }) {
+async function actualizarInformacionPendiente(
+  id,
+  { personalInfo, kitComponents, kitType, amount }
+) {
   const db = obtenerFirestore();
   const actualizacion = { personalInfo, ...camposBusquedaNombre(personalInfo) };
   if (kitComponents !== undefined) {
     actualizacion.kitComponents = kitComponents;
+  }
+  if (kitType !== undefined) {
+    actualizacion.kitType = kitType;
+  }
+  if (amount !== undefined) {
+    actualizacion.amount = amount;
   }
   await db.collection(COLECCION).doc(id).update(actualizacion);
 }
@@ -647,6 +697,7 @@ async function listarPagos({
 module.exports = {
   crearPagoPendiente,
   buscarPendienteReciente,
+  buscarPendienteInstitucionalPorCorreo,
   buscarPagoInstitucionalAprobado,
   actualizarInformacionPendiente,
   buscarPorReferencia,

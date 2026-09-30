@@ -8,6 +8,7 @@ const {
 } = require('../config/catalogoKits');
 const { esCiudadResidenciaValida } = require('./ciudadesColombia.service');
 const {
+  LIMITES,
   validarTextoNombre,
   validarSoloNumeros,
 } = require('../utilidades/validacionCamposFormulario');
@@ -61,7 +62,7 @@ function validarInformacionPersonal(personalInfo) {
   error = validarSoloNumeros(personalInfo.studentCode, {
     obligatorio: false,
     etiqueta: 'Código de estudiante',
-    max: 20,
+    max: LIMITES.codigoEstudiante,
   });
   if (error) return error;
 
@@ -107,7 +108,7 @@ function validarReglasKit(kitType, personalInfo, kitComponents) {
   if (definicion.requiereCodigoEstudiante) {
     const errorCodigo = validarSoloNumeros(personalInfo.studentCode, {
       etiqueta: 'Código de estudiante',
-      max: 20,
+      max: LIMITES.codigoEstudiante,
     });
     if (errorCodigo) return errorCodigo;
   }

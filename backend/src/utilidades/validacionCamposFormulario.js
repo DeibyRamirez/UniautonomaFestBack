@@ -4,7 +4,7 @@ const REGEX_SOLO_NUMEROS = /^\d+$/;
 const LIMITES = {
   nombre: 80,
   documento: 20,
-  codigoEstudiante: 20,
+  codigoEstudiante: 5,
 };
 
 function validarTextoNombre(valor, { obligatorio = true, etiqueta = 'Nombre' } = {}) {

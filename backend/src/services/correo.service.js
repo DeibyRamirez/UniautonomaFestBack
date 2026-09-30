@@ -1,11 +1,13 @@
-const { obtenerClienteResend, correoRemitente } = require('../config/resend');
 const { variablesEntorno } = require('../config/variablesEntorno');
 const { etiquetaKit } = require('../config/catalogoKits');
 const {
-  validarRemitenteResend,
-  extraerCorreoRemitente,
-} = require('../utilidades/validarRemitenteResend');
-const { traducirErrorResend } = require('../utilidades/traducirErrorResend');
+  validarRemitenteEmail,
+  obtenerCorreoRemitenteActivo,
+} = require('../utilidades/validarRemitenteEmail');
+const {
+  enviarCorreo,
+  resolverDriver,
+} = require('./email/email.factory');
 
 function escaparHtml(texto) {
   return String(texto)
@@ -100,19 +102,19 @@ async function enviarCorreoCodigoReclamo({
   idPago,
   reintentarTrasError,
 }) {
-  const errorRemitente = validarRemitenteResend(correoRemitente);
+  const errorRemitente = validarRemitenteEmail();
   if (errorRemitente) {
     throw new Error(errorRemitente);
   }
 
-  const cliente = obtenerClienteResend();
-  const remitenteCorreo = extraerCorreoRemitente(correoRemitente);
+  const remitenteCorreo = obtenerCorreoRemitenteActivo();
   const destinatarioOriginal = String(destinatario || '').trim();
   let destinatarioFinal = destinatarioOriginal;
   let correoCompradorOriginal = null;
 
   const bandejaSandbox = variablesEntorno.resend.correoSandbox;
   if (
+    resolverDriver() === 'resend' &&
     bandejaSandbox &&
     remitenteCorreo === 'onboarding@resend.dev' &&
     destinatarioOriginal.toLowerCase() !== bandejaSandbox.toLowerCase()
@@ -137,11 +139,6 @@ async function enviarCorreoCodigoReclamo({
     correoCompradorOriginal,
   });
 
-  if (!cliente) {
-    console.warn('[correo] RESEND_API_KEY no configurada; correo no enviado a', destinatario);
-    return { omitido: true };
-  }
-
   let claveIdempotencia =
     idPago != null
       ? `codigo-reclamo/${idPago}`
@@ -150,28 +147,35 @@ async function enviarCorreoCodigoReclamo({
     claveIdempotencia = `codigo-reclamo/${idPago}/reintento-${Date.now()}`;
   }
 
-  const resultado = await cliente.emails.send(
-    {
-      from: correoRemitente,
-      to: destinatarioFinal,
-      subject: `Tu código de reclamo ${codigoReclamo} — Uniautónoma Fest 2026`,
-      html,
-    },
-    { idempotencyKey: claveIdempotencia }
-  );
+  const resultado = await enviarCorreo({
+    to: destinatarioFinal,
+    subject: `Tu código de reclamo ${codigoReclamo} — Uniautónoma Fest 2026`,
+    html,
+    idempotencyKey: claveIdempotencia,
+  });
 
-  if (resultado?.error) {
-    throw new Error(traducirErrorResend(resultado.error.message));
+  if (resultado?.omitido) {
+    console.warn(
+      '[correo] proveedor no configurado; correo no enviado a',
+      destinatario
+    );
+    return { omitido: true };
+  }
+
+  if (!resultado.success) {
+    throw resultado.error || new Error('Error desconocido al enviar correo');
   }
 
   console.log(
     '[correo] enviado a',
     destinatarioFinal,
+    'via',
+    resultado.provider,
     'id=',
-    resultado?.data?.id || 'sin-id'
+    resultado.messageId || 'sin-id'
   );
 
-  return resultado;
+  return { data: { id: resultado.messageId }, provider: resultado.provider };
 }
 
 module.exports = {

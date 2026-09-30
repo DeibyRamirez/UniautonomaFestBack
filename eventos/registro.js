@@ -16,18 +16,27 @@
     'inscribir-feria': 'FeriaEmprendimiento',
   };
 
+  var DOMINIO_INSTITUCIONAL = '@uniautonoma.edu.co';
+  var MENSAJES_SOLO_UNIAUTONOMA = {
+    Hackton: 'El Hackatón es exclusivo para la comunidad uniautónoma.',
+    FeriaEmprendimiento:
+      'La Feria de Emprendimiento es exclusiva para la comunidad uniautónoma.',
+  };
+
   var METADATOS = {
     Hackton: {
       etiqueta: 'Registro · Hackatón',
       titulo: 'Inscripción al Hackatón',
-      descripcion: 'Desafío Uniautónomo · 20 de octubre · Sede Campestre El Aljibe',
+      descripcion:
+        'Desafío Uniautónomo · 20 de octubre · Sede Campestre El Aljibe · Exclusivo para estudiantes, docentes, administrativos y egresados uniautónomos.',
       textoBoton: 'Enviar inscripción',
       volverHash: '#programacion',
     },
     FeriaEmprendimiento: {
       etiqueta: 'Registro · Feria de emprendimiento',
       titulo: 'Registro para stand',
-      descripcion: '22 de octubre · Sede principal',
+      descripcion:
+        '22 de octubre · Sede principal · Exclusivo para estudiantes, docentes, administrativos y egresados uniautónomos.',
       textoBoton: 'Enviar registro',
       volverHash: '#programacion',
     },
@@ -39,11 +48,12 @@
       { nombre: 'apellidos', etiqueta: 'Apellidos *', tipo: 'text', requerido: true, autocomplete: 'family-name', soloTexto: true },
       {
         nombre: 'correoElectronico',
-        etiqueta: 'Correo electrónico *',
+        etiqueta: 'Correo institucional *',
         tipo: 'email',
         requerido: true,
         anchoCompleto: true,
         autocomplete: 'email',
+        placeholder: 'Correo institucional',
       },
       {
         nombre: 'programa',
@@ -58,7 +68,8 @@
         etiqueta: 'Código estudiantil',
         tipo: 'text',
         anchoCompleto: true,
-        soloNumeros: true,
+        codigoEstudiante: true,
+        placeholder: 'Ej. 18834',
       },
     ],
     FeriaEmprendimiento: [
@@ -88,10 +99,19 @@
       { nombre: 'telefono', etiqueta: 'Teléfono *', tipo: 'tel', requerido: true, autocomplete: 'tel' },
       {
         nombre: 'correoElectronico',
-        etiqueta: 'Correo electrónico *',
+        etiqueta: 'Correo institucional *',
         tipo: 'email',
         requerido: true,
         autocomplete: 'email',
+        placeholder: 'Correo institucional',
+      },
+      {
+        nombre: 'codigoEstudiantil',
+        etiqueta: 'Código estudiantil',
+        tipo: 'text',
+        anchoCompleto: true,
+        codigoEstudiante: true,
+        placeholder: 'Ej. 18834',
       },
       {
         nombre: 'emprendimientoMarca',
@@ -218,7 +238,9 @@
     if (definicion.soloTexto && window.RestriccionesFormulario) {
       window.RestriccionesFormulario.enlazarSoloTexto(control);
     }
-    if (definicion.soloNumeros && window.RestriccionesFormulario) {
+    if (definicion.codigoEstudiante && window.RestriccionesFormulario) {
+      window.RestriccionesFormulario.enlazarCodigoEstudiante(control);
+    } else if (definicion.soloNumeros && window.RestriccionesFormulario) {
       window.RestriccionesFormulario.enlazarSoloNumeros(control);
     }
 
@@ -271,6 +293,27 @@
     return datos;
   }
 
+  function validarCorreoInstitucional(correo, tipo) {
+    var normalizado = String(correo || '').trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizado)) {
+      return 'Correo electrónico inválido';
+    }
+    if (!normalizado.endsWith(DOMINIO_INSTITUCIONAL)) {
+      return MENSAJES_SOLO_UNIAUTONOMA[tipo] || 'Este evento es exclusivo para la comunidad uniautónoma.';
+    }
+    return null;
+  }
+
+  function validarCodigoEstudiantilOpcional(codigo) {
+    if (!window.RestriccionesFormulario) return null;
+    var error = window.RestriccionesFormulario.validarCodigoEstudiante(
+      codigo,
+      'Código estudiantil',
+      false
+    );
+    return error || null;
+  }
+
   function iniciar() {
     tipoEvento = resolverTipoEvento();
     if (!tipoEvento) {
@@ -289,6 +332,21 @@
       if (enviando) return;
 
       var boton = document.getElementById('boton-enviar-registro');
+      var datos = recogerDatos();
+
+      if (tipoEvento === 'Hackton' || tipoEvento === 'FeriaEmprendimiento') {
+        var errorCorreo = validarCorreoInstitucional(datos.correoElectronico, tipoEvento);
+        if (errorCorreo) {
+          mostrarError(errorCorreo);
+          return;
+        }
+        var errorCodigo = validarCodigoEstudiantilOpcional(datos.codigoEstudiantil);
+        if (errorCodigo) {
+          mostrarError(errorCodigo);
+          return;
+        }
+      }
+
       enviando = true;
       boton.disabled = true;
       boton.textContent = 'Enviando…';
@@ -301,7 +359,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             tipoEvento: tipoEvento,
-            datos: recogerDatos(),
+            datos: datos,
           }),
         },
         2,

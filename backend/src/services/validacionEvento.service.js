@@ -1,8 +1,15 @@
 const { SUBCOLECCIONES } = require('../repositories/eventos.repository');
+const { DOMINIO_INSTITUCIONAL } = require('../config/catalogoKits');
 const {
+  LIMITES,
   validarTextoNombre,
   validarSoloNumeros,
 } = require('../utilidades/validacionCamposFormulario');
+
+const MENSAJE_HACKTON_SOLO_UNIAUTONOMA =
+  'El Hackatón es exclusivo para la comunidad uniautónoma.';
+const MENSAJE_FERIA_SOLO_UNIAUTONOMA =
+  'La Feria de Emprendimiento es exclusiva para la comunidad uniautónoma.';
 
 const TIPOS_EVENTO = Object.keys(SUBCOLECCIONES);
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS', 'NIT'];
@@ -41,13 +48,16 @@ function validarDatosHackton(cuerpo) {
     error = validarSoloNumeros(codigoEstudiantil, {
       obligatorio: true,
       etiqueta: 'Código estudiantil',
-      max: 20,
+      max: LIMITES.codigoEstudiante,
     });
     if (error) return error;
   }
 
   const { error: errorCorreo, correo } = validarCorreo(cuerpo?.correoElectronico);
   if (errorCorreo) return errorCorreo;
+  if (!correo.endsWith(DOMINIO_INSTITUCIONAL)) {
+    return MENSAJE_HACKTON_SOLO_UNIAUTONOMA;
+  }
 
   return {
     nombres,
@@ -65,6 +75,7 @@ function validarDatosFeria(cuerpo) {
   const numeroDocumento = String(cuerpo?.numeroDocumento || '').trim();
   const telefono = String(cuerpo?.telefono || '').trim();
   const emprendimientoMarca = String(cuerpo?.emprendimientoMarca || '').trim();
+  const codigoEstudiantil = String(cuerpo?.codigoEstudiantil || '').trim();
 
   if (!nombre) return 'El nombre es obligatorio';
   if (!apellido) return 'El apellido es obligatorio';
@@ -82,8 +93,20 @@ function validarDatosFeria(cuerpo) {
   if (error) return error;
   if (!telefono) return 'El teléfono es obligatorio';
 
+  if (codigoEstudiantil) {
+    error = validarSoloNumeros(codigoEstudiantil, {
+      obligatorio: true,
+      etiqueta: 'Código estudiantil',
+      max: LIMITES.codigoEstudiante,
+    });
+    if (error) return error;
+  }
+
   const { error: errorCorreo, correo } = validarCorreo(cuerpo?.correoElectronico);
   if (errorCorreo) return errorCorreo;
+  if (!correo.endsWith(DOMINIO_INSTITUCIONAL)) {
+    return MENSAJE_FERIA_SOLO_UNIAUTONOMA;
+  }
 
   return {
     nombre,
@@ -93,6 +116,7 @@ function validarDatosFeria(cuerpo) {
     telefono,
     correoElectronico: correo,
     emprendimientoMarca: emprendimientoMarca || null,
+    codigoEstudiantil: codigoEstudiantil || null,
   };
 }
 
@@ -118,6 +142,8 @@ function validarInscripcionEvento(tipoEvento, datos) {
 module.exports = {
   TIPOS_EVENTO,
   TIPOS_DOCUMENTO,
+  MENSAJE_HACKTON_SOLO_UNIAUTONOMA,
+  MENSAJE_FERIA_SOLO_UNIAUTONOMA,
   validarTipoEvento,
   validarInscripcionEvento,
 };

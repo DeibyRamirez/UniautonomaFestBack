@@ -1,7 +1,9 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 
 const { variablesEntorno } = require('../src/config/variablesEntorno');
-const { enviarCorreoCodigoReclamo } = require('../src/services/correo.service');
+const {
+  enviarCorreoConfirmacionEvento,
+} = require('../src/services/correoEvento.service');
 const { resolverDriver } = require('../src/services/email/email.factory');
 const {
   mostrarAvisoMailtrapSandbox,
@@ -9,20 +11,23 @@ const {
 
 async function main() {
   const destinatario = process.argv[2];
+  const tipoEvento = process.argv[3] || 'Hackton';
+
   if (!destinatario) {
-    console.error('Uso: npm run probar-correo -- destino@correo.com');
+    console.error(
+      'Uso: npm run probar-correo-evento -- destino@correo.com [Hackton|FeriaEmprendimiento]'
+    );
     process.exit(1);
   }
 
   console.log(`[correo] driver=${resolverDriver()}`);
   mostrarAvisoMailtrapSandbox(variablesEntorno.email.smtp.host);
 
-  const resultado = await enviarCorreoCodigoReclamo({
+  const resultado = await enviarCorreoConfirmacionEvento({
     destinatario,
-    nombre: 'Prueba Fest',
-    codigoReclamo: 'UAF26-TEST01',
-    tipoKit: 'uniautonomo',
-    tallaCamiseta: 'M',
+    nombreDestinatario: 'Prueba Fest',
+    tipoEvento,
+    idInscripcion: `test-${Date.now()}`,
   });
 
   if (resultado?.omitido) {
@@ -31,7 +36,7 @@ async function main() {
   }
 
   console.log(
-    'Correo de prueba enviado:',
+    'Correo de evento enviado:',
     resultado?.data?.id,
     `(via ${resultado?.provider || resolverDriver()})`
   );
