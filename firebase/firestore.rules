@@ -26,7 +26,7 @@ service cloud.firestore {
     function esCodigoEstudiante(val) {
       return val == null
         || (val is string && val.size() == 0)
-        || (val is string && val.size() >= 1 && val.size() <= 20 && val.matches('^[0-9]+$'));
+        || (val is string && val.size() >= 1 && val.size() <= 5 && val.matches('^[0-9]+$'));
     }
 
     function esTipoDocumento(val) {

@@ -1,10 +1,12 @@
-const { obtenerClienteResend, correoRemitente } = require('../config/resend');
 const { variablesEntorno } = require('../config/variablesEntorno');
 const {
-  validarRemitenteResend,
-  extraerCorreoRemitente,
-} = require('../utilidades/validarRemitenteResend');
-const { traducirErrorResend } = require('../utilidades/traducirErrorResend');
+  validarRemitenteEmail,
+  obtenerCorreoRemitenteActivo,
+} = require('../utilidades/validarRemitenteEmail');
+const {
+  enviarCorreo,
+  resolverDriver,
+} = require('./email/email.factory');
 const eventosRepository = require('../repositories/eventos.repository');
 
 const TIMEOUT_CORREO_MS = 8000;
@@ -68,19 +70,19 @@ async function enviarCorreoConfirmacionEvento({
   tipoEvento,
   idInscripcion,
 }) {
-  const errorRemitente = validarRemitenteResend(correoRemitente);
+  const errorRemitente = validarRemitenteEmail();
   if (errorRemitente) {
     throw new Error(errorRemitente);
   }
 
-  const cliente = obtenerClienteResend();
-  const remitenteCorreo = extraerCorreoRemitente(correoRemitente);
+  const remitenteCorreo = obtenerCorreoRemitenteActivo();
   const destinatarioOriginal = String(destinatario || '').trim();
   let destinatarioFinal = destinatarioOriginal;
   let correoOriginalSandbox = null;
 
   const bandejaSandbox = variablesEntorno.resend.correoSandbox;
   if (
+    resolverDriver() === 'resend' &&
     bandejaSandbox &&
     remitenteCorreo === 'onboarding@resend.dev' &&
     destinatarioOriginal.toLowerCase() !== bandejaSandbox.toLowerCase()
@@ -95,28 +97,28 @@ async function enviarCorreoConfirmacionEvento({
     correoOriginalSandbox,
   });
 
-  if (!cliente) {
-    console.warn('[correo evento] RESEND_API_KEY no configurada; correo no enviado a', destinatario);
+  const claveIdempotencia = `evento/${tipoEvento}/${idInscripcion}`;
+
+  const resultado = await enviarCorreo({
+    to: destinatarioFinal,
+    subject: `¡Te esperamos! — ${METADATOS_EVENTO[tipoEvento]?.titulo || 'Uniautónoma Fest 2026'}`,
+    html,
+    idempotencyKey: claveIdempotencia,
+  });
+
+  if (resultado?.omitido) {
+    console.warn(
+      '[correo evento] proveedor no configurado; correo no enviado a',
+      destinatario
+    );
     return { omitido: true };
   }
 
-  const claveIdempotencia = `evento/${tipoEvento}/${idInscripcion}`;
-
-  const resultado = await cliente.emails.send(
-    {
-      from: correoRemitente,
-      to: destinatarioFinal,
-      subject: `¡Te esperamos! — ${METADATOS_EVENTO[tipoEvento]?.titulo || 'Uniautónoma Fest 2026'}`,
-      html,
-    },
-    { idempotencyKey: claveIdempotencia }
-  );
-
-  if (resultado?.error) {
-    throw new Error(traducirErrorResend(resultado.error.message));
+  if (!resultado.success) {
+    throw resultado.error || new Error('Error desconocido al enviar correo');
   }
 
-  return resultado;
+  return { data: { id: resultado.messageId }, provider: resultado.provider };
 }
 
 function nombreParaCorreo(tipoEvento, datos) {
@@ -164,13 +166,18 @@ async function intentarEnviarCorreoInscripcionEvento(inscripcion) {
       await eventosRepository.registrarErrorCorreo(
         tipoEvento,
         id,
-        'RESEND_API_KEY no configurada'
+        'Proveedor de correo no configurado'
       );
-      return { enviado: false, motivo: 'resend_no_configurado' };
+      return { enviado: false, motivo: 'correo_no_configurado' };
     }
 
     await eventosRepository.marcarCorreoEnviado(tipoEvento, id);
-    return { enviado: true, idResend: resultado?.data?.id };
+    return {
+      enviado: true,
+      idMensaje: resultado?.data?.id,
+      idResend: resultado?.data?.id,
+      proveedor: resultado?.provider,
+    };
   } catch (error) {
     const mensaje = error?.message || 'Error desconocido al enviar correo';
     console.error('[correo evento] error al enviar a', correo, mensaje);

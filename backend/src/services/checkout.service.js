@@ -1,7 +1,7 @@
 const pagosRepository = require('../repositories/pagos.repository');
 const configuracionWompi = require('../config/wompi');
 const { variablesEntorno } = require('../config/variablesEntorno');
-const { esKitInstitucional } = require('../config/catalogoKits');
+const { esKitInstitucional, DOMINIO_INSTITUCIONAL } = require('../config/catalogoKits');
 const {
   validarSolicitudCheckout,
   obtenerMontoCentavos,
@@ -16,7 +16,7 @@ const { intentarEnviarCorreoReclamo } = require('./correoReclamo.service');
 const { aplicarEstadoTransaccion } = require('./confirmacionPago.service');
 const { consultarTransaccionPorId } = require('./wompiTransaccion.service');
 
-function construirRespuestaInicio({ pago, reference, amount }) {
+function construirRespuestaInicio({ pago, reference, amount, retomandoPagoPendiente = false }) {
   const signatureIntegrity = calcularFirmaIntegridad({
     reference,
     amountInCents: amount,
@@ -31,7 +31,15 @@ function construirRespuestaInicio({ pago, reference, amount }) {
     signatureIntegrity,
     redirectUrl: `${variablesEntorno.urlBase}/`,
     checkoutUrl: configuracionWompi.urlCheckout,
+    retomandoPagoPendiente: Boolean(retomandoPagoPendiente),
   };
+}
+
+function esCheckoutInstitucional(kitType, email) {
+  return (
+    esKitInstitucional(kitType) ||
+    String(email || '').trim().toLowerCase().endsWith(DOMINIO_INSTITUCIONAL)
+  );
 }
 
 async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
@@ -53,13 +61,43 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
 
   const info = normalizarInformacionPersonal(personalInfo);
   const amount = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);
+  const esInstitucional = esCheckoutInstitucional(tipoNormalizado, info.email);
 
-  if (variablesEntorno.validarPagoUnicoInstitucional && esKitInstitucional(tipoNormalizado)) {
-    const pagoExistente = await pagosRepository.buscarPagoInstitucionalAprobado(info.email);
-    if (pagoExistente) {
+  if (esInstitucional) {
+    const pagoAprobado = await pagosRepository.buscarPagoInstitucionalAprobado(info.email);
+    if (pagoAprobado) {
       const err = new Error('Este correo ya tiene un kit registrado.');
       err.codigo = 409;
       throw err;
+    }
+
+    const pendienteInstitucional =
+      await pagosRepository.buscarPendienteInstitucionalPorCorreo(info.email, {
+        horasMaximas: variablesEntorno.pendingReutilizarHoras,
+      });
+
+    if (pendienteInstitucional) {
+      await pagosRepository.actualizarInformacionPendiente(pendienteInstitucional.id, {
+        personalInfo: info,
+        kitComponents: componentesNormalizados,
+        kitType: tipoNormalizado,
+        amount,
+      });
+
+      const pagoActualizado = {
+        ...pendienteInstitucional,
+        personalInfo: info,
+        kitComponents: componentesNormalizados,
+        kitType: tipoNormalizado,
+        amount,
+      };
+
+      return construirRespuestaInicio({
+        pago: pagoActualizado,
+        reference: pendienteInstitucional.reference,
+        amount,
+        retomandoPagoPendiente: true,
+      });
     }
   }
 
@@ -77,6 +115,8 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
     await pagosRepository.actualizarInformacionPendiente(pago.id, {
       personalInfo: info,
       kitComponents: componentesNormalizados,
+      kitType: tipoNormalizado,
+      amount,
     });
   } else {
     reference = generarReferenciaPago();

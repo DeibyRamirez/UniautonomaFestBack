@@ -14,9 +14,11 @@
     "semilla-admin": "node scripts/crear-admin-semilla.js",
     "verificar-admin": "node scripts/verificar-admin-semilla.js",
     "probar-correo": "node scripts/probar-correo.js",
+    "probar-correo-evento": "node scripts/probar-correo-evento.js",
     "reenviar-correo": "node scripts/reenviar-correo-reclamo.js",
     "rellenar-nombre-busqueda": "node scripts/rellenar-nombre-busqueda.js",
-    "reiniciar-numero-corredor": "node scripts/reiniciar-numero-corredor.js"
+    "reiniciar-numero-corredor": "node scripts/reiniciar-numero-corredor.js",
+    "limpiar-base-datos": "node scripts/limpiar-base-datos.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -24,6 +26,7 @@
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "firebase-admin": "^13.0.2",
+    "nodemailer": "^10.0.13",
     "resend": "^4.1.2"
   }
 }

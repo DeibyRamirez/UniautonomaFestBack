@@ -44,7 +44,7 @@ Documento de especificación funcional ampliada: [`Contexto.md`](Contexto.md).
 - **Kit Corredor (`general`)**: participantes externos; sin código estudiante.
 - **Montos (centavos COP)**: Sangre Azul `7_500_000` (75 000 COP), Corredor `8_000_000` (80 000 COP), configurables en `.env`.
 - **Código de reclamo**: formato `UAF26-XXXXX` al aprobar el pago.
-- **Anti-duplicados**: reutiliza checkout `PENDING` reciente mismo email+kit; confirmación idempotente si ya está `APPROVED`.
+- **Correo institucional**: bloquea solo si ya hay pago `APPROVED`; reutiliza el `PENDING` abierto más reciente al reintentar (sin límite de 30 min; opcional `PENDING_REUTILIZAR_HORAS`). Kits externos: reutiliza `PENDING` reciente mismo email+kit (30 min).
 
 ---
 

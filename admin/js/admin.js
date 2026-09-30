@@ -589,6 +589,7 @@ function actualizarCabeceraTablaEventos() {
         <th>Documento</th>
         <th>Teléfono</th>
         <th>Correo</th>
+        <th>Cód. estudiante</th>
         <th>Emprendimiento</th>
         <th>Estado correo</th>
         <th>Registro</th>
@@ -605,7 +606,7 @@ function estadoCorreoEvento(registro) {
 function renderizarTablaEventos(registros) {
   cuerpoTablaEventos.innerHTML = '';
   const esHackton = filtroTipoEvento.value === 'Hackton';
-  const columnas = esHackton ? 7 : 8;
+  const columnas = esHackton ? 7 : 9;
 
   if (!registros.length) {
     cuerpoTablaEventos.innerHTML =
@@ -632,6 +633,7 @@ function renderizarTablaEventos(registros) {
         ${celda(`${registro.tipoDocumento || '—'} ${registro.numeroDocumento || ''}`.trim())}
         ${celda(registro.telefono)}
         ${celda(registro.correoElectronico)}
+        ${celda(registro.codigoEstudiantil)}
         ${celda(registro.emprendimientoMarca)}
         ${celda(estadoCorreoEvento(registro))}
         ${celda(formatearFecha(registro.createdAt))}
@@ -722,6 +724,7 @@ function filasExcelFeria(registros) {
     NumeroDocumento: r.numeroDocumento || '',
     Telefono: r.telefono || '',
     Correo: r.correoElectronico || '',
+    CodigoEstudiantil: r.codigoEstudiantil || '',
     EmprendimientoMarca: r.emprendimientoMarca || '',
     CorreoEnviado: r.emailEnviadoEn || '',
     ErrorCorreo: r.emailError || '',
