@@ -4,7 +4,7 @@
       titulo: 'Kit Sangre Azul',
       descripcion: 'Estudiantes, docentes, administrativos y egresados. Usa tu correo institucional.',
       precioCentavos: 7500000,
-      requiereCodigoEstudiante: true,
+      requiereCodigoEstudiante: false,
       esPersonalizable: false,
     },
     general: {
@@ -18,7 +18,7 @@
       titulo: 'Arma tu kit uniautónomo',
       descripcion: 'Elige los componentes que deseas. Usa tu correo institucional.',
       precioCentavos: null,
-      requiereCodigoEstudiante: true,
+      requiereCodigoEstudiante: false,
       esPersonalizable: true,
     },
   };

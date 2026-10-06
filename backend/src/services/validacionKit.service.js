@@ -5,6 +5,10 @@ const {
   validarComponentes,
   obtenerPrecioKit,
   ordenarComponentes,
+  requiereTallaCamiseta,
+  esRolEstudiante,
+  esRolInstitucionalValido,
+  esCarreraValida,
 } = require('../config/catalogoKits');
 const { esCiudadResidenciaValida } = require('./ciudadesColombia.service');
 const {
@@ -15,6 +19,11 @@ const {
 
 const TALLAS_VALIDAS = ['S', 'M', 'L', 'XL'];
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS', 'NIT'];
+
+const MENSAJE_SOLO_UNIAUTONOMOS =
+  'Este kit es solo para la comunidad uniautónoma. Usa tu correo institucional';
+const MENSAJE_KIT_EXTERNO =
+  'Este kit es para participantes externos. Usa un correo personal o elige Kit Sangre Azul / Arma tu kit.';
 
 function validarTipoKit(kitType) {
   const definicion = obtenerDefinicionKit(kitType);
@@ -59,13 +68,6 @@ function validarInformacionPersonal(personalInfo) {
     return 'Selecciona un tipo de documento válido';
   }
 
-  error = validarSoloNumeros(personalInfo.studentCode, {
-    obligatorio: false,
-    etiqueta: 'Código de estudiante',
-    max: LIMITES.codigoEstudiante,
-  });
-  if (error) return error;
-
   if (!String(personalInfo.residenceCity || '').trim()) {
     return 'La ciudad de residencia es obligatoria';
   }
@@ -74,8 +76,55 @@ function validarInformacionPersonal(personalInfo) {
     return 'Selecciona una ciudad de residencia válida';
   }
 
-  if (!String(personalInfo.address || '').trim()) {
-    return 'La dirección es obligatoria';
+  return null;
+}
+
+function validarRolYCarreraInstitucional(kitType, personalInfo) {
+  const tipoNormalizado = normalizarKitType(kitType);
+  if (tipoNormalizado !== 'uniautonomo' && tipoNormalizado !== 'personalizado') {
+    return null;
+  }
+
+  const rol = String(personalInfo.participantRole || '').trim();
+  if (!rol) {
+    return 'Selecciona tu rol en la universidad';
+  }
+  if (!esRolInstitucionalValido(rol)) {
+    return 'Selecciona un rol válido';
+  }
+
+  if (esRolEstudiante(rol)) {
+    const errorCodigo = validarSoloNumeros(personalInfo.studentCode, {
+      obligatorio: true,
+      etiqueta: 'Código de estudiante',
+      max: LIMITES.codigoEstudiante,
+    });
+    if (errorCodigo) return errorCodigo;
+
+    const carrera = String(personalInfo.academicCareer || '').trim();
+    if (!carrera) {
+      return 'Selecciona tu carrera académica';
+    }
+    if (!esCarreraValida(carrera)) {
+      return 'Selecciona una carrera académica válida';
+    }
+  } else {
+    const codigo = String(personalInfo.studentCode || '').trim();
+    if (codigo) {
+      const errorCodigo = validarSoloNumeros(personalInfo.studentCode, {
+        etiqueta: 'Código de estudiante',
+        max: LIMITES.codigoEstudiante,
+      });
+      if (errorCodigo) return errorCodigo;
+    }
+  }
+
+  return null;
+}
+
+function validarTallaCamiseta(kitType, kitComponents, personalInfo) {
+  if (!requiereTallaCamiseta(kitType, kitComponents)) {
+    return null;
   }
 
   const talla = String(personalInfo.shirtSize || '').trim().toUpperCase();
@@ -94,23 +143,11 @@ function validarReglasKit(kitType, personalInfo, kitComponents) {
   const esInstitucional = email.endsWith(DOMINIO_INSTITUCIONAL);
 
   if (definicion.requiereCorreoInstitucional && !esInstitucional) {
-    return 'Correo electrónico inválido';
+    return MENSAJE_SOLO_UNIAUTONOMOS;
   }
 
   if (!definicion.requiereCorreoInstitucional && esInstitucional) {
-    return `El correo institucional no puede usarse para el kit externo. Usa un correo personal o elige un kit uniautónomo.`;
-  }
-
-  if (definicion.requiereCodigoEstudiante && !String(personalInfo.studentCode || '').trim()) {
-    return 'El código de estudiante es obligatorio para este kit';
-  }
-
-  if (definicion.requiereCodigoEstudiante) {
-    const errorCodigo = validarSoloNumeros(personalInfo.studentCode, {
-      etiqueta: 'Código de estudiante',
-      max: LIMITES.codigoEstudiante,
-    });
-    if (errorCodigo) return errorCodigo;
+    return MENSAJE_KIT_EXTERNO;
   }
 
   if (definicion.esPersonalizable) {
@@ -131,8 +168,17 @@ function normalizarKitComponents(kitComponents) {
   );
 }
 
-function normalizarInformacionPersonal(personalInfo) {
-  return {
+function normalizarInformacionPersonal(personalInfo, { kitType, kitComponents } = {}) {
+  const tipoNormalizado = kitType ? normalizarKitType(kitType) : null;
+  const esInstitucionalKit =
+    tipoNormalizado === 'uniautonomo' || tipoNormalizado === 'personalizado';
+
+  const rol = esInstitucionalKit
+    ? String(personalInfo.participantRole || '').trim()
+    : '';
+  const esEstudiante = esRolEstudiante(rol);
+
+  const info = {
     firstName: String(personalInfo.firstName).trim(),
     secondName: String(personalInfo.secondName || '').trim(),
     firstSurname: String(personalInfo.firstSurname).trim(),
@@ -140,11 +186,19 @@ function normalizarInformacionPersonal(personalInfo) {
     documentType: String(personalInfo.documentType).trim().toUpperCase(),
     documentNumber: String(personalInfo.documentNumber).trim(),
     residenceCity: String(personalInfo.residenceCity).trim(),
-    address: String(personalInfo.address).trim(),
+    address: String(personalInfo.address || '').trim(),
     email: String(personalInfo.email).trim().toLowerCase(),
-    studentCode: String(personalInfo.studentCode || '').trim(),
+    participantRole: rol,
+    academicCareer: esEstudiante ? String(personalInfo.academicCareer || '').trim() : '',
+    studentCode: esEstudiante ? String(personalInfo.studentCode || '').trim() : '',
     shirtSize: String(personalInfo.shirtSize || '').trim().toUpperCase(),
   };
+
+  if (kitType && !requiereTallaCamiseta(kitType, kitComponents || [])) {
+    info.shirtSize = '';
+  }
+
+  return info;
 }
 
 function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
@@ -156,10 +210,19 @@ function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
   error = validarInformacionPersonal(personalInfo);
   if (error) return error;
 
-  const infoNormalizada = normalizarInformacionPersonal(personalInfo);
   const componentesNormalizados = normalizarKitComponents(kitComponents);
+  const infoNormalizada = normalizarInformacionPersonal(personalInfo, {
+    kitType: tipoNormalizado,
+    kitComponents: componentesNormalizados,
+  });
 
   error = validarReglasKit(tipoNormalizado, infoNormalizada, componentesNormalizados);
+  if (error) return error;
+
+  error = validarRolYCarreraInstitucional(tipoNormalizado, infoNormalizada);
+  if (error) return error;
+
+  error = validarTallaCamiseta(tipoNormalizado, componentesNormalizados, infoNormalizada);
   if (error) return error;
 
   const monto = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);

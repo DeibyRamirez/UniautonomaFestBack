@@ -20,12 +20,19 @@
   const errorEl = document.getElementById('modal-compra-error');
   const campoCodigo = document.getElementById('campo-codigo-estudiante-compra');
   const inputCodigo = document.getElementById('compra-studentCode');
+  const campoRol = document.getElementById('campo-rol-institucional-compra');
+  const selectRol = document.getElementById('compra-participantRole');
+  const campoCarrera = document.getElementById('campo-carrera-estudiante-compra');
+  const selectCarrera = document.getElementById('compra-academicCareer');
+  const campoTalla = document.getElementById('campo-talla-camiseta-compra');
+  const selectTalla = document.getElementById('compra-shirtSize');
   const selectResidenceCity = document.getElementById('compra-residenceCity');
   const codigoMostrar = document.getElementById('codigo-reclamo-mostrar');
   const numeroCorredorBloque = document.getElementById('numero-corredor-mostrar');
   const numeroCorredorEtiqueta = document.getElementById('numero-corredor-etiqueta');
   const numeroCorredorValor = document.getElementById('numero-corredor-valor');
   const CLAVE_REFERENCIA_PENDIENTE = 'uaf26-pago-referencia';
+  const CLAVE_REFERENCIA_LOCAL = 'uaf26-pago-referencia-local';
   const textoConfirmacion = document.getElementById('texto-confirmacion');
   const textoConfirmacionExtra = document.getElementById('texto-confirmacion-extra');
   const indicadoresPaso = modal.querySelectorAll('[data-indicador-paso]');
@@ -93,15 +100,52 @@
     numeroCorredorBloque.hidden = false;
   }
 
+  function esNavegadorIncrustado() {
+    var ua = navigator.userAgent || '';
+    return /Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+  }
+
+  function mostrarAvisoNavegadorIncrustado() {
+    var aviso = document.getElementById('aviso-navegador-incrustado');
+    if (!aviso || !esNavegadorIncrustado()) return;
+
+    try {
+      if (sessionStorage.getItem('uaf26-aviso-navegador-cerrado') === '1') return;
+    } catch (e) {}
+
+    aviso.hidden = false;
+    document.body.classList.add('aviso-navegador-activo');
+
+    var btnCerrarAviso = document.getElementById('cerrar-aviso-navegador');
+    if (btnCerrarAviso) {
+      btnCerrarAviso.addEventListener('click', function () {
+        aviso.hidden = true;
+        document.body.classList.remove('aviso-navegador-activo');
+        try {
+          sessionStorage.setItem('uaf26-aviso-navegador-cerrado', '1');
+        } catch (e) {}
+      });
+    }
+  }
+
+  mostrarAvisoNavegadorIncrustado();
+
   function guardarReferenciaPendiente(reference) {
     try {
       sessionStorage.setItem(CLAVE_REFERENCIA_PENDIENTE, reference);
+    } catch (e) {}
+    try {
+      localStorage.setItem(CLAVE_REFERENCIA_LOCAL, reference);
     } catch (e) {}
   }
 
   function leerReferenciaPendiente() {
     try {
-      return sessionStorage.getItem(CLAVE_REFERENCIA_PENDIENTE);
+      var sesion = sessionStorage.getItem(CLAVE_REFERENCIA_PENDIENTE);
+      if (sesion) return sesion;
+    } catch (e) {}
+    try {
+      return localStorage.getItem(CLAVE_REFERENCIA_LOCAL);
     } catch (e) {
       return null;
     }
@@ -111,20 +155,40 @@
     try {
       sessionStorage.removeItem(CLAVE_REFERENCIA_PENDIENTE);
     } catch (e) {}
+    try {
+      localStorage.removeItem(CLAVE_REFERENCIA_LOCAL);
+    } catch (e) {}
+  }
+
+  function correoCompraTexto() {
+    if (datosPersonales && datosPersonales.email) {
+      return datosPersonales.email;
+    }
+    if (datosCheckout && datosCheckout.personalInfo && datosCheckout.personalInfo.email) {
+      return datosCheckout.personalInfo.email;
+    }
+    return 'el correo que registraste';
   }
 
   function mensajeEstadoCorreo(d) {
+    var correo = correoCompraTexto();
     if (d.emailEnviado) {
-      return 'También lo enviamos a tu correo.';
+      return 'También lo enviamos a ' + correo + '.';
     }
     if (d.emailError) {
       return (
-        'No pudimos enviar el correo (' +
+        'No pudimos enviar el correo a ' +
+        correo +
+        ' (' +
         d.emailError +
         '). Usa el código en pantalla; también puedes acercarte a sede con tu comprobante.'
       );
     }
-    return 'Si no llega el correo, revisa spam o usa este código en pantalla.';
+    return (
+      'Tu código también llegará a ' +
+      correo +
+      ' en unos minutos. Revisa spam si no lo ves. Puedes usar el código en pantalla sin esperar el correo.'
+    );
   }
 
   function bloquearScrollLanding() {
@@ -150,9 +214,76 @@
       titulo: tipo === 'general' ? 'Kit Corredor' : 'Kit Sangre Azul',
       descripcion: '',
       precioCentavos: tipo === 'general' ? 8000000 : 7500000,
-      requiereCodigoEstudiante: tipo !== 'general',
+      requiereCodigoEstudiante: false,
       esPersonalizable: tipo === 'personalizado',
     };
+  }
+
+  function kitIncluyeCarrera() {
+    if (tipoKit === 'uniautonomo') return true;
+    if (tipoKit === 'personalizado') {
+      return obtenerComponentesSeleccionados().indexOf('carrera') !== -1;
+    }
+    return false;
+  }
+
+  function actualizarCampoTallaCamiseta() {
+    if (!campoTalla || !selectTalla) return;
+    var visible = kitIncluyeCarrera();
+    campoTalla.hidden = !visible;
+    if (visible) {
+      selectTalla.setAttribute('required', 'required');
+    } else {
+      selectTalla.removeAttribute('required');
+      selectTalla.value = '';
+    }
+  }
+
+  function esKitInstitucionalModal() {
+    return tipoKit === 'uniautonomo' || tipoKit === 'personalizado';
+  }
+
+  function actualizarCamposInstitucionales() {
+    var esInstitucional = esKitInstitucionalModal();
+    if (campoRol && selectRol) {
+      campoRol.hidden = !esInstitucional;
+      if (esInstitucional) {
+        selectRol.setAttribute('required', 'required');
+      } else {
+        selectRol.removeAttribute('required');
+        selectRol.value = '';
+      }
+    }
+    if (!esInstitucional && campoCarrera && selectCarrera) {
+      campoCarrera.hidden = true;
+      selectCarrera.removeAttribute('required');
+      selectCarrera.value = '';
+    }
+    actualizarCamposPorRol();
+  }
+
+  function actualizarCamposPorRol() {
+    if (!campoCodigo || !inputCodigo) return;
+    var esInstitucional = esKitInstitucionalModal();
+    var esEstudiante = esInstitucional && selectRol && selectRol.value === 'Estudiante';
+
+    if (campoCarrera && selectCarrera) {
+      campoCarrera.hidden = !esEstudiante;
+      if (esEstudiante) {
+        selectCarrera.setAttribute('required', 'required');
+      } else {
+        selectCarrera.removeAttribute('required');
+        selectCarrera.value = '';
+      }
+    }
+
+    campoCodigo.hidden = !esEstudiante;
+    if (esEstudiante) {
+      inputCodigo.setAttribute('required', 'required');
+    } else {
+      inputCodigo.removeAttribute('required');
+      inputCodigo.value = '';
+    }
   }
 
   function formatearPrecio(centavos) {
@@ -261,6 +392,8 @@
         (seleccionados.length ? formatearPrecio(total) : 'Selecciona componentes') +
         '<small style="font-size:.45em;opacity:.7"> COP</small>';
     }
+
+    actualizarCampoTallaCamiseta();
   }
 
   function renderizarSelectorComponentes() {
@@ -318,13 +451,8 @@
         formatearPrecio(meta.precioCentavos) + '<small style="font-size:.45em;opacity:.7"> COP</small>';
     }
 
-    if (meta.requiereCodigoEstudiante) {
-      campoCodigo.hidden = false;
-      inputCodigo.setAttribute('required', 'required');
-    } else {
-      campoCodigo.hidden = true;
-      inputCodigo.removeAttribute('required');
-    }
+    actualizarCamposInstitucionales();
+    actualizarCampoTallaCamiseta();
 
     cargarCiudadesResidencia().catch(function (error) {
       mostrarError(error.message);
@@ -390,6 +518,12 @@
         residenceCity: formulario.residenceCity.value.trim(),
         address: formulario.address.value.trim(),
         email: formulario.email.value.trim(),
+        participantRole: formulario.participantRole
+          ? formulario.participantRole.value.trim()
+          : '',
+        academicCareer: formulario.academicCareer
+          ? formulario.academicCareer.value.trim()
+          : '',
         studentCode: formulario.studentCode.value.trim(),
         shirtSize: formulario.shirtSize.value,
       },
@@ -532,14 +666,32 @@
       if (!referenciaActual || intentos > maxIntentos) {
         detenerPolling();
         if (intentos > maxIntentos && codigoMostrar.hidden) {
+          textoConfirmacion.textContent = 'Tu pago está siendo confirmado…';
           textoConfirmacionExtra.textContent =
-            'Si ya pagaste, revisa tu correo en unos minutos o acércate a sede con tu comprobante.';
+            'En cuanto Wompi lo apruebe, enviaremos tu código de reclamo a ' +
+            correoCompraTexto() +
+            '. No necesitas volver a esta página. Revisa spam o acércate a sede con tu comprobante si pasan más de 10 minutos.';
         }
         return;
       }
 
       consultarEstadoPago().then(revisarEstado);
     }, 3000);
+  }
+
+  function esRedirectUrlValida(url) {
+    if (!url || typeof url !== 'string') return false;
+    var valor = url.trim();
+    if (!/^https:\/\//i.test(valor)) return false;
+    if (/localhost|127\.0\.0\.1|0\.0\.0\.0|IP_DEL_VPS|tu-dominio|example\.com/i.test(valor)) {
+      return false;
+    }
+    try {
+      var parsed = new URL(valor);
+      return Boolean(parsed.hostname);
+    } catch (error) {
+      return false;
+    }
   }
 
   function abrirWidgetWompi() {
@@ -562,7 +714,7 @@
           },
         };
 
-        if (datosCheckout.redirectUrl && datosCheckout.redirectUrl.indexOf('localhost') === -1) {
+        if (esRedirectUrlValida(datosCheckout.redirectUrl)) {
           opciones.redirectUrl = datosCheckout.redirectUrl;
         }
 
@@ -580,10 +732,16 @@
           var transaccion = extraerTransaccionWidget(resultado);
           if (transaccion && transaccion.status === 'APPROVED') {
             textoConfirmacion.textContent = '¡Pago recibido! Generando tu código…';
+            textoConfirmacionExtra.textContent =
+              'También lo enviaremos a ' + correoCompraTexto() + '.';
           } else if (transaccion && transaccion.id) {
             textoConfirmacion.textContent = 'Verificando tu pago con Wompi…';
+            textoConfirmacionExtra.textContent =
+              'Si cierras esta ventana, recibirás tu código en ' + correoCompraTexto() + '.';
           } else {
             textoConfirmacion.textContent = 'Confirmando tu pago…';
+            textoConfirmacionExtra.textContent =
+              'Tu código llegará a ' + correoCompraTexto() + ' en cuanto se confirme el pago.';
           }
 
           var promesaConfirmar = transaccion && transaccion.id
@@ -654,16 +812,19 @@
         datosCheckout = datos;
         datosPersonales = cuerpo.personalInfo;
         referenciaActual = datos.reference;
+        guardarReferenciaPendiente(datos.reference);
 
         var resumenHtml =
           '<strong>Kit:</strong> ' +
           metaKit(tipoKit).titulo +
           '<br><strong>Total:</strong> ' +
           formatearPrecio(datos.amountInCents) +
-          '<br><strong>Talla:</strong> ' +
-          cuerpo.personalInfo.shirtSize +
           '<br><strong>Correo:</strong> ' +
           cuerpo.personalInfo.email;
+
+        if (cuerpo.personalInfo.shirtSize) {
+          resumenHtml += '<br><strong>Talla:</strong> ' + cuerpo.personalInfo.shirtSize;
+        }
 
         if (tipoKit === 'personalizado' && cuerpo.kitComponents.length) {
           var componentes = obtenerComponentes();
@@ -725,6 +886,10 @@
 
   enlazarRestriccionesFormulario();
 
+  if (selectRol) {
+    selectRol.addEventListener('change', actualizarCamposPorRol);
+  }
+
   document.querySelectorAll('[data-abrir-compra]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var kit = btn.getAttribute('data-abrir-compra');
@@ -767,7 +932,8 @@
     codigoMostrar.hidden = true;
     mostrarNumeroCorredor(null);
     textoConfirmacion.textContent = 'Verificando tu pago con Wompi…';
-    textoConfirmacionExtra.textContent = '';
+    textoConfirmacionExtra.textContent =
+      'Si ya pagaste, tu código llegará al correo que usaste en la compra. No necesitas volver a Wompi.';
     mostrarError('');
     mostrarPaso('confirmacion');
     modal.hidden = false;

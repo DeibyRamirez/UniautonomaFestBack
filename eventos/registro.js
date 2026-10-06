@@ -1,4 +1,7 @@
 (function () {
+  var URL_INSCRIPCION_HACKTON =
+    'https://docs.google.com/forms/d/e/1FAIpQLSeAdbcxQUxFcYafIcMI2Hm0qIRkac7cDTABX54hJ-Wg63Os4w/viewform';
+
   var formulario = document.getElementById('formulario-evento');
   var etiqueta = document.getElementById('registro-etiqueta');
   var titulo = document.getElementById('registro-titulo');
@@ -318,6 +321,11 @@
     tipoEvento = resolverTipoEvento();
     if (!tipoEvento) {
       window.location.replace('/');
+      return;
+    }
+
+    if (tipoEvento === 'Hackton') {
+      window.location.replace(URL_INSCRIPCION_HACKTON);
       return;
     }
 

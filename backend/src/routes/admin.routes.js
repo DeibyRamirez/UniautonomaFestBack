@@ -9,6 +9,7 @@ const {
   postCrearAdmin,
   postReenviarCorreo,
   postAsignarNumeroCorredor,
+  postRegistroManual,
 } = require('../controllers/admin.controller');
 const { requireAuth } = require('../middlewares/requireAuth');
 const { requireAdmin } = require('../middlewares/requireAdmin');
@@ -30,5 +31,6 @@ router.post(
 );
 router.get('/admins', requireAuth, requireSuperAdmin, getAdministradores);
 router.post('/create-admin', requireAuth, requireSuperAdmin, postCrearAdmin);
+router.post('/students/registro-manual', requireAuth, requireSuperAdmin, postRegistroManual);
 
 module.exports = router;

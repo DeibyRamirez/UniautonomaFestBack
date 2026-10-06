@@ -17,10 +17,29 @@ const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
 const textoPaginaActual = document.getElementById('texto-pagina-actual');
 const pestanaFinanciera = document.getElementById('pestana-financiera');
 const pestanaEventos = document.getElementById('pestana-eventos');
+const pestanaRegistroManual = document.getElementById('pestana-registro-manual');
 const pestanaAdministradores = document.getElementById('pestana-administradores');
 const seccionFinanciera = document.getElementById('seccion-financiera');
 const seccionEventos = document.getElementById('seccion-eventos');
+const seccionRegistroManual = document.getElementById('seccion-registro-manual');
 const seccionAdministradores = document.getElementById('seccion-administradores');
+const botonExportar = document.getElementById('boton-exportar');
+const botonExportarEventos = document.getElementById('boton-exportar-eventos');
+const formularioRegistroManual = document.getElementById('formulario-registro-manual');
+const manualKitType = document.getElementById('manual-kit-type');
+const manualComponentes = document.getElementById('manual-componentes');
+const manualOrigenRegistro = document.getElementById('manual-origen-registro');
+const manualTransactionId = document.getElementById('manual-transaction-id');
+const manualCampoRol = document.getElementById('manual-campo-rol');
+const manualCampoCarrera = document.getElementById('manual-campo-carrera');
+const manualCampoCodigo = document.getElementById('manual-campo-codigo');
+const manualCampoTalla = document.getElementById('manual-campo-talla');
+const manualAcademicCareer = document.getElementById('manual-academicCareer');
+const manualParticipantRole = document.getElementById('manual-participantRole');
+const manualEnviarCorreoCheck = document.getElementById('manual-enviar-correo-check');
+const mensajeRegistroManual = document.getElementById('mensaje-registro-manual');
+const errorRegistroManual = document.getElementById('error-registro-manual');
+const selectManualCiudad = document.getElementById('manual-residenceCity');
 const filtroTipoEvento = document.getElementById('filtro-tipo-evento');
 const filtroBusquedaEventos = document.getElementById('filtro-busqueda-eventos');
 const errorPanelEventos = document.getElementById('error-panel-eventos');
@@ -65,7 +84,14 @@ function cargarLibreriaXlsx() {
 
 function mostrarCargandoTabla() {
   cuerpoTabla.innerHTML =
-    '<tr><td colspan="15">Cargando registros…</td></tr>';
+    '<tr><td colspan="18">Cargando registros…</td></tr>';
+}
+
+function aplicarPermisosSuperAdmin() {
+  if (botonExportar) botonExportar.hidden = !esSuperAdmin;
+  if (botonExportarEventos) botonExportarEventos.hidden = !esSuperAdmin;
+  if (pestanaRegistroManual) pestanaRegistroManual.hidden = !esSuperAdmin;
+  if (pestanaAdministradores) pestanaAdministradores.hidden = !esSuperAdmin;
 }
 
 let auth = null;
@@ -81,6 +107,23 @@ let cursoresInicioPaginaEventos = [null];
 let hayMasPaginasEventos = false;
 let registrosEventosCache = [];
 let eventosFiltrosCargados = '';
+
+const CARRERAS_ESTUDIANTE = [
+  'Gobierno y Relaciones Internacionales',
+  'Derecho',
+  'Entrenamiento Deportivo',
+  'Licenciatura en Educación Infantil',
+  'Ingeniería Civil',
+  'Ingeniería Energética',
+  'Finanzas y Negocios Internacionales',
+  'Administración de Empresas',
+  'Contaduría Pública',
+  'Matemáticas Aplicadas en Ciencia de Datos',
+  'Ingeniería Ambiental y de Saneamiento',
+  'Ingeniería Electrónica',
+  'Ingeniería de Software y computación',
+  'Otra (Postgrado, Especialización, Maestría)',
+];
 
 function mostrarError(elemento, texto) {
   elemento.textContent = texto || '';
@@ -150,7 +193,7 @@ async function leerJson(respuesta) {
 }
 
 function mostrarMensajeTabla(texto) {
-  cuerpoTabla.innerHTML = `<tr><td colspan="15">${escaparHtml(texto)}</td></tr>`;
+  cuerpoTabla.innerHTML = `<tr><td colspan="18">${escaparHtml(texto)}</td></tr>`;
 }
 
 function irALogin() {
@@ -160,14 +203,19 @@ function irALogin() {
 function activarPestana(nombre) {
   const esFinanciera = nombre === 'financiera';
   const esEventos = nombre === 'eventos';
+  const esRegistroManual = nombre === 'registro-manual';
   const esAdministradores = nombre === 'administradores';
 
   pestanaFinanciera.classList.toggle('activa', esFinanciera);
   pestanaEventos.classList.toggle('activa', esEventos);
+  if (pestanaRegistroManual) {
+    pestanaRegistroManual.classList.toggle('activa', esRegistroManual);
+  }
   pestanaAdministradores.classList.toggle('activa', esAdministradores);
 
   seccionFinanciera.hidden = !esFinanciera;
   seccionEventos.hidden = !esEventos;
+  if (seccionRegistroManual) seccionRegistroManual.hidden = !esRegistroManual;
   seccionAdministradores.hidden = !esAdministradores;
 
   if (esEventos) {
@@ -274,7 +322,7 @@ function renderizarTabla(registros) {
 
   if (registros.length === 0) {
     cuerpoTabla.innerHTML =
-      '<tr><td colspan="15">No hay registros con los filtros actuales.</td></tr>';
+      '<tr><td colspan="18">No hay registros con los filtros actuales.</td></tr>';
     return;
   }
 
@@ -305,11 +353,14 @@ function renderizarTabla(registros) {
       ${celda(info.residenceCity)}
       ${celda(info.address)}
       ${celda(info.email)}
+      ${celda(info.participantRole)}
+      ${celda(info.academicCareer)}
       ${celda(info.studentCode)}
       ${celda(info.shirtSize)}
       ${celda(textoNumero)}
       ${celda(etiquetaKit(registro.kitType, registro.kitComponents))}
       ${celda(formatearTarifa(registro))}
+      ${celda(formatearFecha(registro.createdAt))}
       ${celda(registro.uniqueClaimCode)}
       <td class="${claseEstado(registro.status)}">${escaparHtml(textoEstado)}</td>
       ${celda(estadoCorreo)}
@@ -376,7 +427,7 @@ async function cargarPerfilAdmin() {
     throw new Error(datos.mensaje || 'No se pudo cargar el perfil');
   }
   esSuperAdmin = Boolean(datos.esSuperAdmin);
-  pestanaAdministradores.hidden = !esSuperAdmin;
+  aplicarPermisosSuperAdmin();
 }
 
 function aplicarResultadoRegistros(datos) {
@@ -415,7 +466,7 @@ async function cargarBootstrapAdmin() {
   }
 
   esSuperAdmin = Boolean(datos.perfil?.esSuperAdmin);
-  pestanaAdministradores.hidden = !esSuperAdmin;
+  aplicarPermisosSuperAdmin();
   aplicarResultadoRegistros(datos);
 }
 
@@ -733,6 +784,10 @@ function filasExcelFeria(registros) {
 }
 
 async function exportarExcelEventos() {
+  if (!esSuperAdmin) {
+    mostrarError(errorPanelEventos, 'Exportación reservada a super administradores');
+    return;
+  }
   try {
     const XLSX = await cargarLibreriaXlsx();
     const [hackton, feria] = await Promise.all([
@@ -766,6 +821,10 @@ async function exportarExcelEventos() {
 }
 
 async function exportarExcel() {
+  if (!esSuperAdmin) {
+    mostrarError(errorPanel, 'Exportación reservada a super administradores');
+    return;
+  }
   try {
     const XLSX = await cargarLibreriaXlsx();
     const filasExport = await obtenerTodosParaExportar();
@@ -786,6 +845,8 @@ async function exportarExcel() {
         CiudadResidencia: info.residenceCity || '',
         Direccion: info.address || '',
         Correo: info.email,
+        'Quién eres': info.participantRole || '',
+        Carrera: info.academicCareer || '',
         CodigoEstudiante: info.studentCode,
         Talla: info.shirtSize,
         NumeroCorredor: r.numeroCorredor || '',
@@ -805,6 +866,8 @@ async function exportarExcel() {
         Entregado: r.kitClaimed ? 'Sí' : 'No',
         EntregadoPor: r.claimedByAdminEmail || '',
         FechaCreacion: r.createdAt || '',
+        RegistroManual: r.registroManual ? 'Sí' : 'No',
+        OrigenRegistro: r.origenRegistro || '',
       };
     });
 
@@ -896,6 +959,157 @@ filtroEstado.addEventListener('change', () => {
 });
 
 enlazarAlternarContrasena(inputContrasenaNuevoAdmin, botonVerContrasenaNuevoAdmin);
+
+async function poblarCiudadesManual() {
+  if (!selectManualCiudad) return;
+
+  const respuesta = await fetch('/api/config/ciudades');
+  const datos = await respuesta.json();
+  if (!respuesta.ok || !Array.isArray(datos.ciudades) || !datos.ciudades.length) {
+    selectManualCiudad.innerHTML =
+      '<option value="">No se pudieron cargar las ciudades</option>';
+    throw new Error('No se pudieron cargar las ciudades');
+  }
+
+  selectManualCiudad.innerHTML = '<option value="">Seleccionar</option>';
+  for (const ciudad of datos.ciudades) {
+    const etiqueta =
+      typeof ciudad === 'string' ? ciudad : ciudad.etiqueta || ciudad.nombre || '';
+    if (!etiqueta) continue;
+    const opcion = document.createElement('option');
+    opcion.value = etiqueta;
+    opcion.textContent = etiqueta;
+    selectManualCiudad.appendChild(opcion);
+  }
+  selectManualCiudad.disabled = false;
+}
+
+function poblarCarrerasManual() {
+  if (!manualAcademicCareer) return;
+  manualAcademicCareer.innerHTML = '<option value="">Seleccionar</option>';
+  for (const carrera of CARRERAS_ESTUDIANTE) {
+    const opcion = document.createElement('option');
+    opcion.value = carrera;
+    opcion.textContent = carrera;
+    manualAcademicCareer.appendChild(opcion);
+  }
+}
+
+function esKitInstitucionalManual(tipo) {
+  return tipo === 'uniautonomo' || tipo === 'personalizado';
+}
+
+function manualIncluyeCarrera() {
+  if (manualKitType.value === 'uniautonomo') return true;
+  if (manualKitType.value !== 'personalizado') return false;
+  return Array.from(
+    formularioRegistroManual.querySelectorAll('input[name="manualComponente"]:checked')
+  ).some((input) => input.value === 'carrera');
+}
+
+function actualizarFormularioManual() {
+  const esPersonalizado = manualKitType.value === 'personalizado';
+  const esInstitucional = esKitInstitucionalManual(manualKitType.value);
+  const esEstudiante = manualParticipantRole.value === 'Estudiante';
+
+  manualComponentes.hidden = !esPersonalizado;
+  manualTransactionId.hidden = manualOrigenRegistro.value !== 'WOMPI_EXTERNO';
+  manualCampoRol.hidden = !esInstitucional;
+  manualCampoCarrera.hidden = !esInstitucional || !esEstudiante;
+  manualCampoCodigo.hidden = !esInstitucional || !esEstudiante;
+  manualCampoTalla.hidden = !manualIncluyeCarrera();
+}
+
+function obtenerComponentesManual() {
+  return Array.from(
+    formularioRegistroManual.querySelectorAll('input[name="manualComponente"]:checked')
+  ).map((input) => input.value);
+}
+
+function construirPersonalInfoManual() {
+  const datos = new FormData(formularioRegistroManual);
+  const info = {
+    firstName: datos.get('firstName'),
+    secondName: datos.get('secondName') || '',
+    firstSurname: datos.get('firstSurname'),
+    secondSurname: datos.get('secondSurname') || '',
+    documentType: datos.get('documentType'),
+    documentNumber: datos.get('documentNumber'),
+    residenceCity: datos.get('residenceCity'),
+    address: datos.get('address') || '',
+    email: datos.get('email'),
+    participantRole: datos.get('participantRole') || '',
+    academicCareer: datos.get('academicCareer') || '',
+    studentCode: datos.get('studentCode') || '',
+    shirtSize: datos.get('shirtSize') || '',
+  };
+  return info;
+}
+
+function construirCuerpoRegistroManual() {
+  const kitType = manualKitType.value;
+  const kitComponents = kitType === 'personalizado' ? obtenerComponentesManual() : [];
+  return {
+    kitType,
+    kitComponents,
+    personalInfo: construirPersonalInfoManual(),
+  };
+}
+
+if (formularioRegistroManual) {
+  poblarCarrerasManual();
+  poblarCiudadesManual().catch((error) => {
+    mostrarError(errorRegistroManual, error.message);
+  });
+  actualizarFormularioManual();
+
+  manualKitType.addEventListener('change', actualizarFormularioManual);
+  manualOrigenRegistro.addEventListener('change', actualizarFormularioManual);
+  manualParticipantRole.addEventListener('change', actualizarFormularioManual);
+  formularioRegistroManual
+    .querySelectorAll('input[name="manualComponente"]')
+    .forEach((input) => input.addEventListener('change', actualizarFormularioManual));
+
+  formularioRegistroManual.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    mostrarError(errorRegistroManual, '');
+    mensajeRegistroManual.hidden = true;
+
+    const cuerpo = construirCuerpoRegistroManual();
+
+    try {
+      const respuesta = await fetchAdmin('/api/admin/students/registro-manual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...cuerpo,
+          origenRegistro: manualOrigenRegistro.value,
+          transactionId: formularioRegistroManual.transactionId?.value?.trim() || '',
+          notas: formularioRegistroManual.notas?.value?.trim() || '',
+          enviarCorreo: manualEnviarCorreoCheck.checked,
+        }),
+      });
+      const datos = await respuesta.json();
+      if (!respuesta.ok) throw new Error(datos.mensaje || 'No se pudo registrar');
+
+      mensajeRegistroManual.textContent =
+        `Registrado. Código: ${datos.dato?.uniqueClaimCode || '—'} · Núm. corredor: ${datos.dato?.numeroCorredor || '—'}`;
+      mensajeRegistroManual.hidden = false;
+      formularioRegistroManual.reset();
+      poblarCarrerasManual();
+      actualizarFormularioManual();
+      await obtenerRegistros({ reiniciar: true });
+    } catch (error) {
+      mostrarError(errorRegistroManual, error.message);
+    }
+  });
+}
+
+if (pestanaRegistroManual) {
+  pestanaRegistroManual.addEventListener('click', () => {
+    if (esSuperAdmin) activarPestana('registro-manual');
+  });
+}
 
 formularioCrearAdmin.addEventListener('submit', async (evento) => {
   evento.preventDefault();

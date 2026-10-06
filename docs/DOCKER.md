@@ -153,6 +153,78 @@ Abre en el navegador:
 | `docker compose ps` | Estado del contenedor y healthcheck |
 | `docker compose exec app npm run semilla-admin` | Crear admin semilla dentro del contenedor |
 | `docker compose exec app npm run probar-correo` | Probar envío de correo |
+| `docker compose exec app npm run probar-webhook` | Simular webhook Wompi firmado (entorno de pruebas) |
+| `docker compose exec app npm run probar-webhook-sin-firma` | Verificar que el webhook rechaza peticiones sin firma (401) |
+| `NODE_ENV=development docker compose up -d` | Levantar con logs de desarrollo (usa solo `backend/.env`) |
+
+---
+
+## Prueba del webhook Wompi (sandbox + ngrok)
+
+Usa **solo** `backend/.env` del entorno de pruebas. **Nunca** montes ni copies `backend/.env.real`.
+
+### Checklist previo
+
+- [ ] `backend/.env` con credenciales de **sandbox/test** (Firebase de pruebas, llaves Wompi test)
+- [ ] `WOMPI_EVENTS_SECRET` coincide con el Events Secret del dashboard Wompi (sandbox)
+- [ ] `WOMPI_PUBLIC_KEY` y `WOMPI_INTEGRITY_SECRET` del mismo entorno sandbox
+- [ ] Contenedor levantado: `docker compose up --build -d`
+- [ ] Health OK: `curl http://localhost:3000/api/health`
+
+### 1. Prueba automatizada local (sin ngrok)
+
+Desde el contenedor o con `npm run dev` en `backend/`:
+
+```bash
+# Rechazo sin firma (debe responder 401)
+docker compose exec app npm run probar-webhook-sin-firma
+
+# Flujo completo: crea PENDING → webhook APPROVED → consulta estado
+docker compose exec app npm run probar-webhook
+```
+
+Verifica en Firestore de **pruebas**: `status=APPROVED`, `uniqueClaimCode` presente, `emailEnviadoEn` o `emailError`.
+
+### 2. Exponer el webhook a Wompi con ngrok
+
+```bash
+ngrok http 3000
+```
+
+En el [dashboard de Wompi](https://comercios.wompi.co) (sandbox):
+
+1. **Desarrolladores → Eventos → URL de eventos**
+2. Registrar: `https://<subdominio-ngrok>.ngrok-free.app/api/payments/webhook`
+3. Guardar el **Events Secret** en `WOMPI_EVENTS_SECRET` del `.env` de pruebas
+4. Reiniciar contenedor: `docker compose up -d`
+
+### 3. Prueba manual end-to-end (simula Instagram)
+
+1. Abre `http://localhost:3000` o la URL ngrok
+2. Inicia compra de kit con tarjeta sandbox Wompi
+3. **Cierra el navegador o pestaña inmediatamente después de pagar** (no esperes el redirect)
+4. En Firestore de pruebas confirma:
+   - `payments/{id}.status` = `APPROVED`
+   - `uniqueClaimCode` generado (ej. `UAF26-XXXXX`)
+   - Correo en Mailtrap / Resend sandbox
+5. Revisa logs: `docker compose logs -f app | grep webhook`
+
+### 4. URLs del webhook propio
+
+| Entorno | URL |
+|---------|-----|
+| Local + ngrok | `https://<ngrok>/api/payments/webhook` |
+| Producción universidad | `https://uniautonomafest.uniautonoma.edu.co/api/payments/webhook` |
+
+No uses webhooks de otros proyectos (p. ej. Cloud Functions de `mvp-fast-service`).
+
+### 5. Antes de producción
+
+- [ ] `npm run probar-webhook` pasa en entorno de pruebas
+- [ ] Pago sandbox + cierre de browser → APPROVED vía webhook
+- [ ] Correo llega al sandbox configurado
+- [ ] Registrar webhook en Wompi **producción** con la URL real del servidor
+- [ ] `URL_BASE=https://uniautonomafest.uniautonoma.edu.co` solo en el servidor de producción
 
 ---
 
@@ -331,6 +403,7 @@ Compose recrea el contenedor con las nuevas variables. Un simple `restart` no re
 
 ## Referencias
 
+- Activar webhook Wompi (sandbox + producción): [`ACTIVAR-WEBHOOK-WOMPI.md`](ACTIVAR-WEBHOOK-WOMPI.md)
 - Documentación general del proyecto: [`../README.md`](../README.md)
 - Variables de entorno: [`../backend/.env.example`](../backend/.env.example)
 - API y endpoints: [`../backend/README.md`](../backend/README.md)

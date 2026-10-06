@@ -267,6 +267,8 @@ html.compra-scroll-lock iframe[src*="wompi"]{display:block;width:100%;min-height
 .form-compra-grid input:focus-visible,.form-compra-grid select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
 .modal-compra__error{color:#ff6b6b;font-size:14px;margin:12px 0 0;}
 .modal-compra__aviso{color:var(--cyan);font-size:14px;margin:0 0 14px;line-height:1.5;}
+.modal-compra__aviso--importante{border:1px solid var(--cyan);background:rgba(0,212,255,.1);padding:14px 16px;border-radius:2px;text-align:left;}
+.modal-compra__aviso--importante strong{color:var(--ink);}
 .modal-compra__exito{color:#4ade80;font-size:14px;margin:12px 0 0;line-height:1.5;}
 .modal-compra__wompi{text-align:center;padding:20px 0;}
 .modal-compra__wompi-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;}
@@ -328,9 +330,36 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
   .hero-content .claim{font-size:18px;} .hero-content .dates{font-size:11px;}
   .hero-cta .btn{--pad:12px 16px;font-size:13px;}
 }
+
+.aviso-navegador-incrustado{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:flex-start;gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;
+  background:linear-gradient(180deg,rgba(10,21,34,.98),rgba(10,21,34,.92));
+  border-bottom:1px solid var(--cyan);
+  color:var(--ink);font-size:14px;line-height:1.45;
+  box-shadow:0 8px 32px rgba(0,0,0,.45);
+}
+.aviso-navegador-incrustado[hidden]{display:none!important;}
+.aviso-navegador-incrustado strong{display:block;color:var(--cyan);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.aviso-navegador-incrustado p{margin:0;flex:1;}
+.aviso-navegador-incrustado button{
+  flex-shrink:0;border:1px solid var(--line);background:transparent;color:var(--ink-2);
+  width:36px;height:36px;font-size:20px;line-height:1;cursor:pointer;border-radius:4px;
+}
+body.aviso-navegador-activo{padding-top:calc(env(safe-area-inset-top,0px) + 72px);}
+body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
 </style>
 </head>
 <body>
+
+<div id="aviso-navegador-incrustado" class="aviso-navegador-incrustado" role="status" hidden>
+  <p>
+    <strong>Compra segura</strong>
+    Estás viendo esta página dentro de Instagram o Facebook. Para pagar sin problemas, toca ⋮ y elige <strong>Abrir en navegador externo</strong> (Safari o Chrome). Tras pagar recibirás tu código por correo aunque cierres Wompi.
+  </p>
+  <button type="button" id="cerrar-aviso-navegador" aria-label="Cerrar aviso">&times;</button>
+</div>
 
 <nav class="nav" id="nav" aria-label="Principal">
   <a href="#top" aria-label="Uniautónoma del Cauca"><img src="img/logo_uac.webp" alt="Uniautónoma del Cauca"></a>
@@ -461,7 +490,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
         <div class="time">9:00 AM<small>hasta 4:00 PM</small></div>
         <div><h3>Desafío Uniautónomo</h3><p class="sub">Actividades lúdicas y deportivas, y el Hackatón. Exclusivo para la comunidad uniautónoma.</p>
           <div class="meta"><span>Sede Campestre El Aljibe</span></div>
-          <div class="cta"><a class="btn sm" id="inscribir-hackton" href="/eventos/?evento=Hackton&amp;desde=inscribir-hackton"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
+          <div class="cta"><a class="btn sm" id="inscribir-hackton" href="https://docs.google.com/forms/d/e/1FAIpQLSeAdbcxQUxFcYafIcMI2Hm0qIRkac7cDTABX54hJ-Wg63Os4w/viewform" target="_blank" rel="noopener noreferrer"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
       </article>
     </div>
 
@@ -474,7 +503,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
         <div class="time">6:00 PM<small>Miércoles 21 de octubre</small></div>
         <div><h3>Carrera 5K</h3><p class="sub">Corre con la U por Popayán.</p>
           <div class="meta"><span>Salida: sede principal</span><span>Meta: Parque de la Salud</span></div>
-          <!-- <div class="mapa-5k" id="mapaCarrera5k" role="region" aria-label="Mapa de salida y meta de la Carrera 5K">
+          <div class="mapa-5k" id="mapaCarrera5k" role="region" aria-label="Mapa de salida y meta de la Carrera 5K">
             <div class="mapa-5k__contenedor" id="mapaCarrera5kContenedor" tabindex="0" aria-describedby="mapaCarrera5kLeyenda"></div>
             <div class="mapa-5k__leyenda" id="mapaCarrera5kLeyenda">
               <span class="mapa-5k__punto mapa-5k__punto--salida">
@@ -484,7 +513,7 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
                 <a href="https://www.google.com/maps/place/Parque+de+la+Salud/@2.4551328,-76.5920287,17z" target="_blank" rel="noopener noreferrer">Meta · Parque de la Salud</a>
               </span>
             </div>
-          </div> -->
+          </div>
           <div class="cta"><a class="btn sm" href="#"><i class="tick"></i>Inscribirme a la 5K</a></div></div>
       </article>
     </div>
@@ -681,20 +710,50 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
           </select>
         </div>
         <div class="ancho-completo">
-          <label for="compra-address">Dirección *</label>
-          <input id="compra-address" name="address" autocomplete="street-address" required>
+          <label for="compra-address">Dirección</label>
+          <input id="compra-address" name="address" autocomplete="street-address">
         </div>
         <div class="ancho-completo">
           <label for="compra-email">Correo electrónico *</label>
           <input id="compra-email" name="email" type="email" autocomplete="email" required>
         </div>
-        <div id="campo-codigo-estudiante-compra">
+        <div id="campo-rol-institucional-compra" class="ancho-completo" hidden>
+          <label for="compra-participantRole">¿Quién eres en la universidad? *</label>
+          <select id="compra-participantRole" name="participantRole">
+            <option value="">Seleccionar</option>
+            <option value="Estudiante">Estudiante</option>
+            <option value="Docente">Docente</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Egresado">Egresado</option>
+          </select>
+        </div>
+        <div id="campo-carrera-estudiante-compra" class="ancho-completo" hidden>
+          <label for="compra-academicCareer">Carrera *</label>
+          <select id="compra-academicCareer" name="academicCareer">
+            <option value="">Seleccionar</option>
+            <option value="Gobierno y Relaciones Internacionales">Gobierno y Relaciones Internacionales</option>
+            <option value="Derecho">Derecho</option>
+            <option value="Entrenamiento Deportivo">Entrenamiento Deportivo</option>
+            <option value="Licenciatura en Educación Infantil">Licenciatura en Educación Infantil</option>
+            <option value="Ingeniería Civil">Ingeniería Civil</option>
+            <option value="Ingeniería Energética">Ingeniería Energética</option>
+            <option value="Finanzas y Negocios Internacionales">Finanzas y Negocios Internacionales</option>
+            <option value="Administración de Empresas">Administración de Empresas</option>
+            <option value="Contaduría Pública">Contaduría Pública</option>
+            <option value="Matemáticas Aplicadas en Ciencia de Datos">Matemáticas Aplicadas en Ciencia de Datos</option>
+            <option value="Ingeniería Ambiental y de Saneamiento">Ingeniería Ambiental y de Saneamiento</option>
+            <option value="Ingeniería Electrónica">Ingeniería Electrónica</option>
+            <option value="Ingeniería de Software y computación">Ingeniería de Software y computación</option>
+            <option value="Otra (Postgrado, Especialización, Maestría)">Otra (Postgrado, Especialización, Maestría)</option>
+          </select>
+        </div>
+        <div id="campo-codigo-estudiante-compra" hidden>
           <label for="compra-studentCode">Código de estudiante *</label>
           <input id="compra-studentCode" name="studentCode" inputmode="numeric" maxlength="5" placeholder="Ej. 18834">
         </div>
-        <div>
+        <div id="campo-talla-camiseta-compra" hidden>
           <label for="compra-shirtSize">Talla camiseta *</label>
-          <select id="compra-shirtSize" name="shirtSize" required>
+          <select id="compra-shirtSize" name="shirtSize">
             <option value="">Seleccionar</option>
             <option value="S">S</option>
             <option value="M">M</option>
@@ -712,7 +771,8 @@ footer .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
       <div class="modal-compra__wompi">
         <div class="modal-compra__wompi-badge">Pago seguro con Wompi</div>
         <div class="modal-compra__resumen" id="resumen-pago-wompi"></div>
-        <p class="muted" style="margin-bottom:16px">Al continuar se abrirá la pasarela oficial de Wompi. No almacenamos datos de tarjeta.</p>
+        <p class="muted" style="margin-bottom:12px">Al continuar se abrirá la pasarela oficial de Wompi. No almacenamos datos de tarjeta.</p>
+        <p class="modal-compra__aviso modal-compra__aviso--importante" id="aviso-correo-post-pago"><strong>¡Importante!</strong> Cuando Wompi confirme tu pago, verás el botón <strong>«Regresar al comercio»</strong>. <strong>Pulsa ese botón sí o sí</strong> para volver aquí y completar tu inscripción; si cierras Wompi sin hacerlo, tu registro puede quedar pendiente. También recibirás el código por correo.</p>
         <button type="button" class="btn solid" id="boton-abrir-wompi" style="width:100%;max-width:320px;justify-content:center;margin:0 auto"><i class="tick"></i>Pagar con Wompi</button>
       </div>
     </div>
