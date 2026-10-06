@@ -2,6 +2,25 @@ const { variablesEntorno } = require('./variablesEntorno');
 
 const DOMINIO_INSTITUCIONAL = '@uniautonoma.edu.co';
 
+const ROLES_INSTITUCIONALES = ['Estudiante', 'Docente', 'Administrativo', 'Egresado'];
+
+const CARRERAS_ESTUDIANTE = [
+  'Gobierno y Relaciones Internacionales',
+  'Derecho',
+  'Entrenamiento Deportivo',
+  'Licenciatura en Educación Infantil',
+  'Ingeniería Civil',
+  'Ingeniería Energética',
+  'Finanzas y Negocios Internacionales',
+  'Administración de Empresas',
+  'Contaduría Pública',
+  'Matemáticas Aplicadas en Ciencia de Datos',
+  'Ingeniería Ambiental y de Saneamiento',
+  'Ingeniería Electrónica',
+  'Ingeniería de Software y computación',
+  'Otra (Postgrado, Especialización, Maestría)',
+];
+
 const COMPONENTES = {
   carrera: {
     id: 'carrera',
@@ -31,7 +50,7 @@ const KITS = {
       'Estudiantes, docentes, administrativos y egresados. Usa tu correo institucional.',
     precioCentavos: () => variablesEntorno.montos.uniautonomo,
     requiereCorreoInstitucional: true,
-    requiereCodigoEstudiante: true,
+    requiereCodigoEstudiante: false,
     esPersonalizable: false,
   },
   general: {
@@ -60,7 +79,7 @@ const KITS = {
       'Elige los componentes que deseas. Usa tu correo institucional.',
     precioCentavos: null,
     requiereCorreoInstitucional: true,
-    requiereCodigoEstudiante: true,
+    requiereCodigoEstudiante: false,
     esPersonalizable: true,
   },
 };
@@ -87,6 +106,35 @@ function obtenerDefinicionKit(kitType) {
 function esKitInstitucional(kitType) {
   const definicion = obtenerDefinicionKit(kitType);
   return Boolean(definicion?.requiereCorreoInstitucional);
+}
+
+function esRolEstudiante(rol) {
+  return String(rol || '').trim() === 'Estudiante';
+}
+
+function esRolInstitucionalValido(rol) {
+  return ROLES_INSTITUCIONALES.includes(String(rol || '').trim());
+}
+
+function esCarreraValida(carrera) {
+  return CARRERAS_ESTUDIANTE.includes(String(carrera || '').trim());
+}
+
+function tituloComponente(componenteId) {
+  return COMPONENTES[componenteId]?.titulo || componenteId;
+}
+
+/** Talla de camiseta: kit uniautónomo completo o kit personalizado con componente carrera. */
+function requiereTallaCamiseta(kitType, kitComponents = []) {
+  const tipo = normalizarKitType(kitType);
+  if (tipo === 'uniautonomo') return true;
+  if (tipo === 'personalizado') {
+    const componentes = Array.isArray(kitComponents)
+      ? kitComponents.map((c) => String(c || '').trim()).filter(Boolean)
+      : [];
+    return componentes.includes('carrera');
+  }
+  return false;
 }
 
 function ordenarComponentes(kitComponents) {
@@ -170,11 +218,18 @@ function etiquetaKit(tipoKit, kitComponents) {
 
 module.exports = {
   DOMINIO_INSTITUCIONAL,
+  ROLES_INSTITUCIONALES,
+  CARRERAS_ESTUDIANTE,
   COMPONENTES,
   KITS,
   normalizarKitType,
   obtenerDefinicionKit,
   esKitInstitucional,
+  esRolEstudiante,
+  esRolInstitucionalValido,
+  esCarreraValida,
+  tituloComponente,
+  requiereTallaCamiseta,
   ordenarComponentes,
   validarComponentes,
   obtenerPrecioKit,

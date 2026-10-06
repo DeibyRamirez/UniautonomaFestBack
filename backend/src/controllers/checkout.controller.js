@@ -3,6 +3,8 @@ const {
   obtenerEstadoCheckout,
   confirmarPagoCheckout,
 } = require('../services/checkout.service');
+const { variablesEntorno } = require('../config/variablesEntorno');
+const { resolverUrlPublica } = require('../utilidades/resolverUrlPublica');
 
 async function getEstadoCheckout(req, res) {
   try {
@@ -36,7 +38,16 @@ async function postConfirmarCheckout(req, res) {
 async function postIniciarCheckout(req, res) {
   try {
     const { kitType, kitComponents, personalInfo } = req.body;
-    const resultado = await iniciarCheckout({ kitType, kitComponents, personalInfo });
+    const urlBase = resolverUrlPublica({
+      urlBaseEnv: variablesEntorno.urlBase,
+      req,
+    });
+    const resultado = await iniciarCheckout({
+      kitType,
+      kitComponents,
+      personalInfo,
+      urlBase,
+    });
     return res.status(201).json(resultado);
   } catch (error) {
     const codigo = error.codigo || 500;

@@ -29,6 +29,9 @@
       <button type="button" id="pestana-eventos" class="admin-pestana" data-pestana="eventos">
         Eventos
       </button>
+      <button type="button" id="pestana-registro-manual" class="admin-pestana" data-pestana="registro-manual" hidden>
+        Registro manual
+      </button>
       <button type="button" id="pestana-administradores" class="admin-pestana" data-pestana="administradores" hidden>
         Administradores
       </button>
@@ -66,11 +69,14 @@
               <th>Ciudad</th>
               <th>Dirección</th>
               <th>Correo</th>
+              <th>Rol</th>
+              <th>Carrera</th>
               <th>Cód. estudiante</th>
               <th>Talla</th>
               <th>Núm. corredor</th>
               <th>Kit</th>
               <th>Tarifa</th>
+              <th>Fecha</th>
               <th>Código reclamo</th>
               <th>Pago</th>
               <th>Estado Correo</th>
@@ -132,6 +138,125 @@
         <span id="texto-pagina-actual-eventos" class="texto-pagina">Página 1</span>
         <button type="button" id="boton-pagina-siguiente-eventos" class="boton-pagina" aria-label="Página siguiente">&gt;</button>
       </nav>
+    </section>
+
+    <section id="seccion-registro-manual" class="admin-seccion" hidden aria-labelledby="pestana-registro-manual">
+      <p class="admin-seccion__subtitulo">Alta manual de participantes ya pagados (efectivo, cortesía o Wompi externo)</p>
+
+      <form id="formulario-registro-manual" class="formulario-crear-admin">
+        <div class="campo-inline">
+          <label for="manual-kit-type">Tipo de kit</label>
+          <select id="manual-kit-type" name="kitType" required>
+            <option value="uniautonomo">Kit Sangre Azul</option>
+            <option value="personalizado">Arma tu kit</option>
+            <option value="general">Kit externo</option>
+          </select>
+        </div>
+        <div id="manual-componentes" class="campo-inline ancho-completo" hidden>
+          <span class="etiqueta-campo">Componentes</span>
+          <label><input type="checkbox" name="manualComponente" value="carrera"> Carrera 5K</label>
+          <label><input type="checkbox" name="manualComponente" value="bingo"> Tabla Bingo</label>
+          <label><input type="checkbox" name="manualComponente" value="fiesta"> Fiesta Blanca</label>
+        </div>
+        <div id="manual-origen" class="campo-inline">
+          <label for="manual-origen-registro">Origen del pago</label>
+          <select id="manual-origen-registro" name="origenRegistro">
+            <option value="EFECTIVO">Efectivo en sede</option>
+            <option value="CORTESIA">Cortesía</option>
+            <option value="WOMPI_EXTERNO">Wompi ya cobrado (referencia externa)</option>
+          </select>
+        </div>
+        <div id="manual-transaction-id" class="campo-inline" hidden>
+          <label for="manual-transaction-id-input">ID transacción Wompi</label>
+          <input id="manual-transaction-id-input" name="transactionId" type="text" placeholder="Ej. 12120955-...">
+        </div>
+        <div>
+          <label for="manual-firstName">Primer nombre *</label>
+          <input id="manual-firstName" name="firstName" type="text" required>
+        </div>
+        <div>
+          <label for="manual-secondName">Segundo nombre</label>
+          <input id="manual-secondName" name="secondName" type="text">
+        </div>
+        <div>
+          <label for="manual-firstSurname">Primer apellido *</label>
+          <input id="manual-firstSurname" name="firstSurname" type="text" required>
+        </div>
+        <div>
+          <label for="manual-secondSurname">Segundo apellido</label>
+          <input id="manual-secondSurname" name="secondSurname" type="text">
+        </div>
+        <div>
+          <label for="manual-documentType">Tipo documento *</label>
+          <select id="manual-documentType" name="documentType" required>
+            <option value="">Seleccionar</option>
+            <option value="CC">CC</option>
+            <option value="CE">CE</option>
+            <option value="TI">TI</option>
+            <option value="PAS">PAS</option>
+            <option value="NIT">NIT</option>
+          </select>
+        </div>
+        <div>
+          <label for="manual-documentNumber">Número documento *</label>
+          <input id="manual-documentNumber" name="documentNumber" inputmode="numeric" required>
+        </div>
+        <div>
+          <label for="manual-residenceCity">Ciudad *</label>
+          <select id="manual-residenceCity" name="residenceCity" required>
+            <option value="">Cargando ciudades…</option>
+          </select>
+        </div>
+        <div class="ancho-completo">
+          <label for="manual-address">Dirección</label>
+          <input id="manual-address" name="address" type="text">
+        </div>
+        <div class="ancho-completo">
+          <label for="manual-email">Correo *</label>
+          <input id="manual-email" name="email" type="email" required>
+        </div>
+        <div id="manual-campo-rol" class="ancho-completo" hidden>
+          <label for="manual-participantRole">Rol *</label>
+          <select id="manual-participantRole" name="participantRole">
+            <option value="">Seleccionar</option>
+            <option value="Estudiante">Estudiante</option>
+            <option value="Docente">Docente</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Egresado">Egresado</option>
+          </select>
+        </div>
+        <div id="manual-campo-carrera" class="ancho-completo" hidden>
+          <label for="manual-academicCareer">Carrera *</label>
+          <select id="manual-academicCareer" name="academicCareer">
+            <option value="">Seleccionar</option>
+          </select>
+        </div>
+        <div id="manual-campo-codigo" hidden>
+          <label for="manual-studentCode">Código estudiante *</label>
+          <input id="manual-studentCode" name="studentCode" inputmode="numeric" maxlength="5">
+        </div>
+        <div id="manual-campo-talla" hidden>
+          <label for="manual-shirtSize">Talla camiseta *</label>
+          <select id="manual-shirtSize" name="shirtSize">
+            <option value="">Seleccionar</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+        </div>
+        <div class="ancho-completo">
+          <label for="manual-notas">Notas (opcional)</label>
+          <input id="manual-notas" name="notas" type="text" placeholder="Comprobante, observación…">
+        </div>
+        <div id="manual-enviar-correo" class="ancho-completo">
+          <label><input id="manual-enviar-correo-check" type="checkbox" checked> Enviar correo con código de reclamo</label>
+        </div>
+        <button type="submit" class="boton-principal" id="manual-boton-enviar">Registrar participante</button>
+      </form>
+
+      <p id="mensaje-registro-manual" class="mensaje-crear-admin" role="status" hidden></p>
+      <p id="error-registro-manual" class="error" role="alert" hidden></p>
     </section>
 
     <section id="seccion-administradores" class="admin-seccion" hidden aria-labelledby="pestana-administradores">

@@ -1,7 +1,12 @@
 const pagosRepository = require('../repositories/pagos.repository');
 const configuracionWompi = require('../config/wompi');
 const { variablesEntorno } = require('../config/variablesEntorno');
-const { esKitInstitucional, DOMINIO_INSTITUCIONAL } = require('../config/catalogoKits');
+const { construirRedirectUrl } = require('../utilidades/resolverUrlPublica');
+const {
+  esKitInstitucional,
+  DOMINIO_INSTITUCIONAL,
+  tituloComponente,
+} = require('../config/catalogoKits');
 const {
   validarSolicitudCheckout,
   obtenerMontoCentavos,
@@ -16,7 +21,13 @@ const { intentarEnviarCorreoReclamo } = require('./correoReclamo.service');
 const { aplicarEstadoTransaccion } = require('./confirmacionPago.service');
 const { consultarTransaccionPorId } = require('./wompiTransaccion.service');
 
-function construirRespuestaInicio({ pago, reference, amount, retomandoPagoPendiente = false }) {
+function construirRespuestaInicio({
+  pago,
+  reference,
+  amount,
+  urlBase,
+  retomandoPagoPendiente = false,
+}) {
   const signatureIntegrity = calcularFirmaIntegridad({
     reference,
     amountInCents: amount,
@@ -29,7 +40,7 @@ function construirRespuestaInicio({ pago, reference, amount, retomandoPagoPendie
     currency: configuracionWompi.moneda,
     publicKey: configuracionWompi.llavePublica,
     signatureIntegrity,
-    redirectUrl: `${variablesEntorno.urlBase}/`,
+    redirectUrl: construirRedirectUrl(urlBase),
     checkoutUrl: configuracionWompi.urlCheckout,
     retomandoPagoPendiente: Boolean(retomandoPagoPendiente),
   };
@@ -42,7 +53,47 @@ function esCheckoutInstitucional(kitType, email) {
   );
 }
 
-async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
+async function validarDisponibilidadCompraPorCorreo({
+  kitType,
+  kitComponents,
+  email,
+  esInstitucional,
+}) {
+  const tipoNormalizado = normalizarKitType(kitType);
+  const componentesNormalizados = normalizarKitComponents(kitComponents);
+
+  if (tipoNormalizado === 'uniautonomo' && esInstitucional) {
+    const pagoSangreAzul = await pagosRepository.buscarPagoUniautonomoAprobado(email);
+    if (pagoSangreAzul) {
+      const err = new Error('Este correo ya tiene un kit Sangre Azul registrado.');
+      err.codigo = 409;
+      throw err;
+    }
+  }
+
+  if (tipoNormalizado === 'personalizado' && esInstitucional) {
+    const pagoSangreAzul = await pagosRepository.buscarPagoUniautonomoAprobado(email);
+    if (pagoSangreAzul) {
+      const err = new Error(
+        'Este correo ya tiene un kit Sangre Azul registrado. No puedes comprar Arma tu kit.'
+      );
+      err.codigo = 409;
+      throw err;
+    }
+
+    const componentesAprobados =
+      await pagosRepository.obtenerComponentesPersonalizadosAprobados(email);
+    const duplicados = componentesNormalizados.filter((c) => componentesAprobados.has(c));
+    if (duplicados.length) {
+      const nombres = duplicados.map((id) => tituloComponente(id)).join(', ');
+      const err = new Error(`Ya registraste ${nombres} con este correo.`);
+      err.codigo = 409;
+      throw err;
+    }
+  }
+}
+
+async function iniciarCheckout({ kitType, kitComponents, personalInfo, urlBase }) {
   const tipoNormalizado = normalizarKitType(kitType);
   const componentesNormalizados = normalizarKitComponents(kitComponents);
 
@@ -59,25 +110,28 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
 
   validarFormatoLlavePublica(configuracionWompi.llavePublica);
 
-  const info = normalizarInformacionPersonal(personalInfo);
+  const info = normalizarInformacionPersonal(personalInfo, {
+    kitType: tipoNormalizado,
+    kitComponents: componentesNormalizados,
+  });
   const amount = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);
   const esInstitucional = esCheckoutInstitucional(tipoNormalizado, info.email);
 
-  if (esInstitucional) {
-    const pagoAprobado = await pagosRepository.buscarPagoInstitucionalAprobado(info.email);
-    if (pagoAprobado) {
-      const err = new Error('Este correo ya tiene un kit registrado.');
-      err.codigo = 409;
-      throw err;
-    }
+  await validarDisponibilidadCompraPorCorreo({
+    kitType: tipoNormalizado,
+    kitComponents: componentesNormalizados,
+    email: info.email,
+    esInstitucional,
+  });
 
-    const pendienteInstitucional =
-      await pagosRepository.buscarPendienteInstitucionalPorCorreo(info.email, {
-        horasMaximas: variablesEntorno.pendingReutilizarHoras,
-      });
+  if (tipoNormalizado === 'uniautonomo' && esInstitucional) {
+    const pendienteUniautonomo = await pagosRepository.buscarPendienteUniautonomoPorCorreo(
+      info.email,
+      { horasMaximas: variablesEntorno.pendingReutilizarHoras }
+    );
 
-    if (pendienteInstitucional) {
-      await pagosRepository.actualizarInformacionPendiente(pendienteInstitucional.id, {
+    if (pendienteUniautonomo) {
+      await pagosRepository.actualizarInformacionPendiente(pendienteUniautonomo.id, {
         personalInfo: info,
         kitComponents: componentesNormalizados,
         kitType: tipoNormalizado,
@@ -85,7 +139,7 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
       });
 
       const pagoActualizado = {
-        ...pendienteInstitucional,
+        ...pendienteUniautonomo,
         personalInfo: info,
         kitComponents: componentesNormalizados,
         kitType: tipoNormalizado,
@@ -94,8 +148,42 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
 
       return construirRespuestaInicio({
         pago: pagoActualizado,
-        reference: pendienteInstitucional.reference,
+        reference: pendienteUniautonomo.reference,
         amount,
+        urlBase,
+        retomandoPagoPendiente: true,
+      });
+    }
+  }
+
+  if (tipoNormalizado === 'personalizado' && esInstitucional) {
+    const pendientePersonalizado =
+      await pagosRepository.buscarPendientePersonalizadoPorCorreo(
+        info.email,
+        componentesNormalizados
+      );
+
+    if (pendientePersonalizado) {
+      await pagosRepository.actualizarInformacionPendiente(pendientePersonalizado.id, {
+        personalInfo: info,
+        kitComponents: componentesNormalizados,
+        kitType: tipoNormalizado,
+        amount,
+      });
+
+      const pagoActualizado = {
+        ...pendientePersonalizado,
+        personalInfo: info,
+        kitComponents: componentesNormalizados,
+        kitType: tipoNormalizado,
+        amount,
+      };
+
+      return construirRespuestaInicio({
+        pago: pagoActualizado,
+        reference: pendientePersonalizado.reference,
+        amount,
+        urlBase,
         retomandoPagoPendiente: true,
       });
     }
@@ -129,7 +217,7 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo }) {
     });
   }
 
-  return construirRespuestaInicio({ pago, reference, amount });
+  return construirRespuestaInicio({ pago, reference, amount, urlBase });
 }
 
 function respuestaEstadoDesdePago(pago) {
@@ -234,4 +322,10 @@ async function obtenerEstadoCheckout(reference) {
   return respuestaEstadoDesdePago(pago);
 }
 
-module.exports = { iniciarCheckout, obtenerEstadoCheckout, confirmarPagoCheckout };
+module.exports = {
+  iniciarCheckout,
+  obtenerEstadoCheckout,
+  confirmarPagoCheckout,
+  validarDisponibilidadCompraPorCorreo,
+  esCheckoutInstitucional,
+};

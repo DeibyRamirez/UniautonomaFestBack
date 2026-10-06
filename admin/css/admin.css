@@ -371,9 +371,24 @@ button:focus-visible {
   align-items: end;
 }
 
-.formulario-crear-admin .campo-inline--contrasena {
+.formulario-crear-admin .campo-inline--contrasena,
+.formulario-crear-admin .ancho-completo {
   grid-column: 1 / -1;
+}
+
+.formulario-crear-admin .campo-inline--contrasena {
   max-width: min(100%, 420px);
+}
+
+.formulario-crear-admin .etiqueta-campo {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.formulario-crear-admin label input[type='checkbox'] {
+  margin-right: 6px;
 }
 
 .mensaje-crear-admin {

@@ -1,7 +1,7 @@
 const COLECCION_SECUENCIA = 'sequences';
 const DOCUMENTO_CONTADOR = 'numeroCorredor';
 const COLECCION_NUMEROS = 'numerosCorredor';
-const MAX_NUMERO = 999;
+const MAX_NUMERO = 700;
 const MAX_SALTOS_OCUPADOS = 20;
 
 function debeAsignarNumeroCorredor(kitType, kitComponents = []) {
@@ -24,7 +24,7 @@ function formatearNumeroCorredor(valor) {
 
 function errorNumerosAgotados() {
   const err = new Error(
-    'Se agotaron los números de corredor disponibles (máximo 999). Contacta al organizador del evento.'
+    'Se agotaron los números de corredor disponibles (máximo 700). Contacta al organizador del evento.'
   );
   err.codigo = 503;
   return err;

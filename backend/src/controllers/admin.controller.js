@@ -5,6 +5,19 @@ const { obtenerAuth } = require('../config/firebase');
 const { invalidarCacheAdmin } = require('../utilidades/cacheAdmin');
 const { validarTipoEvento } = require('../services/validacionEvento.service');
 const { intentarEnviarCorreoReclamo } = require('../services/correoReclamo.service');
+const { registrarManualAprobado } = require('../services/registroManual.service');
+
+function esSolicitudExportacion(limite) {
+  const valor = Number.parseInt(String(limite), 10);
+  return Number.isFinite(valor) && valor >= 100;
+}
+
+function rechazarExportacionSiNoEsSuperAdmin(req, res) {
+  if (esSolicitudExportacion(req.query.limit) && req.admin?.role !== 'SUPER_ADMIN') {
+    return res.status(403).json({ mensaje: 'Exportación reservada a super administradores' });
+  }
+  return null;
+}
 
 async function getPerfilAdmin(req, res) {
   try {
@@ -32,6 +45,9 @@ async function getAdministradores(req, res) {
 
 async function getEstudiantes(req, res) {
   try {
+    const bloqueoExport = rechazarExportacionSiNoEsSuperAdmin(req, res);
+    if (bloqueoExport) return bloqueoExport;
+
     const status = req.query.status || undefined;
     const search = req.query.search || undefined;
     const cursor = req.query.cursor || undefined;
@@ -231,6 +247,9 @@ async function postAsignarNumeroCorredor(req, res) {
 
 async function getInscripcionesEventos(req, res) {
   try {
+    const bloqueoExport = rechazarExportacionSiNoEsSuperAdmin(req, res);
+    if (bloqueoExport) return bloqueoExport;
+
     const tipoEvento = req.query.tipoEvento;
     const errorTipo = validarTipoEvento(tipoEvento);
     if (errorTipo) {
@@ -254,6 +273,42 @@ async function getInscripcionesEventos(req, res) {
   }
 }
 
+async function postRegistroManual(req, res) {
+  try {
+    const {
+      kitType,
+      kitComponents,
+      personalInfo,
+      origenRegistro,
+      transactionId,
+      notas,
+      enviarCorreo,
+    } = req.body || {};
+
+    const resultado = await registrarManualAprobado({
+      kitType,
+      kitComponents,
+      personalInfo,
+      origenRegistro,
+      transactionId,
+      notas,
+      enviarCorreo: Boolean(enviarCorreo),
+      registradoPorAdminEmail: req.admin?.email || req.usuario?.email,
+    });
+
+    return res.status(201).json({
+      mensaje: 'Registro manual creado correctamente',
+      dato: resultado,
+    });
+  } catch (error) {
+    const codigo = error.codigo || 500;
+    if (codigo >= 500) console.error('[admin registro manual]', error);
+    return res.status(codigo).json({
+      mensaje: error.message || 'No se pudo crear el registro manual',
+    });
+  }
+}
+
 module.exports = {
   getPerfilAdmin,
   getAdministradores,
@@ -264,4 +319,5 @@ module.exports = {
   postCrearAdmin,
   postReenviarCorreo,
   postAsignarNumeroCorredor,
+  postRegistroManual,
 };

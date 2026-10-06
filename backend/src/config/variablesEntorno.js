@@ -48,6 +48,7 @@ const variablesEntorno = {
   },
   wompi: {
     llavePublica: process.env.WOMPI_PUBLIC_KEY?.trim(),
+    llavePrivada: process.env.WOMPI_PRIVATE_KEY?.trim(),
     secretoIntegridad: process.env.WOMPI_INTEGRITY_SECRET?.trim(),
     secretoEventos: process.env.WOMPI_EVENTS_SECRET?.trim(),
   },

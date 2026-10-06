@@ -1,16 +1,15 @@
 const configuracionWompi = require('../config/wompi');
-const { urlBaseWompi } = require('./wompiValidacion.service');
+const {
+  urlBaseWompiDesdeLlave,
+  validarFormatoLlavePrivada,
+} = require('./wompiValidacion.service');
 
 const TIMEOUT_WOMPI_MS = 8000;
 
 async function consultarTransaccionPorId(transactionId) {
-  const llave = configuracionWompi.llavePublica;
-  const base = urlBaseWompi(llave);
-  if (!base) {
-    const err = new Error('WOMPI_PUBLIC_KEY inválida para consultar transacciones');
-    err.codigo = 500;
-    throw err;
-  }
+  const llave = configuracionWompi.llavePrivada;
+  validarFormatoLlavePrivada(llave);
+  const base = urlBaseWompiDesdeLlave(llave);
 
   if (!transactionId || typeof transactionId !== 'string') {
     const err = new Error('transactionId requerido');

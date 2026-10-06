@@ -40,7 +40,7 @@ async function crearPagoPendiente(datos) {
   const referencia = db.collection(COLECCION).doc();
   const carga = {
     reference: datos.reference,
-    transactionId: null,
+    transactionId: datos.transactionId ?? null,
     personalInfo: datos.personalInfo,
     ...camposBusquedaNombre(datos.personalInfo),
     kitType: datos.kitType,
@@ -54,10 +54,42 @@ async function crearPagoPendiente(datos) {
     claimedByAdminEmail: null,
     emailEnviadoEn: null,
     emailError: null,
+    registroManual: Boolean(datos.registroManual),
+    origenRegistro: datos.origenRegistro || null,
+    notasRegistro: datos.notasRegistro || null,
+    registradoPorAdminEmail: datos.registradoPorAdminEmail || null,
     createdAt: FieldValue.serverTimestamp(),
   };
   await referencia.set(carga);
   return { id: referencia.id, ...carga };
+}
+
+async function crearRegistroManualAprobado(datos, generarCodigo) {
+  const pagoPendiente = await crearPagoPendiente({
+    reference: datos.reference,
+    transactionId: datos.transactionId ?? null,
+    personalInfo: datos.personalInfo,
+    kitType: datos.kitType,
+    kitComponents: datos.kitComponents || [],
+    amount: datos.amount,
+    registroManual: true,
+    origenRegistro: datos.origenRegistro,
+    notasRegistro: datos.notas || null,
+    registradoPorAdminEmail: datos.registradoPorAdminEmail,
+  });
+
+  const resultado = await aprobarPagoAtomico(pagoPendiente.id, {
+    transactionId: datos.transactionId ?? null,
+    generarCodigo,
+  });
+
+  if (!resultado.aprobado && !resultado.idempotente) {
+    const err = new Error('No se pudo aprobar el registro manual');
+    err.codigo = 500;
+    throw err;
+  }
+
+  return obtenerPorId(pagoPendiente.id);
 }
 
 async function buscarPendienteReciente({
@@ -151,6 +183,123 @@ async function buscarPagoInstitucionalAprobado(email) {
   for (const doc of consulta.docs) {
     const datos = doc.data();
     if (esKitInstitucional(datos.kitType)) {
+      return serializarDocumento(doc.id, datos);
+    }
+  }
+  return null;
+}
+
+async function buscarPagoUniautonomoAprobado(email) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  if (!correo) return null;
+
+  const consulta = await db
+    .collection(COLECCION)
+    .where('status', '==', 'APPROVED')
+    .where('personalInfo.email', '==', correo)
+    .limit(20)
+    .get();
+
+  for (const doc of consulta.docs) {
+    const datos = doc.data();
+    if (datos.kitType === 'uniautonomo') {
+      return serializarDocumento(doc.id, datos);
+    }
+  }
+  return null;
+}
+
+async function obtenerComponentesPersonalizadosAprobados(email) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  const componentes = new Set();
+  if (!correo) return componentes;
+
+  const consulta = await db
+    .collection(COLECCION)
+    .where('status', '==', 'APPROVED')
+    .where('personalInfo.email', '==', correo)
+    .limit(20)
+    .get();
+
+  for (const doc of consulta.docs) {
+    const datos = doc.data();
+    if (datos.kitType !== 'personalizado') continue;
+    const lista = Array.isArray(datos.kitComponents) ? datos.kitComponents : [];
+    for (const componente of lista) {
+      const clave = String(componente || '').trim();
+      if (clave) componentes.add(clave);
+    }
+  }
+  return componentes;
+}
+
+async function buscarPendienteUniautonomoPorCorreo(email, { horasMaximas = null } = {}) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  if (!correo) return null;
+
+  let consulta = db
+    .collection(COLECCION)
+    .where('personalInfo.email', '==', correo)
+    .where('status', '==', 'PENDING')
+    .orderBy('createdAt', 'desc')
+    .limit(10);
+
+  if (horasMaximas != null && horasMaximas > 0) {
+    const limite = new Date(Date.now() - horasMaximas * 60 * 60 * 1000);
+    consulta = db
+      .collection(COLECCION)
+      .where('personalInfo.email', '==', correo)
+      .where('status', '==', 'PENDING')
+      .where('createdAt', '>=', limite)
+      .orderBy('createdAt', 'desc')
+      .limit(10);
+  }
+
+  let snapshot;
+  try {
+    snapshot = await consulta.get();
+  } catch (error) {
+    if (!esIndiceFirestorePendiente(error)) throw error;
+    console.warn('[pagos] índice email+status en construcción; no se reutiliza PENDING uniautónomo');
+    return null;
+  }
+
+  for (const doc of snapshot.docs) {
+    const datos = doc.data();
+    if (datos.kitType === 'uniautonomo') {
+      return serializarDocumento(doc.id, datos);
+    }
+  }
+  return null;
+}
+
+async function buscarPendientePersonalizadoPorCorreo(email, kitComponents) {
+  const db = obtenerFirestore();
+  const correo = String(email || '').trim().toLowerCase();
+  if (!correo) return null;
+
+  let snapshot;
+  try {
+    snapshot = await db
+      .collection(COLECCION)
+      .where('personalInfo.email', '==', correo)
+      .where('status', '==', 'PENDING')
+      .orderBy('createdAt', 'desc')
+      .limit(10)
+      .get();
+  } catch (error) {
+    if (!esIndiceFirestorePendiente(error)) throw error;
+    console.warn('[pagos] índice email+status en construcción; no se reutiliza PENDING personalizado');
+    return null;
+  }
+
+  for (const doc of snapshot.docs) {
+    const datos = doc.data();
+    if (datos.kitType !== 'personalizado') continue;
+    if (componentesCoinciden(datos.kitComponents, kitComponents)) {
       return serializarDocumento(doc.id, datos);
     }
   }
@@ -696,9 +845,14 @@ async function listarPagos({
 
 module.exports = {
   crearPagoPendiente,
+  crearRegistroManualAprobado,
   buscarPendienteReciente,
   buscarPendienteInstitucionalPorCorreo,
   buscarPagoInstitucionalAprobado,
+  buscarPagoUniautonomoAprobado,
+  obtenerComponentesPersonalizadosAprobados,
+  buscarPendienteUniautonomoPorCorreo,
+  buscarPendientePersonalizadoPorCorreo,
   actualizarInformacionPendiente,
   buscarPorReferencia,
   obtenerPorId,

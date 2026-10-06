@@ -1,13 +1,27 @@
+# syntax=docker/dockerfile:1
 FROM node:24-alpine
 
 WORKDIR /app
 
-# Copiar todo el repositorio (landing, checkout, admin, eventos + backend)
-COPY . .
+# Capa de dependencias separada (cache + menos re-descargas)
+COPY backend/package.json backend/package-lock.json ./backend/
 
 WORKDIR /app/backend
 
-RUN npm ci --omit=dev
+# ECONNRESET en Docker Desktop: menos sockets paralelos y más reintentos
+RUN --mount=type=cache,target=/root/.npm \
+    npm config set fetch-retries 10 \
+    fetch-retry-mintimeout 30000 \
+    fetch-retry-maxtimeout 300000 \
+    maxsockets 3 \
+    && npm ci --omit=dev --loglevel verbose
+
+WORKDIR /app
+
+# Resto del repo (landing, admin, checkout, backend/src, etc.)
+COPY . .
+
+WORKDIR /app/backend
 
 ENV NODE_ENV=production \
     SERVIR_ESTATICOS=true \

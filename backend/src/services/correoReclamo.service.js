@@ -40,9 +40,10 @@ async function intentarEnviarCorreoReclamo(pago, opciones = {}) {
 
     // Sin registrar error: la clave de idempotencia de Resend evita duplicados en el próximo intento.
     if (resultado === TIEMPO_AGOTADO) {
-      console.warn('[correo] Resend no respondió a tiempo para', info.email);
+      console.warn('[correo] proveedor no respondió a tiempo para', info.email);
       envio.catch(() => {});
-      return { enviado: false, motivo: 'timeout' };
+      await pagosRepository.registrarErrorCorreo(pago.id, 'timeout_resend');
+      return { enviado: false, motivo: 'timeout_resend' };
     }
 
     if (resultado?.omitido) {

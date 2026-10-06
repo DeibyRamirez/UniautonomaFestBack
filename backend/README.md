@@ -36,6 +36,16 @@ Para probar webhooks Wompi en local, expón el puerto con ngrok y registra la UR
 
 `https://<tu-subdominio>.ngrok.io/api/payments/webhook`
 
+Guía paso a paso (sandbox + producción): [`../docs/ACTIVAR-WEBHOOK-WOMPI.md`](../docs/ACTIVAR-WEBHOOK-WOMPI.md)
+
+Scripts de verificación:
+
+```bash
+npm run verificar-webhook          # revisa .env y servidor
+npm run simular-pago-sin-retorno   # paso 1 + webhook (usuario no vuelve al sitio)
+npm run probar-webhook             # prueba firmada del webhook
+```
+
 ## Primer super administrador
 
 Define `ADMIN_SEMILLA_CORREO` y `ADMIN_SEMILLA_CONTRASENA` en `.env`, luego:
@@ -147,6 +157,8 @@ npm run probar-correo-evento -- tu-correo@ejemplo.com Hackton
 ```
 
 Si el pago quedó aprobado pero el correo falló, el sistema reintenta al consultar `GET /api/checkout/estado` o en un webhook idempotente. Revisa en Firestore los campos `emailEnviadoEn` y `emailError`. Desde el panel admin puedes usar **Enviar correo** / **Reenviar correo** en cada fila aprobada.
+
+Guía operativa completa: [`docs/RESPALDO-PAGOS-PENDIENTES.md`](../docs/RESPALDO-PAGOS-PENDIENTES.md) (PENDING antiguos, reenvío manual, monitoreo).
 
 ### Diagnóstico Resend
 
