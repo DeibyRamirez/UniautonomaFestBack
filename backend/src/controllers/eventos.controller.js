@@ -1,10 +1,19 @@
 const eventosRepository = require('../repositories/eventos.repository');
 const { validarInscripcionEvento } = require('../services/validacionEvento.service');
 const { intentarEnviarCorreoInscripcionEvento } = require('../services/correoEvento.service');
+const { eventoInscripcionAbierta } = require('../services/vitrinaPublica.service');
 
 async function postInscripcion(req, res) {
   try {
     const { tipoEvento, datos } = req.body || {};
+
+    const abierta = await eventoInscripcionAbierta(tipoEvento);
+    if (!abierta) {
+      return res.status(403).json({
+        mensaje: 'Las inscripciones para este evento están cerradas en este momento.',
+      });
+    }
+
     const { error, datos: datosValidados } = validarInscripcionEvento(tipoEvento, datos);
 
     if (error) {

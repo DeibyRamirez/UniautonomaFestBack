@@ -19,9 +19,13 @@ const pestanaFinanciera = document.getElementById('pestana-financiera');
 const pestanaEventos = document.getElementById('pestana-eventos');
 const pestanaRegistroManual = document.getElementById('pestana-registro-manual');
 const pestanaAdministradores = document.getElementById('pestana-administradores');
+const pestanaTallasCamiseta = document.getElementById('pestana-tallas-camiseta');
+const pestanaVitrinaPublica = document.getElementById('pestana-vitrina-publica');
 const seccionFinanciera = document.getElementById('seccion-financiera');
 const seccionEventos = document.getElementById('seccion-eventos');
 const seccionRegistroManual = document.getElementById('seccion-registro-manual');
+const seccionTallasCamiseta = document.getElementById('seccion-tallas-camiseta');
+const seccionVitrinaPublica = document.getElementById('seccion-vitrina-publica');
 const seccionAdministradores = document.getElementById('seccion-administradores');
 const botonExportar = document.getElementById('boton-exportar');
 const botonExportarEventos = document.getElementById('boton-exportar-eventos');
@@ -34,6 +38,17 @@ const manualCampoRol = document.getElementById('manual-campo-rol');
 const manualCampoCarrera = document.getElementById('manual-campo-carrera');
 const manualCampoCodigo = document.getElementById('manual-campo-codigo');
 const manualCampoTalla = document.getElementById('manual-campo-talla');
+const manualShirtSize = document.getElementById('manual-shirtSize');
+const cuerpoTablaTallasCamiseta = document.getElementById('cuerpo-tabla-tallas-camiseta');
+const botonGuardarTallasCamiseta = document.getElementById('boton-guardar-tallas-camiseta');
+const botonRefrescarTallasCamiseta = document.getElementById('boton-refrescar-tallas-camiseta');
+const mensajeTallasCamiseta = document.getElementById('mensaje-tallas-camiseta');
+const errorTallasCamiseta = document.getElementById('error-tallas-camiseta');
+const contenedorVitrinaPublica = document.getElementById('contenedor-vitrina-publica');
+const botonGuardarVitrinaPublica = document.getElementById('boton-guardar-vitrina-publica');
+const botonRefrescarVitrinaPublica = document.getElementById('boton-refrescar-vitrina-publica');
+const mensajeVitrinaPublica = document.getElementById('mensaje-vitrina-publica');
+const errorVitrinaPublica = document.getElementById('error-vitrina-publica');
 const manualAcademicCareer = document.getElementById('manual-academicCareer');
 const manualParticipantRole = document.getElementById('manual-participantRole');
 const manualEnviarCorreoCheck = document.getElementById('manual-enviar-correo-check');
@@ -91,6 +106,8 @@ function aplicarPermisosSuperAdmin() {
   if (botonExportar) botonExportar.hidden = !esSuperAdmin;
   if (botonExportarEventos) botonExportarEventos.hidden = !esSuperAdmin;
   if (pestanaRegistroManual) pestanaRegistroManual.hidden = !esSuperAdmin;
+  if (pestanaTallasCamiseta) pestanaTallasCamiseta.hidden = !esSuperAdmin;
+  if (pestanaVitrinaPublica) pestanaVitrinaPublica.hidden = !esSuperAdmin;
   if (pestanaAdministradores) pestanaAdministradores.hidden = !esSuperAdmin;
 }
 
@@ -107,6 +124,28 @@ let cursoresInicioPaginaEventos = [null];
 let hayMasPaginasEventos = false;
 let registrosEventosCache = [];
 let eventosFiltrosCargados = '';
+let tallasCamisetaAdminCache = [];
+let tallasCamisetaPublicoCache = [];
+let vitrinaPublicaAdminCache = null;
+
+const ETIQUETAS_VITRINA_KIT = {
+  uniautonomo: 'Kit Sangre Azul',
+  general: 'Kit Corredor (externos)',
+  personalizado: 'Arma tu kit',
+};
+
+const ETIQUETAS_VITRINA_COMPONENTE = {
+  carrera: 'Carrera 5K',
+  fiesta: 'Fiesta Blanca',
+  bingo: 'Tabla Bingo',
+};
+
+const ETIQUETAS_VITRINA_ENLACE = {
+  hero_kit: 'Hero «Quiero la mía»',
+  inscripcion_5k: 'Inscripción 5K (cronograma)',
+  hackaton: 'Inscripción Hackatón',
+  feria_emprendimiento: 'Inscripción Feria de emprendimiento',
+};
 
 const CARRERAS_ESTUDIANTE = [
   'Gobierno y Relaciones Internacionales',
@@ -204,6 +243,8 @@ function activarPestana(nombre) {
   const esFinanciera = nombre === 'financiera';
   const esEventos = nombre === 'eventos';
   const esRegistroManual = nombre === 'registro-manual';
+  const esTallasCamiseta = nombre === 'tallas-camiseta';
+  const esVitrinaPublica = nombre === 'vitrina-publica';
   const esAdministradores = nombre === 'administradores';
 
   pestanaFinanciera.classList.toggle('activa', esFinanciera);
@@ -211,12 +252,32 @@ function activarPestana(nombre) {
   if (pestanaRegistroManual) {
     pestanaRegistroManual.classList.toggle('activa', esRegistroManual);
   }
+  if (pestanaTallasCamiseta) {
+    pestanaTallasCamiseta.classList.toggle('activa', esTallasCamiseta);
+  }
+  if (pestanaVitrinaPublica) {
+    pestanaVitrinaPublica.classList.toggle('activa', esVitrinaPublica);
+  }
   pestanaAdministradores.classList.toggle('activa', esAdministradores);
 
   seccionFinanciera.hidden = !esFinanciera;
   seccionEventos.hidden = !esEventos;
   if (seccionRegistroManual) seccionRegistroManual.hidden = !esRegistroManual;
+  if (seccionTallasCamiseta) seccionTallasCamiseta.hidden = !esTallasCamiseta;
+  if (seccionVitrinaPublica) seccionVitrinaPublica.hidden = !esVitrinaPublica;
   seccionAdministradores.hidden = !esAdministradores;
+
+  if (esVitrinaPublica) {
+    cargarVitrinaPublicaAdmin().catch((error) =>
+      mostrarError(errorVitrinaPublica, error.message)
+    );
+  }
+
+  if (esTallasCamiseta) {
+    cargarTallasCamisetaAdmin().catch((error) =>
+      mostrarError(errorTallasCamiseta, error.message)
+    );
+  }
 
   if (esEventos) {
     actualizarCabeceraTablaEventos();
@@ -888,6 +949,10 @@ async function iniciarPanel(usuario) {
   if (vistaPanel) vistaPanel.hidden = false;
   activarPestana('financiera');
   await cargarBootstrapAdmin();
+  if (esSuperAdmin) {
+    await cargarTallasCamisetaPublico().catch(() => {});
+    await cargarVitrinaPublicaCache().catch(() => {});
+  }
 }
 
 document.getElementById('boton-cerrar-sesion').addEventListener('click', async () => {
@@ -908,6 +973,50 @@ botonPaginaSiguiente.addEventListener('click', () => {
 
 pestanaFinanciera.addEventListener('click', () => activarPestana('financiera'));
 pestanaEventos.addEventListener('click', () => activarPestana('eventos'));
+if (pestanaTallasCamiseta) {
+  pestanaTallasCamiseta.addEventListener('click', () => {
+    if (esSuperAdmin) activarPestana('tallas-camiseta');
+  });
+}
+
+if (pestanaVitrinaPublica) {
+  pestanaVitrinaPublica.addEventListener('click', () => {
+    if (esSuperAdmin) activarPestana('vitrina-publica');
+  });
+}
+
+if (botonGuardarVitrinaPublica) {
+  botonGuardarVitrinaPublica.addEventListener('click', () => {
+    guardarVitrinaPublicaAdmin().catch((error) =>
+      mostrarError(errorVitrinaPublica, error.message)
+    );
+  });
+}
+
+if (botonRefrescarVitrinaPublica) {
+  botonRefrescarVitrinaPublica.addEventListener('click', () => {
+    cargarVitrinaPublicaAdmin().catch((error) =>
+      mostrarError(errorVitrinaPublica, error.message)
+    );
+  });
+}
+
+if (botonGuardarTallasCamiseta) {
+  botonGuardarTallasCamiseta.addEventListener('click', () => {
+    guardarTallasCamisetaAdmin().catch((error) =>
+      mostrarError(errorTallasCamiseta, error.message)
+    );
+  });
+}
+
+if (botonRefrescarTallasCamiseta) {
+  botonRefrescarTallasCamiseta.addEventListener('click', () => {
+    cargarTallasCamisetaAdmin().catch((error) =>
+      mostrarError(errorTallasCamiseta, error.message)
+    );
+  });
+}
+
 pestanaAdministradores.addEventListener('click', () => {
   if (esSuperAdmin) activarPestana('administradores');
 });
@@ -1007,6 +1116,157 @@ function manualIncluyeCarrera() {
   ).some((input) => input.value === 'carrera');
 }
 
+function vitrinaKitVendible(kitId) {
+  if (!vitrinaPublicaAdminCache?.kits) return true;
+  const kit = vitrinaPublicaAdminCache.kits.find((k) => k.id === kitId);
+  return Boolean(kit?.ventaActiva);
+}
+
+function vitrinaComponenteActivo(componenteId) {
+  if (!vitrinaPublicaAdminCache?.componentes) return true;
+  const comp = vitrinaPublicaAdminCache.componentes.find((c) => c.id === componenteId);
+  return Boolean(comp?.activo);
+}
+
+function renderizarVitrinaPublicaAdmin(datos) {
+  if (!contenedorVitrinaPublica || !datos) return;
+
+  const bloqueKits = (datos.kits || [])
+    .map((kit) => {
+      const etiqueta = ETIQUETAS_VITRINA_KIT[kit.id] || kit.id;
+      return `<div class="vitrina-admin-fila" data-vitrina-kit-id="${escaparHtml(kit.id)}">
+        <span class="vitrina-admin-fila__etiqueta">${escaparHtml(etiqueta)}</span>
+        <label class="admin-switch"><input type="checkbox" data-campo="ventaActiva" ${kit.ventaActiva ? 'checked' : ''}> Venta abierta</label>
+      </div>`;
+    })
+    .join('');
+
+  const bloqueComponentes = (datos.componentes || [])
+    .map((comp) => {
+      const etiqueta = ETIQUETAS_VITRINA_COMPONENTE[comp.id] || comp.id;
+      return `<div class="vitrina-admin-fila" data-vitrina-componente-id="${escaparHtml(comp.id)}">
+        <span class="vitrina-admin-fila__etiqueta">${escaparHtml(etiqueta)}</span>
+        <label class="admin-switch"><input type="checkbox" data-campo="activo" ${comp.activo ? 'checked' : ''}> Activo</label>
+      </div>`;
+    })
+    .join('');
+
+  const bloqueEnlaces = (datos.enlaces || [])
+    .map((enlace) => {
+      const etiqueta = ETIQUETAS_VITRINA_ENLACE[enlace.id] || enlace.id;
+      return `<div class="vitrina-admin-fila" data-vitrina-enlace-id="${escaparHtml(enlace.id)}">
+        <span class="vitrina-admin-fila__etiqueta">${escaparHtml(etiqueta)}</span>
+        <label class="admin-switch"><input type="checkbox" data-campo="activo" ${enlace.activo ? 'checked' : ''}> Activo</label>
+      </div>`;
+    })
+    .join('');
+
+  contenedorVitrinaPublica.innerHTML = `
+    <div class="vitrina-admin-grupo"><h3>Kits</h3><p class="admin-tallas-ayuda">Marcado = venta <strong>abierta</strong>. Si está desmarcado, la tarjeta muestra «Sold out».</p>${bloqueKits}</div>
+    <div class="vitrina-admin-grupo"><h3>Arma tu kit — eventos</h3><p class="admin-tallas-ayuda">Marcado = componente <strong>activo</strong> en el modal. Carrera desactivada cierra la inscripción 5K del cronograma (si hay kits a la venta).</p>${bloqueComponentes}</div>
+    <div class="vitrina-admin-grupo"><h3>Cronograma — inscripciones</h3><p class="admin-tallas-ayuda">Marcado = inscripción <strong>abierta</strong> en la landing.</p>${bloqueEnlaces}</div>
+  `;
+}
+
+function leerVitrinaDesdeAdmin() {
+  const kits = {};
+  contenedorVitrinaPublica?.querySelectorAll('[data-vitrina-kit-id]').forEach((fila) => {
+    const id = fila.getAttribute('data-vitrina-kit-id');
+    kits[id] = {
+      ventaActiva: fila.querySelector('[data-campo="ventaActiva"]')?.checked ?? false,
+    };
+  });
+
+  const componentes = {};
+  contenedorVitrinaPublica?.querySelectorAll('[data-vitrina-componente-id]').forEach((fila) => {
+    const id = fila.getAttribute('data-vitrina-componente-id');
+    componentes[id] = {
+      activo: fila.querySelector('[data-campo="activo"]')?.checked ?? false,
+    };
+  });
+
+  const enlaces = {};
+  contenedorVitrinaPublica?.querySelectorAll('[data-vitrina-enlace-id]').forEach((fila) => {
+    const id = fila.getAttribute('data-vitrina-enlace-id');
+    enlaces[id] = {
+      activo: fila.querySelector('[data-campo="activo"]')?.checked ?? false,
+    };
+  });
+
+  return { kits, componentes, enlaces };
+}
+
+async function cargarVitrinaPublicaCache() {
+  const respuesta = await fetch('/api/config/publica');
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok || !datos.vitrinaPublica) return;
+  vitrinaPublicaAdminCache = datos.vitrinaPublica;
+  aplicarVitrinaAlRegistroManual();
+}
+
+async function cargarVitrinaPublicaAdmin() {
+  mostrarError(errorVitrinaPublica, '');
+  if (mensajeVitrinaPublica) mensajeVitrinaPublica.hidden = true;
+
+  const respuesta = await fetchAdmin('/api/admin/vitrina-publica');
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'No se pudo cargar la vitrina');
+  }
+
+  vitrinaPublicaAdminCache = datos.datos;
+  renderizarVitrinaPublicaAdmin(vitrinaPublicaAdminCache);
+  aplicarVitrinaAlRegistroManual();
+}
+
+async function guardarVitrinaPublicaAdmin() {
+  mostrarError(errorVitrinaPublica, '');
+  if (mensajeVitrinaPublica) mensajeVitrinaPublica.hidden = true;
+
+  const cuerpo = leerVitrinaDesdeAdmin();
+  const respuesta = await fetchAdmin('/api/admin/vitrina-publica', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cuerpo),
+  });
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'No se pudo guardar la vitrina');
+  }
+
+  vitrinaPublicaAdminCache = datos.datos;
+  renderizarVitrinaPublicaAdmin(vitrinaPublicaAdminCache);
+  aplicarVitrinaAlRegistroManual();
+
+  if (mensajeVitrinaPublica) {
+    mensajeVitrinaPublica.textContent =
+      (datos.mensaje || 'Vitrina actualizada') + ' Recarga la web pública con Ctrl+F5 para ver los cambios.';
+    mensajeVitrinaPublica.hidden = false;
+  }
+}
+
+function aplicarVitrinaAlRegistroManual() {
+  if (!manualKitType) return;
+
+  for (const opcion of manualKitType.options) {
+    if (!opcion.value) continue;
+    const vendible = vitrinaKitVendible(opcion.value);
+    opcion.disabled = !vendible;
+  }
+
+  formularioRegistroManual?.querySelectorAll('input[name="manualComponente"]').forEach((input) => {
+    const activo = vitrinaComponenteActivo(input.value);
+    input.disabled = !activo;
+    const etiqueta = input.closest('label');
+    if (etiqueta) {
+      etiqueta.style.opacity = activo ? '' : '0.55';
+    }
+    if (!activo && input.checked) {
+      input.checked = false;
+    }
+  });
+}
+
 function actualizarFormularioManual() {
   const esPersonalizado = manualKitType.value === 'personalizado';
   const esInstitucional = esKitInstitucionalManual(manualKitType.value);
@@ -1017,7 +1277,112 @@ function actualizarFormularioManual() {
   manualCampoRol.hidden = !esInstitucional;
   manualCampoCarrera.hidden = !esInstitucional || !esEstudiante;
   manualCampoCodigo.hidden = !esInstitucional || !esEstudiante;
-  manualCampoTalla.hidden = !manualIncluyeCarrera();
+  const incluyeCarrera = manualIncluyeCarrera();
+  manualCampoTalla.hidden = !incluyeCarrera;
+  if (incluyeCarrera && manualShirtSize && window.UAF26TallasCamisetaUi) {
+    window.UAF26TallasCamisetaUi.poblarSelectTallas(
+      manualShirtSize,
+      tallasCamisetaPublicoCache
+    );
+  }
+  aplicarVitrinaAlRegistroManual();
+}
+
+function textoEstadoTallaAdmin(fila) {
+  if (!fila.activa) return 'Inactiva';
+  if (fila.stock === null) return 'Disponible (sin conteo)';
+  if (fila.stock > 0) return `${fila.stock} en inventario`;
+  return 'Agotada';
+}
+
+function renderizarTablaTallasCamiseta(filas) {
+  if (!cuerpoTablaTallasCamiseta) return;
+  if (!filas.length) {
+    cuerpoTablaTallasCamiseta.innerHTML =
+      '<tr><td colspan="4">No hay datos de tallas.</td></tr>';
+    return;
+  }
+
+  cuerpoTablaTallasCamiseta.innerHTML = filas
+    .map((fila) => {
+      const stockValor = fila.stock === null ? '' : String(fila.stock);
+      const claseEstado = fila.comprable ? 'estado-talla--ok' : 'estado-talla--agotada';
+      return `<tr data-talla="${escaparHtml(fila.codigo)}">
+        <td><strong>${escaparHtml(fila.codigo)}</strong></td>
+        <td><input type="checkbox" data-campo="activa" ${fila.activa ? 'checked' : ''} aria-label="Talla ${escaparHtml(fila.codigo)} activa"></td>
+        <td><input type="number" min="0" step="1" data-campo="stock" value="${escaparHtml(stockValor)}" placeholder="Sin conteo" aria-label="Stock talla ${escaparHtml(fila.codigo)}"></td>
+        <td class="${claseEstado}" data-campo="estado">${escaparHtml(textoEstadoTallaAdmin(fila))}</td>
+      </tr>`;
+    })
+    .join('');
+}
+
+function leerTallasDesdeTablaAdmin() {
+  if (!cuerpoTablaTallasCamiseta) return {};
+  const tallas = {};
+  cuerpoTablaTallasCamiseta.querySelectorAll('tr[data-talla]').forEach((fila) => {
+    const codigo = fila.getAttribute('data-talla');
+    const activa = fila.querySelector('[data-campo="activa"]')?.checked ?? false;
+    const stockRaw = fila.querySelector('[data-campo="stock"]')?.value?.trim() ?? '';
+    tallas[codigo] = {
+      activa,
+      stock: stockRaw === '' ? null : Number(stockRaw),
+    };
+  });
+  return tallas;
+}
+
+async function cargarTallasCamisetaPublico() {
+  const respuesta = await fetch('/api/config/publica');
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'No se pudieron cargar las tallas');
+  }
+  tallasCamisetaPublicoCache = Array.isArray(datos.tallasCamiseta) ? datos.tallasCamiseta : [];
+  return tallasCamisetaPublicoCache;
+}
+
+async function cargarTallasCamisetaAdmin() {
+  mostrarError(errorTallasCamiseta, '');
+  if (mensajeTallasCamiseta) mensajeTallasCamiseta.hidden = true;
+
+  const respuesta = await fetchAdmin('/api/admin/tallas-camiseta');
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'No se pudo cargar el inventario');
+  }
+
+  tallasCamisetaAdminCache = Array.isArray(datos.datos) ? datos.datos : [];
+  renderizarTablaTallasCamiseta(tallasCamisetaAdminCache);
+  await cargarTallasCamisetaPublico().catch(() => {});
+  actualizarFormularioManual();
+  return tallasCamisetaAdminCache;
+}
+
+async function guardarTallasCamisetaAdmin() {
+  mostrarError(errorTallasCamiseta, '');
+  if (mensajeTallasCamiseta) mensajeTallasCamiseta.hidden = true;
+
+  const tallas = leerTallasDesdeTablaAdmin();
+  const respuesta = await fetchAdmin('/api/admin/tallas-camiseta', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tallas }),
+  });
+  const datos = await leerJson(respuesta);
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || 'No se pudo guardar el inventario');
+  }
+
+  tallasCamisetaAdminCache = Array.isArray(datos.datos) ? datos.datos : [];
+  renderizarTablaTallasCamiseta(tallasCamisetaAdminCache);
+  await cargarTallasCamisetaPublico();
+  actualizarFormularioManual();
+
+  if (mensajeTallasCamiseta) {
+    mensajeTallasCamiseta.textContent = datos.mensaje || 'Inventario actualizado';
+    mensajeTallasCamiseta.hidden = false;
+  }
 }
 
 function obtenerComponentesManual() {
@@ -1076,6 +1441,23 @@ if (formularioRegistroManual) {
     mensajeRegistroManual.hidden = true;
 
     const cuerpo = construirCuerpoRegistroManual();
+
+    if (!vitrinaKitVendible(cuerpo.kitType)) {
+      mostrarError(
+        errorRegistroManual,
+        'Este kit está agotado en la vitrina pública. Actívalo en la pestaña Vitrina o elige otro kit.'
+      );
+      return;
+    }
+    for (const componente of cuerpo.kitComponents) {
+      if (!vitrinaComponenteActivo(componente)) {
+        mostrarError(
+          errorRegistroManual,
+          'Uno de los componentes seleccionados no está disponible en la vitrina pública.'
+        );
+        return;
+      }
+    }
 
     try {
       const respuesta = await fetchAdmin('/api/admin/students/registro-manual', {

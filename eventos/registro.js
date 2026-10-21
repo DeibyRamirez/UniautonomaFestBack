@@ -19,6 +19,13 @@
     'inscribir-feria': 'FeriaEmprendimiento',
   };
 
+  var MAPA_EVENTO_ENLACE_VITRINA = {
+    Hackton: 'hackaton',
+    FeriaEmprendimiento: 'feria_emprendimiento',
+  };
+
+  var vitrinaPublicaCache = null;
+
   var DOMINIO_INSTITUCIONAL = '@uniautonoma.edu.co';
   var MENSAJES_SOLO_UNIAUTONOMA = {
     Hackton: 'El Hackatón es exclusivo para la comunidad uniautónoma.',
@@ -163,6 +170,27 @@
 
   function precalentarRegistro() {
     fetch('/api/eventos/warmup').catch(function () {});
+  }
+
+  function cargarVitrinaPublica() {
+    return fetch('/api/config/publica')
+      .then(leerJson)
+      .then(function (datos) {
+        if (datos && datos.vitrinaPublica) {
+          vitrinaPublicaCache = datos.vitrinaPublica;
+        }
+      })
+      .catch(function () {});
+  }
+
+  function inscripcionEventoAbierta(tipo) {
+    var clave = MAPA_EVENTO_ENLACE_VITRINA[tipo];
+    if (!clave) return true;
+    if (!vitrinaPublicaCache || !Array.isArray(vitrinaPublicaCache.enlaces)) return true;
+    var enlace = vitrinaPublicaCache.enlaces.find(function (e) {
+      return e.id === clave;
+    });
+    return Boolean(enlace && enlace.activo);
   }
 
   function leerJson(respuesta) {
@@ -317,18 +345,7 @@
     return error || null;
   }
 
-  function iniciar() {
-    tipoEvento = resolverTipoEvento();
-    if (!tipoEvento) {
-      window.location.replace('/');
-      return;
-    }
-
-    if (tipoEvento === 'Hackton') {
-      window.location.replace(URL_INSCRIPCION_HACKTON);
-      return;
-    }
-
+  function montarFlujoRegistro() {
     aplicarMetadatos(tipoEvento);
     montarFormulario(tipoEvento);
     mostrarPaso('datos');
@@ -341,6 +358,11 @@
 
       var boton = document.getElementById('boton-enviar-registro');
       var datos = recogerDatos();
+
+      if (!inscripcionEventoAbierta(tipoEvento)) {
+        mostrarError('Las inscripciones para este evento están cerradas en este momento.');
+        return;
+      }
 
       if (tipoEvento === 'Hackton' || tipoEvento === 'FeriaEmprendimiento') {
         var errorCorreo = validarCorreoInstitucional(datos.correoElectronico, tipoEvento);
@@ -425,6 +447,31 @@
 
     var primerCampo = formulario.querySelector('input, select');
     if (primerCampo) primerCampo.focus();
+  }
+
+  function iniciar() {
+    tipoEvento = resolverTipoEvento();
+    if (!tipoEvento) {
+      window.location.replace('/');
+      return;
+    }
+
+    if (tipoEvento === 'Hackton') {
+      window.location.replace(URL_INSCRIPCION_HACKTON);
+      return;
+    }
+
+    cargarVitrinaPublica().then(function () {
+      if (!inscripcionEventoAbierta(tipoEvento)) {
+        aplicarMetadatos(tipoEvento);
+        formulario.innerHTML = '';
+        pasoDatos.hidden = false;
+        pasoConfirmacion.hidden = true;
+        mostrarError('Las inscripciones para este evento están cerradas en este momento.');
+        return;
+      }
+      montarFlujoRegistro();
+    });
   }
 
   iniciar();

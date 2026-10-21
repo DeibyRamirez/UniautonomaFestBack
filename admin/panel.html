@@ -32,6 +32,12 @@
       <button type="button" id="pestana-registro-manual" class="admin-pestana" data-pestana="registro-manual" hidden>
         Registro manual
       </button>
+      <button type="button" id="pestana-vitrina-publica" class="admin-pestana" data-pestana="vitrina-publica" hidden>
+        Disponibilidad web
+      </button>
+      <button type="button" id="pestana-tallas-camiseta" class="admin-pestana" data-pestana="tallas-camiseta" hidden>
+        Tallas camiseta
+      </button>
       <button type="button" id="pestana-administradores" class="admin-pestana" data-pestana="administradores" hidden>
         Administradores
       </button>
@@ -239,10 +245,6 @@
           <label for="manual-shirtSize">Talla camiseta *</label>
           <select id="manual-shirtSize" name="shirtSize">
             <option value="">Seleccionar</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
           </select>
         </div>
         <div class="ancho-completo">
@@ -257,6 +259,50 @@
 
       <p id="mensaje-registro-manual" class="mensaje-crear-admin" role="status" hidden></p>
       <p id="error-registro-manual" class="error" role="alert" hidden></p>
+    </section>
+
+    <section id="seccion-vitrina-publica" class="admin-seccion" hidden aria-labelledby="pestana-vitrina-publica">
+      <p class="admin-seccion__subtitulo">Disponibilidad en la web (sin redesplegar)</p>
+      <p class="admin-tallas-ayuda">
+        Kits cerrados muestran «Sold out». La inscripción 5K del cronograma y el botón «Quiero la mía» se actualizan solos según kits y componentes activos.
+      </p>
+
+      <div id="contenedor-vitrina-publica" class="vitrina-admin-grupos"></div>
+
+      <div class="admin-tallas-acciones">
+        <button type="button" id="boton-guardar-vitrina-publica" class="boton-principal">Guardar cambios</button>
+        <button type="button" id="boton-refrescar-vitrina-publica" class="boton-secundario">Actualizar</button>
+      </div>
+      <p id="mensaje-vitrina-publica" class="mensaje-crear-admin" role="status" hidden></p>
+      <p id="error-vitrina-publica" class="error" role="alert" hidden></p>
+    </section>
+
+    <section id="seccion-tallas-camiseta" class="admin-seccion" hidden aria-labelledby="pestana-tallas-camiseta">
+      <p class="admin-seccion__subtitulo">Inventario de camisetas por talla (carrera 5K)</p>
+      <p class="admin-tallas-ayuda">
+        En la web, una talla desactivada se muestra como «Agotada». Deja el stock vacío si no llevas conteo (se verá «Disponible»). Si ingresas un número, se descuenta al aprobar cada compra.
+      </p>
+
+      <div class="tabla-contenedor tabla-tallas-camiseta">
+        <table>
+          <thead>
+            <tr>
+              <th>Talla</th>
+              <th>Activa</th>
+              <th>Stock</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-tallas-camiseta"></tbody>
+        </table>
+      </div>
+
+      <div class="admin-tallas-acciones">
+        <button type="button" id="boton-guardar-tallas-camiseta" class="boton-principal">Guardar cambios</button>
+        <button type="button" id="boton-refrescar-tallas-camiseta" class="boton-secundario">Actualizar</button>
+      </div>
+      <p id="mensaje-tallas-camiseta" class="mensaje-crear-admin" role="status" hidden></p>
+      <p id="error-tallas-camiseta" class="error" role="alert" hidden></p>
     </section>
 
     <section id="seccion-administradores" class="admin-seccion" hidden aria-labelledby="pestana-administradores">
@@ -319,6 +365,7 @@
     </form>
   </dialog>
 
+  <script src="/js/tallas-camiseta-ui.js"></script>
   <script src="/admin/js/admin.js" type="module"></script>
 </body>
 </html>

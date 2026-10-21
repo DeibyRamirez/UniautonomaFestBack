@@ -16,6 +16,8 @@ const {
   validarTextoNombre,
   validarSoloNumeros,
 } = require('../utilidades/validacionCamposFormulario');
+const { validarTallaDisponible } = require('./tallasCamiseta.service');
+const { validarKitVendible, validarComponentesVitrina } = require('./vitrinaPublica.service');
 
 const TALLAS_VALIDAS = ['S', 'M', 'L', 'XL'];
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS', 'NIT'];
@@ -201,7 +203,7 @@ function normalizarInformacionPersonal(personalInfo, { kitType, kitComponents } 
   return info;
 }
 
-function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
+async function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
   const tipoNormalizado = normalizarKitType(kitType);
 
   let error = validarTipoKit(tipoNormalizado);
@@ -216,6 +218,12 @@ function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
     kitComponents: componentesNormalizados,
   });
 
+  error = await validarKitVendible(tipoNormalizado);
+  if (error) return error;
+
+  error = await validarComponentesVitrina(componentesNormalizados);
+  if (error) return error;
+
   error = validarReglasKit(tipoNormalizado, infoNormalizada, componentesNormalizados);
   if (error) return error;
 
@@ -224,6 +232,11 @@ function validarSolicitudCheckout({ kitType, kitComponents, personalInfo }) {
 
   error = validarTallaCamiseta(tipoNormalizado, componentesNormalizados, infoNormalizada);
   if (error) return error;
+
+  if (requiereTallaCamiseta(tipoNormalizado, componentesNormalizados)) {
+    error = await validarTallaDisponible(infoNormalizada.shirtSize);
+    if (error) return error;
+  }
 
   const monto = obtenerMontoCentavos(tipoNormalizado, componentesNormalizados);
   if (!monto || monto <= 0) {

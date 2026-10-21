@@ -5,6 +5,8 @@ const {
   debeAsignarNumeroCorredor,
   reservarNumeroEnTransaccion,
 } = require('../services/numeroCorredor.service');
+const { requiereTallaCamiseta } = require('../config/catalogoKits');
+const { descontarStockEnTransaccion } = require('../services/tallasCamiseta.service');
 const {
   normalizarTextoBusqueda,
   camposBusquedaNombre,
@@ -379,6 +381,12 @@ async function aprobarPagoAtomico(id, { transactionId, generarCodigo }) {
       return { aprobado: false, idempotente: true };
     }
 
+    let reservaStock = null;
+    if (requiereTallaCamiseta(datos.kitType, datos.kitComponents)) {
+      const talla = datos.personalInfo?.shirtSize;
+      reservaStock = await descontarStockEnTransaccion(db, transaccion, talla);
+    }
+
     let reserva = null;
     let numeroCorredorError = null;
 
@@ -405,6 +413,7 @@ async function aprobarPagoAtomico(id, { transactionId, generarCodigo }) {
         : null,
     };
 
+    if (reservaStock?.escribir) reservaStock.escribir();
     if (reserva) reserva.escribir();
     transaccion.update(refPago, actualizacion);
 

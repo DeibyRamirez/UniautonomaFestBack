@@ -48,6 +48,41 @@
   let intervaloPolling = null;
   let ciudadesResidencia = null;
   let promesaCiudadesResidencia = null;
+  let tallasCamisetaCache =
+    window.UAF26TallasCamisetaDatos && window.UAF26TallasCamisetaDatos.length
+      ? window.UAF26TallasCamisetaDatos
+      : null;
+  let promesaTallasCamiseta = null;
+
+  function normalizarTallasDesdeApi(datos) {
+    if (window.UAF26TallasCamisetaUi && window.UAF26TallasCamisetaUi.normalizarListaTallas) {
+      return window.UAF26TallasCamisetaUi.normalizarListaTallas(datos);
+    }
+    if (Array.isArray(datos) && datos.length) return datos;
+    return [
+      { codigo: 'S', activa: false, comprable: false, stock: null },
+      { codigo: 'M', activa: false, comprable: false, stock: null },
+      { codigo: 'L', activa: false, comprable: false, stock: null },
+      { codigo: 'XL', activa: false, comprable: false, stock: null },
+    ];
+  }
+
+  function poblarSelectTallasEnModal(select, tallas) {
+    if (!select) return;
+    if (window.UAF26TallasCamisetaUi && window.UAF26TallasCamisetaUi.poblarSelectTallas) {
+      window.UAF26TallasCamisetaUi.poblarSelectTallas(select, tallas);
+      return;
+    }
+    var lista = normalizarTallasDesdeApi(tallas);
+    select.innerHTML = '<option value="">Seleccionar</option>';
+    lista.forEach(function (item) {
+      var opt = document.createElement('option');
+      opt.value = item.codigo;
+      opt.textContent = item.codigo + (item.comprable ? '' : ' — Agotada');
+      if (!item.comprable) opt.disabled = true;
+      select.appendChild(opt);
+    });
+  }
 
   function esErrorRed(error) {
     if (!error) return false;
@@ -227,12 +262,75 @@
     return false;
   }
 
+  function cargarTallasCamiseta(forzarActualizacion) {
+    if (!forzarActualizacion && tallasCamisetaCache) {
+      return Promise.resolve(tallasCamisetaCache);
+    }
+    if (forzarActualizacion) {
+      promesaTallasCamiseta = null;
+    }
+    if (promesaTallasCamiseta) return promesaTallasCamiseta;
+
+    promesaTallasCamiseta = fetch('/api/config/publica')
+      .then(function (respuesta) {
+        if (!respuesta.ok) throw new Error('No se pudo cargar tallas');
+        return respuesta.json();
+      })
+      .then(function (datos) {
+        tallasCamisetaCache = normalizarTallasDesdeApi(datos.tallasCamiseta);
+        window.UAF26TallasCamisetaDatos = tallasCamisetaCache;
+        actualizarTextoDisponibilidadTallas(tallasCamisetaCache);
+        return tallasCamisetaCache;
+      })
+      .catch(function () {
+        tallasCamisetaCache = normalizarTallasDesdeApi(null);
+        return tallasCamisetaCache;
+      })
+      .finally(function () {
+        promesaTallasCamiseta = null;
+      });
+
+    return promesaTallasCamiseta;
+  }
+
+  function actualizarTextoDisponibilidadTallas(tallas) {
+    var el = document.getElementById('texto-disponibilidad-tallas');
+    if (!el || !tallas || !tallas.length) return;
+    var comprables = tallas.filter(function (t) {
+      return t.comprable;
+    });
+    if (!comprables.length) {
+      el.textContent =
+        'Camisetas temporalmente agotadas en todas las tallas. Entrega en la sede principal.';
+      return;
+    }
+    var partes = comprables.map(function (t) {
+      if (t.stock === null || t.stock === undefined) return t.codigo + ' (disponible)';
+      return t.codigo + ' (' + t.stock + ')';
+    });
+    el.textContent =
+      'Tallas con cupo: ' +
+      partes.join(', ') +
+      '. Sujeto a disponibilidad al pagar. Entrega en la sede principal.';
+  }
+
+  function actualizarOpcionesTallaCamiseta() {
+    if (!selectTalla) return;
+    var lista =
+      tallasCamisetaCache ||
+      (window.UAF26TallasCamisetaDatos && window.UAF26TallasCamisetaDatos.length
+        ? window.UAF26TallasCamisetaDatos
+        : null);
+    poblarSelectTallasEnModal(selectTalla, lista);
+  }
+
   function actualizarCampoTallaCamiseta() {
     if (!campoTalla || !selectTalla) return;
     var visible = kitIncluyeCarrera();
     campoTalla.hidden = !visible;
     if (visible) {
       selectTalla.setAttribute('required', 'required');
+      actualizarOpcionesTallaCamiseta();
     } else {
       selectTalla.removeAttribute('required');
       selectTalla.value = '';
@@ -396,6 +494,15 @@
     actualizarCampoTallaCamiseta();
   }
 
+  function componenteVitrinaActivo(componenteId) {
+    if (window.UAF26Vitrina && window.UAF26Vitrina.componenteActivo) {
+      return window.UAF26Vitrina.componenteActivo(componenteId);
+    }
+    if (componenteId === 'carrera') return false;
+    if (componenteId === 'fiesta' || componenteId === 'bingo') return true;
+    return false;
+  }
+
   function renderizarSelectorComponentes() {
     if (!listaComponentes) return;
 
@@ -404,13 +511,21 @@
 
     Object.keys(componentes).forEach(function (clave) {
       var componente = componentes[clave];
+      var activo = componenteVitrinaActivo(componente.id);
       var etiqueta = document.createElement('label');
       etiqueta.className = 'kit-componente';
+      if (!activo) {
+        etiqueta.classList.add('kit-componente--agotado');
+      }
 
       var input = document.createElement('input');
       input.type = 'checkbox';
       input.name = 'kitComponent';
       input.value = componente.id;
+      input.disabled = !activo;
+      if (!activo) {
+        input.title = 'Sold out';
+      }
       input.addEventListener('change', actualizarTotalComponentes);
 
       var info = document.createElement('div');
@@ -418,6 +533,7 @@
       info.innerHTML =
         '<b>' +
         componente.titulo +
+        (activo ? '' : ' — Sold out') +
         '</b>' +
         (componente.descripcion ? '<span>' + componente.descripcion + '</span>' : '');
 
@@ -436,6 +552,14 @@
 
   function abrirModal(kit) {
     tipoKit = kit === 'general' ? 'general' : kit === 'personalizado' ? 'personalizado' : 'uniautonomo';
+
+    if (window.UAF26Vitrina && !window.UAF26Vitrina.puedeComprarKit(tipoKit)) {
+      return;
+    }
+    if (window.UAF26Vitrina && window.UAF26Vitrina.mostrarAvisoEnKit) {
+      window.UAF26Vitrina.mostrarAvisoEnKit('');
+    }
+
     var meta = metaKit(tipoKit);
     titulo.textContent = 'Comprar ' + meta.titulo;
     descripcion.textContent = meta.descripcion;
@@ -452,18 +576,31 @@
     }
 
     actualizarCamposInstitucionales();
+
+    formulario.reset();
+    if (tipoKit === 'personalizado') {
+      renderizarSelectorComponentes();
+    }
+
+    if (!tallasCamisetaCache && window.UAF26TallasCamisetaDatos) {
+      tallasCamisetaCache = window.UAF26TallasCamisetaDatos;
+    }
     actualizarCampoTallaCamiseta();
+
+    cargarTallasCamiseta(true)
+      .then(function () {
+        actualizarOpcionesTallaCamiseta();
+        actualizarTextoDisponibilidadTallas(tallasCamisetaCache);
+      })
+      .catch(function () {
+        actualizarOpcionesTallaCamiseta();
+      });
 
     cargarCiudadesResidencia().catch(function (error) {
       mostrarError(error.message);
     });
     precalentarCheckout();
     cargarScriptWidgetWompi().catch(function () {});
-
-    formulario.reset();
-    if (tipoKit === 'personalizado') {
-      renderizarSelectorComponentes();
-    }
     datosCheckout = null;
     datosPersonales = null;
     referenciaActual = null;
@@ -893,9 +1030,16 @@
   document.querySelectorAll('[data-abrir-compra]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var kit = btn.getAttribute('data-abrir-compra');
-      var listo = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
-      Promise.all([listo, cargarCiudadesResidencia().catch(function () { return null; })])
+      var promesaConfig = window.PreciosKit
+        ? (window.PreciosKit.refrescarConfig
+            ? window.PreciosKit.refrescarConfig()
+            : window.PreciosKit.listo)
+        : Promise.resolve();
+      Promise.all([promesaConfig, cargarCiudadesResidencia().catch(function () { return null; })])
         .then(function () {
+          if (window.UAF26Vitrina) {
+            window.UAF26Vitrina.aplicarEnPagina();
+          }
           abrirModal(kit);
         });
     });
@@ -953,9 +1097,16 @@
   var params = new URLSearchParams(window.location.search);
   var comprar = retomarPagoTrasRedireccion() ? null : params.get('comprar') || params.get('kit');
   if (comprar) {
-    var listoCompra = window.PreciosKit ? window.PreciosKit.listo : Promise.resolve();
+    var listoCompra = window.PreciosKit
+      ? (window.PreciosKit.refrescarConfig
+          ? window.PreciosKit.refrescarConfig()
+          : window.PreciosKit.listo)
+      : Promise.resolve();
     Promise.all([listoCompra, cargarCiudadesResidencia().catch(function () { return null; })])
       .then(function () {
+        if (window.UAF26Vitrina) {
+          window.UAF26Vitrina.aplicarEnPagina();
+        }
         abrirModal(comprar);
       });
     if (window.history.replaceState) {

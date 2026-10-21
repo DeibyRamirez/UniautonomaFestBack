@@ -5,8 +5,28 @@ const {
   listarComponentesPublicos,
 } = require('../config/catalogoKits');
 const { listarCiudades } = require('../services/ciudadesColombia.service');
+const { listarParaPublico } = require('../services/tallasCamiseta.service');
+const {
+  obtenerConfig: obtenerConfigVitrina,
+  listarParaPublico: listarVitrinaParaPublico,
+} = require('../services/vitrinaPublica.service');
 
-function getConfigPublica(req, res) {
+async function getConfigPublica(req, res) {
+  let tallasCamiseta = [];
+  try {
+    tallasCamiseta = await listarParaPublico();
+  } catch (error) {
+    console.error('[config publica tallas]', error);
+  }
+
+  let vitrinaPublica = null;
+  try {
+    const configVitrina = await obtenerConfigVitrina();
+    vitrinaPublica = listarVitrinaParaPublico(configVitrina);
+  } catch (error) {
+    console.error('[config publica vitrina]', error);
+  }
+
   return res.json({
     firebase: {
       apiKey: variablesEntorno.firebase.apiKey,
@@ -21,6 +41,8 @@ function getConfigPublica(req, res) {
       kits: listarKitsPublicos(),
       componentes: listarComponentesPublicos(),
     },
+    tallasCamiseta,
+    vitrinaPublica,
   });
 }
 
