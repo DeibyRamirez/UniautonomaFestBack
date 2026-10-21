@@ -6,6 +6,16 @@ const { invalidarCacheAdmin } = require('../utilidades/cacheAdmin');
 const { validarTipoEvento } = require('../services/validacionEvento.service');
 const { intentarEnviarCorreoReclamo } = require('../services/correoReclamo.service');
 const { registrarManualAprobado } = require('../services/registroManual.service');
+const {
+  obtenerConfig,
+  listarParaAdmin,
+  actualizarDesdeAdmin,
+} = require('../services/tallasCamiseta.service');
+const {
+  obtenerConfig: obtenerConfigVitrina,
+  listarParaAdmin: listarVitrinaParaAdmin,
+  actualizarDesdeAdmin: actualizarVitrinaDesdeAdmin,
+} = require('../services/vitrinaPublica.service');
 
 function esSolicitudExportacion(limite) {
   const valor = Number.parseInt(String(limite), 10);
@@ -309,6 +319,65 @@ async function postRegistroManual(req, res) {
   }
 }
 
+async function getTallasCamiseta(req, res) {
+  try {
+    const config = await obtenerConfig();
+    return res.json({ datos: listarParaAdmin(config) });
+  } catch (error) {
+    console.error('[admin tallas camiseta GET]', error);
+    return res.status(500).json({ mensaje: 'No se pudo obtener el inventario de tallas' });
+  }
+}
+
+async function putTallasCamiseta(req, res) {
+  try {
+    const { tallas } = req.body || {};
+    const config = await actualizarDesdeAdmin(
+      tallas,
+      req.admin?.email || req.usuario?.email
+    );
+    return res.json({
+      mensaje: 'Inventario de tallas actualizado',
+      datos: listarParaAdmin(config),
+    });
+  } catch (error) {
+    const codigo = error.codigo || 500;
+    if (codigo >= 500) console.error('[admin tallas camiseta PUT]', error);
+    return res.status(codigo).json({
+      mensaje: error.message || 'No se pudo actualizar el inventario de tallas',
+    });
+  }
+}
+
+async function getVitrinaPublica(req, res) {
+  try {
+    const config = await obtenerConfigVitrina();
+    return res.json({ datos: listarVitrinaParaAdmin(config) });
+  } catch (error) {
+    console.error('[admin vitrina GET]', error);
+    return res.status(500).json({ mensaje: 'No se pudo obtener la vitrina pública' });
+  }
+}
+
+async function putVitrinaPublica(req, res) {
+  try {
+    const config = await actualizarVitrinaDesdeAdmin(
+      req.body || {},
+      req.admin?.email || req.usuario?.email
+    );
+    return res.json({
+      mensaje: 'Vitrina pública actualizada',
+      datos: listarVitrinaParaAdmin(config),
+    });
+  } catch (error) {
+    const codigo = error.codigo || 500;
+    if (codigo >= 500) console.error('[admin vitrina PUT]', error);
+    return res.status(codigo).json({
+      mensaje: error.message || 'No se pudo actualizar la vitrina pública',
+    });
+  }
+}
+
 module.exports = {
   getPerfilAdmin,
   getAdministradores,
@@ -320,4 +389,8 @@ module.exports = {
   postReenviarCorreo,
   postAsignarNumeroCorredor,
   postRegistroManual,
+  getTallasCamiseta,
+  putTallasCamiseta,
+  getVitrinaPublica,
+  putVitrinaPublica,
 };

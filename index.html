@@ -237,6 +237,17 @@ p{margin:0;}
 .kit-card li.hi::before{background:var(--cyan);box-shadow:0 0 10px var(--cyan);}
 .kit-card li.no{color:var(--ink-2);}
 .kit-card li.no::before{border-color:var(--ink-2);opacity:.5;}
+.kit-card--agotado{opacity:.72;}
+.kit-card--agotado .btn.btn--sold-out,.kit-card--agotado .btn[aria-disabled="true"]{opacity:.45;cursor:not-allowed;filter:grayscale(.35);}
+.kit-card-item--sold-out{opacity:.5;text-decoration:line-through;}
+.kit-componente--agotado{opacity:.55;cursor:not-allowed;}
+.kit-componente--agotado input{pointer-events:none;}
+.kit-aviso{margin:16px 0 0;padding:14px 18px;border:1px solid rgba(255,107,107,.45);color:#ffb4b4;font-size:15px;font-weight:600;line-height:1.45;}
+.vitrina-badge{display:inline-block;margin:0 0 12px;padding:6px 12px;border:1px solid rgba(255,107,107,.55);color:#ff8a8a;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;}
+.vitrina-badge--esquina{position:absolute;top:14px;right:14px;margin:0;z-index:2;pointer-events:none;padding:5px 10px;font-size:clamp(10px,2.2vw,11px);background:rgba(8,12,20,.92);box-shadow:0 0 0 1px rgba(255,107,107,.25),0 4px 12px rgba(0,0,0,.35);clip-path:polygon(0 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%);}
+.kit-card--agotado .vitrina-badge--esquina{opacity:1;}
+.vitrina-badge--inline{display:inline-block;margin-left:10px;padding:4px 10px;font-size:11px;vertical-align:middle;}
+.vitrina-cerrado{opacity:.55;cursor:not-allowed;}
 .price{border-top:1px solid var(--line);padding-top:22px;margin-top:26px;}
 .price .num{font-weight:900;font-size:clamp(40px,4.6vw,64px);line-height:1;color:var(--cyan);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
 .price .num small{font-size:.4em;color:var(--ink-2);font-weight:400;letter-spacing:.06em;margin-left:6px;}
@@ -490,7 +501,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
         <div class="time">9:00 AM<small>hasta 4:00 PM</small></div>
         <div><h3>Desafío Uniautónomo</h3><p class="sub">Actividades lúdicas y deportivas, y el Hackatón. Exclusivo para la comunidad uniautónoma.</p>
           <div class="meta"><span>Sede Campestre El Aljibe</span></div>
-          <div class="cta"><a class="btn sm" id="inscribir-hackton" href="https://docs.google.com/forms/d/e/1FAIpQLSeAdbcxQUxFcYafIcMI2Hm0qIRkac7cDTABX54hJ-Wg63Os4w/viewform" target="_blank" rel="noopener noreferrer"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
+          <div class="cta"><a class="btn sm" id="inscribir-hackton" data-vitrina-enlace="hackaton" href="https://docs.google.com/forms/d/e/1FAIpQLSeAdbcxQUxFcYafIcMI2Hm0qIRkac7cDTABX54hJ-Wg63Os4w/viewform" target="_blank" rel="noopener noreferrer"><i class="tick"></i>Inscribirme al Hackatón</a></div></div>
       </article>
     </div>
 
@@ -514,7 +525,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
               </span>
             </div>
           </div>
-          <div class="cta"><a class="btn sm" href="#"><i class="tick"></i>Inscribirme a la 5K</a></div></div>
+          <div class="cta"><a class="btn sm" href="#kit" data-vitrina-enlace="inscripcion_5k"><i class="tick"></i>Inscribirme a la 5K</a></div></div>
       </article>
     </div>
 
@@ -523,7 +534,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
         <div class="time">8:00 AM<small>Jueves 22 de octubre</small></div>
         <div><h3>Feria de Emprendimiento</h3><p class="sub">Gastronomía, accesorios, salud, moda y belleza. Exclusivo para la comunidad uniautónoma.</p>
           <div class="meta"><span>Sede principal</span></div>
-          <div class="cta"><a class="btn sm" id="inscribir-feria" href="/eventos/?evento=FeriaEmprendimiento&amp;desde=inscribir-feria"><i class="tick"></i>Quiero un stand</a></div></div>
+          <div class="cta"><a class="btn sm" id="inscribir-feria" data-vitrina-enlace="feria_emprendimiento" href="/eventos/?evento=FeriaEmprendimiento&amp;desde=inscribir-feria"><i class="tick"></i>Quiero un stand</a></div></div>
       </article>
       <article class="ev">
         <div class="time">3:00 PM<small>hasta 7:00 PM</small></div>
@@ -573,7 +584,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
       <h2 class="t-l ultra">Todos necesitan la camisa.</h2>
       <p class="lead" style="margin-top:22px">Es la que nos une frente a lo que venga. Póntela y ya sabes qué te corre por las venas.</p>
       <div class="hero-cta" style="justify-content:flex-start;margin-top:26px">
-        <a class="btn solid" href="#kit"><i class="tick"></i>Quiero la mía</a>
+        <a class="btn solid" href="#kit" data-vitrina-enlace="hero_kit"><i class="tick"></i>Quiero la mía</a>
       </div>
     </div>
   </div>
@@ -586,8 +597,9 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
     <div class="hud-line hud"><b></b>Registro 05 · Kit oficial</div>
     <h2 class="t-l ultra">Consigue tu kit.</h2>
     <p class="lead muted" style="margin-top:18px">Elige el kit completo o arma el tuyo con los componentes que necesites.</p>
+    <p id="kit-aviso" class="kit-aviso" role="alert" hidden></p>
     <div class="kits">
-      <article class="kit-card">
+      <article class="kit-card" data-vitrina-kit="uniautonomo">
         <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
         <p class="hud">Para uniautónomos</p>
         <h3 class="t-m">Kit Sangre Azul</h3>
@@ -606,7 +618,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
           </div>
         </div>
       </article>
-      <article class="kit-card">
+      <article class="kit-card" data-vitrina-kit="general">
         <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
         <p class="hud">Para externos</p>
         <h3 class="t-m">Kit Corredor</h3>
@@ -624,15 +636,15 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
           </div>
         </div>
       </article>
-      <article class="kit-card">
+      <article class="kit-card" data-vitrina-kit="personalizado">
         <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
         <p class="hud">Para uniautónomos</p>
         <h3 class="t-m">Arma tu kit</h3>
         <p class="muted" style="margin-top:6px">Elige solo lo que necesitas: carrera, fiesta o bingo.</p>
         <ul>
-          <li>Carrera 5K — desde $60.000</li>
-          <li>Fiesta Blanca — $20.000</li>
-          <li>Tabla Bingo (2) — $10.000</li>
+          <li data-vitrina-componente="carrera">Carrera 5K — desde $60.000</li>
+          <li data-vitrina-componente="fiesta">Fiesta Blanca — $20.000</li>
+          <li data-vitrina-componente="bingo">Tabla Bingo (2) — $10.000</li>
           <li class="hi">Combo completo — $90.000</li>
         </ul>
         <div class="price">
@@ -643,7 +655,7 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
         </div>
       </article>
     </div>
-    <p class="muted" style="font-size:14px;margin-top:20px">Tallas S, M, L y XL. Entrega en la sede principal.</p>
+    <p class="muted" style="font-size:14px;margin-top:20px" id="texto-disponibilidad-tallas">Tallas S, M, L y XL sujetas a disponibilidad. Entrega en la sede principal.</p>
   </div>
 </section>
 
@@ -755,10 +767,6 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
           <label for="compra-shirtSize">Talla camiseta *</label>
           <select id="compra-shirtSize" name="shirtSize">
             <option value="">Seleccionar</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
           </select>
         </div>
         <div class="ancho-completo">
@@ -934,8 +942,24 @@ body.aviso-navegador-activo .nav{top:calc(env(safe-area-inset-top,0px) + 72px);}
 </script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin="" defer></script>
 <script src="js/mapa-carrera-5k.js" defer></script>
-<script src="js/precios-kit.js" defer></script>
+<script src="js/tallas-camiseta-ui.js" defer></script>
+<script src="js/vitrina-publica.js?v=20260423" defer id="script-vitrina-publica"></script>
+<script src="js/precios-kit.js?v=20260421" defer></script>
 <script src="js/restricciones-formulario.js" defer></script>
-<script src="js/modal-compra.js" defer></script>
+<script src="js/modal-compra.js?v=20260421" defer></script>
+<script defer>
+(function(){
+  var script=document.getElementById('script-vitrina-publica');
+  if(script){
+    script.addEventListener('error',function(){
+      console.error('[UAF26] No se pudo descargar js/vitrina-publica.js (404 o red). La vitrina no aplicará.');
+    });
+  }
+  window.addEventListener('load',function(){
+    if(window.UAF26Vitrina)return;
+    console.error('[UAF26] vitrina-publica.js no definió UAF26Vitrina (revisa errores de ejecución en Consola). Sold out no aplicará.');
+  });
+})();
+</script>
 </body>
 </html>

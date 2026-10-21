@@ -37,7 +37,7 @@ async function prepararSolicitudRegistro({ kitType, kitComponents, personalInfo 
   const tipoNormalizado = normalizarKitType(kitType);
   const componentesNormalizados = normalizarKitComponents(kitComponents);
 
-  const errorValidacion = validarSolicitudCheckout({
+  const errorValidacion = await validarSolicitudCheckout({
     kitType: tipoNormalizado,
     kitComponents: componentesNormalizados,
     personalInfo,

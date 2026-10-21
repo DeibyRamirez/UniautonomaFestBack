@@ -97,7 +97,7 @@ async function iniciarCheckout({ kitType, kitComponents, personalInfo, urlBase }
   const tipoNormalizado = normalizarKitType(kitType);
   const componentesNormalizados = normalizarKitComponents(kitComponents);
 
-  const errorValidacion = validarSolicitudCheckout({
+  const errorValidacion = await validarSolicitudCheckout({
     kitType: tipoNormalizado,
     kitComponents: componentesNormalizados,
     personalInfo,

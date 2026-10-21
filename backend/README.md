@@ -73,7 +73,9 @@ npm run crear-super-admin -- correo@uniautonoma.edu.co ContraseñaSegura123
 | PATCH | `/api/admin/students/:id/deliver` | Marcar kit entregado |
 | POST | `/api/admin/students/:id/reenviar-correo` | Reenviar correo de código de reclamo |
 | POST | `/api/admin/create-admin` | Crear admin (super admin) |
-| GET | `/api/config/publica` | Config Firebase/Wompi pública |
+| GET | `/api/config/publica` | Config Firebase/Wompi pública (incluye `tallasCamiseta`) |
+| GET | `/api/admin/tallas-camiseta` | Inventario de tallas (super admin) |
+| PUT | `/api/admin/tallas-camiseta` | Actualizar tallas activas y stock (super admin) |
 | GET | `/api/checkout/estado?reference=` | Estado del pago y código de reclamo |
 
 ## Reintento de pago (correo institucional)
@@ -246,6 +248,12 @@ npm run reiniciar-numero-corredor -- --confirmar  # aplica
 ```
 
 Para que la búsqueda por nombre del panel encuentre pagos anteriores a este cambio, ejecuta una vez `npm run rellenar-nombre-busqueda` y despliega los índices con `firebase deploy --only firestore:indexes`.
+
+## Inventario de tallas de camiseta
+
+Documento Firestore: `config/tallasCamiseta`. Cada talla (`S`, `M`, `L`, `XL`) tiene `activa` y `stock` (`null` = disponible sin conteo; número entero = se descuenta al aprobar el pago).
+
+El inventario **no se siembra por script**: el super administrador lo define en el panel → pestaña **Tallas camiseta** y guarda en Firestore. Hasta entonces, en la web las tallas aparecen como no disponibles.
 
 ## Checklist pre-producción
 
